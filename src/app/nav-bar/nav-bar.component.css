@@ -1,0 +1,32 @@
+.logo {
+    width: auto;
+    height: 90%;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.content {
+    min-height: 100vh;
+}
+
+.mat-sidenav-container {
+    background-color: white;
+    min-height: calc(100vh - 60px) !important;
+}
+
+.mat-toolbar {
+    height: 60px;
+}
+
+span.fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+span.welcome {
+    padding-right: 5px;
+}
+
+a{
+    text-decoration: none;
+    white-space: normal;
+}

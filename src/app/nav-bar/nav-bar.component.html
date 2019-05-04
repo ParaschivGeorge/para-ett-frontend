@@ -1,0 +1,31 @@
+<div> 
+  <mat-toolbar color="primary">
+    <div fxShow="true" fxHide.gt-sm="true">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <img routerLink="/home" fxHide.lt-md="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  
+    <span class="welcome">Hello, Dummy!</span>
+    <span class="fill-remaining-space"></span>    
+    <mat-icon fxHide.gt-sm="true" class="logout-mobile">meeting_room</mat-icon>
+    <img fxHide.gt-sm="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  
+    
+    <div fxShow="true" fxHide.lt-md="true">
+      <a mat-button routerLink="/dummy">Dummy</a>
+      <button mat-raised-button>Logout</button>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container fxFlexFill class="content" hasBackdrop="false" >
+    <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over" opened="false" fxHide.gt-sm="true">
+      <div fxLayout="column">
+        <a mat-button routerLink="/dummy">Dummy</a>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content fxFlexFill>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
