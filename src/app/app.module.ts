@@ -9,8 +9,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
-import { AuthGuardService } from './auth/auth-guard.service';
 import { TokenInterceptorService } from './auth/token-interceptor.service';
+import { AuthGuard } from './auth/auth.guard';
 
 @NgModule({
   declarations: [
