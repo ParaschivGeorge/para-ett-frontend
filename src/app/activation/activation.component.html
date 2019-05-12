@@ -1,3 +1,11 @@
-<p>
-  activation works!
-</p>
+<form [formGroup]="accountActivationForm" (ngSubmit)="onSubmit()">  
+  <mat-form-field>
+    <input matInput placeholder="Password" formControlName="password" type="password"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Confirm password" formControlName="passwordConfirm" type="password"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <button mat-button type="submit">Submit</button>
+</form>

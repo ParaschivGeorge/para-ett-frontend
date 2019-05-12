@@ -1,10 +1,10 @@
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" *ngIf="loginForm">
-    <mat-form-field class="full-width">
+    <mat-form-field>
       <input matInput placeholder="Email" formControlName="email"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field>
       <input matInput placeholder="Password" formControlName="password" type="password"
         [errorStateMatcher]="matcher">
     </mat-form-field>
