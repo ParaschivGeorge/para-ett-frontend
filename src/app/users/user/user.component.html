@@ -1,3 +1,30 @@
-<p>
-  user works!
-</p>
+<form [formGroup]="userEditForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput placeholder="First Name" formControlName="firstName"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Last Name" formControlName="lastName"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Free days left" formControlName="freeDaysLeft"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Norm" formControlName="norm"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-select placeholder="User type" formControlName="type" name="type">
+      <mat-option *ngFor="let type of userTypes" [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Manager Id" formControlName="managerId"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <button mat-button type="submit">Submit</button>
+</form>

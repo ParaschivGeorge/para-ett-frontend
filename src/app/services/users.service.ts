@@ -31,6 +31,7 @@ export class UsersService {
   }
 
   updateUser(id: number, user: User): Observable<User> {
+    user.projects = [];
     return this.http.put<User>(this.usersServiceUrl + '/' + id, user);
   }
 

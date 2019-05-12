@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CompaniesService } from 'src/app/services/companies.service';
 import { ActivatedRoute } from '@angular/router';
 import { Company } from 'src/app/models/company';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -37,7 +38,7 @@ export class CompanyComponent implements OnInit {
   getCompany(id: number) {
     this.companiesService.getCompany(id).subscribe(
       company => {
-        this.company = company;
+        this.company = JSON.parse(JSON.stringify(company));
         delete company.id;
         this.companyEditForm.setValue(company);
         console.log(company);

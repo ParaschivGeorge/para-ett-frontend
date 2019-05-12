@@ -1,3 +1,11 @@
-<p>
-  users works!
-</p>
+<div *ngFor="let user of users">
+  <p>{{user.id}}</p>
+  <p>{{user.email}}</p>
+  <p>{{user.firstName}}</p>
+  <p>{{user.lastName}}</p>
+  <p>{{user.freeDaysLeft}}</p>
+  <p>{{user.norm}}</p>
+  <p>{{user.type}}</p>
+  <button mat-button color="warn" (click)="deleteUser(user.id)">Delete</button>
+  <button mat-button color="accent" [routerLink]="['./' + user.id]">View</button>
+</div>
