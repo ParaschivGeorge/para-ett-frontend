@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CompaniesService } from '../services/companies.service';
+import { Company } from '../models/company';
 
 @Component({
   selector: 'app-companies',
@@ -7,9 +9,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompaniesComponent implements OnInit {
 
-  constructor() { }
+  companies: Company[] = [];
+
+  constructor(private companiesService: CompaniesService) { }
 
   ngOnInit() {
+    this.getCompanies();
+  }
+
+  getCompanies() {
+    this.companiesService.getAllCompanies().subscribe(
+      companies => {
+        this.companies = companies;
+        console.log(companies);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  deleteCompany(id: number) {
+    this.companiesService.deleteCompany(id).subscribe(
+      data => {
+        console.log(data);
+        this.getCompanies();
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
 }
