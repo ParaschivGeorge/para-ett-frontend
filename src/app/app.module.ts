@@ -11,11 +11,13 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TokenInterceptorService } from './auth/token-interceptor.service';
 import { AuthGuard } from './auth/auth.guard';
+import { RegisterCompanyComponent } from './register-company/register-company.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent
+    NavBarComponent,
+    RegisterCompanyComponent
   ],
   entryComponents: [
   ],
