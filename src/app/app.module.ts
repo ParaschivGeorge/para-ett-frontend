@@ -13,13 +13,41 @@ import { TokenInterceptorService } from './auth/token-interceptor.service';
 import { AuthGuard } from './auth/auth.guard';
 import { RegisterCompanyComponent } from './register-company/register-company.component';
 import { LoginComponent } from './login/login.component';
+import { CompaniesComponent } from './companies/companies.component';
+import { CompanyComponent } from './companies/company/company.component';
+import { UsersComponent } from './users/users.component';
+import { UserComponent } from './users/user/user.component';
+import { ProjectsComponent } from './projects/projects.component';
+import { ProjectComponent } from './projects/project/project.component';
+import { FreeDaysComponent } from './free-days/free-days.component';
+import { FreeDayComponent } from './free-days/free-day/free-day.component';
+import { LeaveRequestsComponent } from './leave-requests/leave-requests.component';
+import { LeaveRequestComponent } from './leave-requests/leave-request/leave-request.component';
+import { TimesheetRecordsComponent } from './timesheet-records/timesheet-records.component';
+import { TimesheetRecordComponent } from './timesheet-records/timesheet-record/timesheet-record.component';
+import { ActivationComponent } from './activation/activation.component';
+import { MassRegisterComponent } from './mass-register/mass-register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
     RegisterCompanyComponent,
-    LoginComponent
+    LoginComponent,
+    CompaniesComponent,
+    CompanyComponent,
+    UsersComponent,
+    UserComponent,
+    ProjectsComponent,
+    ProjectComponent,
+    FreeDaysComponent,
+    FreeDayComponent,
+    LeaveRequestsComponent,
+    LeaveRequestComponent,
+    TimesheetRecordsComponent,
+    TimesheetRecordComponent,
+    ActivationComponent,
+    MassRegisterComponent
   ],
   entryComponents: [
   ],
