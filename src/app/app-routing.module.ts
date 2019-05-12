@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RegisterCompanyComponent } from './register-company/register-company.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: 'register-company', component: RegisterCompanyComponent},
+  { path: 'login', component: LoginComponent},
   // { path: '', redirectTo: 'login', pathMatch: 'full'},
   // { path: 'login', component: LoginComponent},
   // { path: 'admin-incidents', component: AdminIncidentsComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},

@@ -12,12 +12,14 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TokenInterceptorService } from './auth/token-interceptor.service';
 import { AuthGuard } from './auth/auth.guard';
 import { RegisterCompanyComponent } from './register-company/register-company.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    RegisterCompanyComponent
+    RegisterCompanyComponent,
+    LoginComponent
   ],
   entryComponents: [
   ],
