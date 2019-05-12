@@ -1,3 +1,42 @@
-<p>
-  mass-register works!
-</p>
+<form [formGroup]="massRegisterForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="massRegister">    
+    <div *ngFor="let userForm of massRegister.controls; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field>
+          <input matInput placeholder="Email" formControlName="email"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="First Name" formControlName="firstName"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Last Name" formControlName="lastName"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Manager email" formControlName="managerEmail"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Free days per year" formControlName="freeDaysTotal"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Norm" formControlName="norm"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-select placeholder="User type" formControlName="type" name="type">
+            <mat-option *ngFor="let type of userTypes" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <button mat-button (click)="addUserForm()">Add</button>
+  <button mat-button (click)="removeUsersForm()">Remove</button>
+  <button mat-button type="submit">Submit</button>
+</form>

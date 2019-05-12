@@ -50,7 +50,11 @@ export class UsersService {
     return this.http.put<User>(this.usersServiceUrl + '/activateAccount', accountActivationUserDto);
   }
 
-  massRegister(massRegisterUserDtoList: MassRegisterUserDto[]): Observable<User[]> {
-    return this.http.post<User[]>(this.usersServiceUrl + '/massRegister', massRegisterUserDtoList);
+  massRegister(companyId: number, massRegisterUserDtoList: MassRegisterUserDto[]): Observable<User[]> {
+    let queryParam = new HttpParams();
+    if (companyId) {
+      queryParam = queryParam.append('companyId', companyId.toString());
+    }
+    return this.http.post<User[]>(this.usersServiceUrl + '/massRegister', massRegisterUserDtoList, {params : queryParam});
   }
 }
