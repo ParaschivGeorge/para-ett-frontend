@@ -1,3 +1,19 @@
-<p>
-  project works!
-</p>
+<form [formGroup]="projectEditForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput placeholder="Name" formControlName="name"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Responsible Id" formControlName="responsibleId"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <div formArrayName="users">
+    <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">
+      <input matInput placeholder="User Id" [formControlName]="i"
+      [errorStateMatcher]="matcher">      
+      <button mat-button (click)="removeUser(i)">Remove User</button>
+    </div>
+  </div>
+  <button mat-button (click)="addUser(null)">Add user</button>
+  <button mat-button type="submit">Submit</button>
+</form>

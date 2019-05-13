@@ -1,3 +1,23 @@
+<form [formGroup]="projectCreateForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput placeholder="Name" formControlName="name"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Responsible Id" formControlName="responsibleId"
+      [errorStateMatcher]="matcher">
+  </mat-form-field>
+  <div formArrayName="users">
+    <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">
+      <input matInput placeholder="User Id" [formControlName]="i"
+      [errorStateMatcher]="matcher">
+    </div>
+  </div>
+  <button mat-button (click)="addUser()">Add user</button>
+  <button mat-button (click)="removeUser()">Remove User</button>
+  <button mat-button type="submit">Submit</button>
+</form>
+
 <div *ngFor="let project of projects">
   <p>{{project.id}}</p>
   <p>{{project.name}}</p>
@@ -5,3 +25,4 @@
   <button mat-button color="warn" (click)="deleteProject(project.id)">Delete</button>
   <button mat-button color="accent" [routerLink]="['./' + project.id]">View</button>
 </div>
+
