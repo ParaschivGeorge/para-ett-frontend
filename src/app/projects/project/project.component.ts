@@ -45,7 +45,6 @@ export class ProjectComponent implements OnInit {
         delete project.companyId;
         delete project.id;
         const users: User[] = JSON.parse(JSON.stringify(project.users));
-        console.log(this.projectEditForm);
         this.removeAllUsers();
         project.users = [];
         this.projectEditForm.setValue(project);

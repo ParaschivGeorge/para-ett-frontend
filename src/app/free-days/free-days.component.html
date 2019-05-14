@@ -1,3 +1,32 @@
-<p>
-  free-days works!
-</p>
+<form [formGroup]="freeDaysCreateForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="freeDays">    
+    <div *ngFor="let freeDayForm of freeDaysFormArray.controls; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field>
+          <mat-select placeholder="Type" formControlName="type" name="type">
+            <mat-option *ngFor="let type of freeDayTypes" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <button mat-button (click)="removeFreeDay(i)">Remove</button>
+      </div>
+    </div>
+  </div>  
+  <button mat-button (click)="addFreeDay()">Add</button>
+  <button mat-button type="submit">Submit</button>
+</form>
+
+<div *ngFor="let freeDay of freeDays">
+  <p>{{freeDay.id}}</p>
+  <p>{{freeDay.date}}</p>
+  <p>{{freeDay.type}}</p>
+  <p>{{freeDay.companyId}}</p>
+  <button mat-button color="warn" (click)="deleteFreeDay(freeDay.id)">Delete</button>
+  <button mat-button color="accent" [routerLink]="['./' + freeDay.id]">View</button>
+</div>
