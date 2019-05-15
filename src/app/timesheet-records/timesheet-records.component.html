@@ -1,3 +1,43 @@
-<p>
-  timesheet-records works!
-</p>
+<form [formGroup]="timesheetRecordsCreateForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="timesheetRecords">    
+    <div *ngFor="let timesheetRecordForm of timesheetRecordsFormArray.controls; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field>
+          <mat-select placeholder="Overtime" formControlName="overtime" name="overtime">
+            <mat-option *ngFor="let status of overtimeStatus" [value]="status">
+              {{status}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Number of hours" formControlName="noHours"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>          
+        <mat-form-field>
+          <input matInput placeholder="Project Id" formControlName="projectId"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <button mat-button (click)="removeTimesheetRecord(i)">Remove</button>
+      </div>
+    </div>
+  </div>  
+  <button mat-button (click)="addTimesheetRecord()">Add</button>
+  <button mat-button type="submit">Submit</button>
+</form>
+  
+<div *ngFor="let timesheetRecord of timesheetRecords">
+  <p>{{timesheetRecord.id}}</p>
+  <p>{{timesheetRecord.date}}</p>
+  <p>{{timesheetRecord.overtime}}</p>
+  <p>{{timesheetRecord.noHours}}</p>
+  <p>{{timesheetRecord.companyId}}</p>
+  <p>{{timesheetRecord.managerId}}</p>
+  <p>{{timesheetRecord.userId}}</p>
+  <button mat-button color="warn" (click)="deleteTimesheetRecord(timesheetRecord.id)">Delete</button>
+  <button mat-button color="accent" [routerLink]="['./' + timesheetRecord.id]">View</button>
+</div>

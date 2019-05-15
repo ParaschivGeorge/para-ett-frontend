@@ -62,6 +62,7 @@ export class LeaveRequestComponent implements OnInit {
     console.log(this.leaveRequestEditForm.valid);
     if (this.leaveRequestEditForm.valid) {
       const leaveRequest = this.leaveRequestEditForm.value as LeaveRequest;
+      leaveRequest.id = this.id;
       // TODO: set user data
       leaveRequest.companyId = 1;
       leaveRequest.managerId = 1;

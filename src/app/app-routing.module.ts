@@ -14,6 +14,8 @@ import { LeaveRequestsComponent } from './leave-requests/leave-requests.componen
 import { LeaveRequestComponent } from './leave-requests/leave-request/leave-request.component';
 import { ActivationComponent } from './activation/activation.component';
 import { MassRegisterComponent } from './mass-register/mass-register.component';
+import { TimesheetRecordsComponent } from './timesheet-records/timesheet-records.component';
+import { TimesheetRecordComponent } from './timesheet-records/timesheet-record/timesheet-record.component';
 
 const routes: Routes = [
   { path: 'register-company', component: RegisterCompanyComponent},
@@ -47,8 +49,8 @@ const routes: Routes = [
   ]},
   { path: 'timesheet-records',
    children: [
-    { path: '', component: LeaveRequestsComponent},
-    { path: ':id', component: LeaveRequestComponent},
+    { path: '', component: TimesheetRecordsComponent},
+    { path: ':id', component: TimesheetRecordComponent},
   ]},
   // { path: '', redirectTo: 'login', pathMatch: 'full'},
   // { path: 'login', component: LoginComponent},

@@ -56,6 +56,7 @@ export class FreeDayComponent implements OnInit {
     console.log(this.freeDayEditForm.valid);
     if (this.freeDayEditForm.valid) {
       const freeDay = this.freeDayEditForm.value as FreeDay;
+      freeDay.id = this.id;
       freeDay.companyId = this.freeDay.companyId;
       this.freeDaysService.updateFreeDay(this.id, freeDay).subscribe(
         editedFreeDay => {

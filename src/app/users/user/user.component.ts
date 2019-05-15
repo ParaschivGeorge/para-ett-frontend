@@ -76,7 +76,7 @@ export class UserComponent implements OnInit {
 
   onSubmit() {
     this.usersService.updateUser(this.id, this.userEditForm.value as User).subscribe(
-      company => {
+      user => {
         this.getUser(this.id);
       },
       error => {

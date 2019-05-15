@@ -15,5 +15,12 @@
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="Status" formControlName="approved" name="approved">
+      <mat-option *ngFor="let status of leaveRequestStatuses" [value]="status">
+        {{status}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   <button mat-button type="submit">Submit</button>
 </form>
