@@ -1,3 +1,17 @@
-<p>
-  free-day works!
-</p>
+<form [formGroup]="freeDayEditForm" (ngSubmit)="onSubmit()" *ngIf="freeDay">
+  <p>{{freeDay.id}}</p>
+  <p>{{freeDay.companyId}}</p>
+  <mat-form-field>
+    <mat-select placeholder="Type" formControlName="type" name="type">
+      <mat-option *ngFor="let type of freeDayTypes" [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <button mat-button type="submit">Submit</button>
+</form>
