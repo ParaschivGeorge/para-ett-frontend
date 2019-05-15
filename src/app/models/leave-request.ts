@@ -1,5 +1,5 @@
 export interface LeaveRequest {
-    approved: true;
+    approved: boolean;
     companyId: number;
     date: Date;
     id: number;

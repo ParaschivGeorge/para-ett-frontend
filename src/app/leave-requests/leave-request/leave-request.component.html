@@ -1,3 +1,19 @@
-<p>
-  leave-request works!
-</p>
+<form [formGroup]="leaveRequestEditForm" (ngSubmit)="onSubmit()" *ngIf="leaveRequest">
+  <p>{{leaveRequest.id}}</p>
+  <p>{{leaveRequest.companyId}}</p>
+  <p>{{leaveRequest.managerId}}</p>
+  <p>{{leaveRequest.userId}}</p>
+  <mat-form-field>
+    <mat-select placeholder="Type" formControlName="type" name="type">
+      <mat-option *ngFor="let type of leaveRequestTypes" [value]="type">
+        {{type}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <button mat-button type="submit">Submit</button>
+</form>
