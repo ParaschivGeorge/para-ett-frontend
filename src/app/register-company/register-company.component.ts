@@ -22,12 +22,6 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class RegisterCompanyComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
-
-  passwordFormControl = new FormControl('', [
-    Validators.required,
-    // Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}')
-  ]);
-
   registerCompanyForm: FormGroup = new FormGroup({
     company: new FormGroup({
       description: new FormControl(null, [Validators.required]),
@@ -38,19 +32,9 @@ export class RegisterCompanyComponent implements OnInit {
       firstName: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
       freeDaysTotal:  new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
       lastName: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
-      norm: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-      password: this.passwordFormControl,
-      passwordConfirm: new FormControl('', [
-        Validators.required,
-        this.passwordConfirmValidator.bind(this)
-      ])
+      norm: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')])
     })
   });
-
-  passwordConfirmValidator(control: FormControl): {[s: string]: boolean} {
-    if (control.value === this.passwordFormControl.value) {return null; }
-    return {'passwordsNotMatching': true};
-  }
 
   constructor(private companiesService: CompaniesService) { }
 

@@ -4,5 +4,4 @@ export interface OwnerRegisterUserDto {
     freeDaysTotal: number;
     lastName: string;
     norm: number;
-    password: string;
 }
