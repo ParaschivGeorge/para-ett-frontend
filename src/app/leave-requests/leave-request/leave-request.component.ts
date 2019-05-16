@@ -27,7 +27,7 @@ export class LeaveRequestComponent implements OnInit {
         'CHILDCARE_LEAVE', 'MARRIAGE_LEAVE', 'MATERNITY_LEAVE', 'OTHER_UNPAID_LEAVE', 'OVERTIME_COMPENSATION', 'PATERNITY_LEAVE',
         'PRE_NATAL_EXAMINATION_LEAVE', 'PUBLIC_STATUTORY_DUTIES', 'PUBLIC_HOLIDAYS_OTHER_RELIGION', 'RELOCATION_LEAVE', 'SICKNESS',
         'TRAINING', 'UNPAID_INFANT_CARE_LEAVE', 'VOLUNTEER_LEAVE', 'WORK_FROM_HOME'];
-  leaveRequestStatuses = [false, true];
+  leaveRequestStatuses = ['APPROVED', 'DENIED', 'PENDING'];
   leaveRequestEditForm: FormGroup = new FormGroup({
     date: new FormControl(null, Validators.required),
     type: new FormControl(null, Validators.required),

@@ -68,7 +68,7 @@ export class LeaveRequestsComponent implements OnInit {
       leaveRequest.companyId = 1;
       leaveRequest.managerId = 1;
       leaveRequest.userId = 1;
-      leaveRequest.approved = false;
+      leaveRequest.status = 'PENDING';
       this.leaveRequestsService.createLeaveRequest(leaveRequest).subscribe(
         createdLeaveRequest => {
           console.log(createdLeaveRequest);

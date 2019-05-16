@@ -1,5 +1,5 @@
 export interface LeaveRequest {
-    approved: boolean;
+    status: string; // enum APPROVED, DENIED, PENDING
     companyId: number;
     date: Date;
     id: number;
