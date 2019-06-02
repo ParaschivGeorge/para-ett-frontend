@@ -6,6 +6,7 @@ import { User } from '../models/user';
 })
 export class DataHolderService {
   loading =  false;
+  email: string = null;
   private _user: User;
   
   constructor() { }

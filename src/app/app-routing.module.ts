@@ -17,9 +17,11 @@ import { MassRegisterComponent } from './mass-register/mass-register.component';
 import { TimesheetRecordsComponent } from './timesheet-records/timesheet-records.component';
 import { TimesheetRecordComponent } from './timesheet-records/timesheet-record/timesheet-record.component';
 import { StartComponent } from './start/start.component';
+import { CompanyRegisterRedirectComponent } from './company-register-redirect/company-register-redirect.component';
 
 const routes: Routes = [
   { path: 'start', component: StartComponent},
+  { path: 'email-activation', component: CompanyRegisterRedirectComponent},
   { path: 'activation', component: ActivationComponent},
   { path: 'mass-register', component: MassRegisterComponent},
   { path: 'companies',

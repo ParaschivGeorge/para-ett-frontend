@@ -28,6 +28,8 @@ import { TimesheetRecordComponent } from './timesheet-records/timesheet-record/t
 import { ActivationComponent } from './activation/activation.component';
 import { MassRegisterComponent } from './mass-register/mass-register.component';
 import { StartComponent } from './start/start.component';
+import { CompanyRegisterRedirectComponent } from './company-register-redirect/company-register-redirect.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { StartComponent } from './start/start.component';
     TimesheetRecordComponent,
     ActivationComponent,
     MassRegisterComponent,
-    StartComponent
+    StartComponent,
+    CompanyRegisterRedirectComponent,
+    HomeComponent
   ],
   entryComponents: [
   ],

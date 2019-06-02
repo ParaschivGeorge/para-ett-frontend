@@ -5,6 +5,8 @@ import { CompanyRegisterDto } from '../models/company-register-dto';
 import { ErrorStateMatcher } from '@angular/material';
 import { Company } from '../models/company';
 import { OwnerRegisterUserDto } from '../models/owner-register-user-dto';
+import { Router } from '@angular/router';
+import { DataHolderService } from '../services/data-holder.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -21,6 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class RegisterCompanyComponent implements OnInit {
 
+  error: string;
   matcher = new MyErrorStateMatcher();
   registerCompanyForm: FormGroup = new FormGroup({
     company: new FormGroup({
@@ -36,9 +39,15 @@ export class RegisterCompanyComponent implements OnInit {
     })
   });
 
-  constructor(private companiesService: CompaniesService) { }
+  constructor(
+    private companiesService: CompaniesService,
+    private router: Router,
+    private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
+    this.registerCompanyForm.valueChanges.subscribe(value => {
+      this.error = null;
+    });
   }
 
   onSubmit() {
@@ -46,13 +55,19 @@ export class RegisterCompanyComponent implements OnInit {
     if (this.registerCompanyForm.valid) {
       const companyRegisterDto: CompanyRegisterDto = this.registerCompanyForm.value as CompanyRegisterDto;
       console.log('crdto: ', companyRegisterDto);
+      this.dataHolderService.loading = true;
       this.companiesService.createCompany(companyRegisterDto).subscribe(
         data => {
           console.log(data);
+          this.dataHolderService.email = companyRegisterDto.ownerRegisterUserDto.email;
+          this.router.navigate(['email-activation']);
         },
         error => {
           console.log(error);
+          this.error = 'There was a problem processing your request! Please recheck the form or retry later.';
         }
+      ).add(
+        () => this.dataHolderService.loading = false
       );
     }
   }
