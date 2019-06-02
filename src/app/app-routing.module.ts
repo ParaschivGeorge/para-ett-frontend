@@ -16,8 +16,10 @@ import { ActivationComponent } from './activation/activation.component';
 import { MassRegisterComponent } from './mass-register/mass-register.component';
 import { TimesheetRecordsComponent } from './timesheet-records/timesheet-records.component';
 import { TimesheetRecordComponent } from './timesheet-records/timesheet-record/timesheet-record.component';
+import { StartComponent } from './start/start.component';
 
 const routes: Routes = [
+  { path: 'start', component: StartComponent},
   { path: 'register-company', component: RegisterCompanyComponent},
   { path: 'activation', component: ActivationComponent},
   { path: 'mass-register', component: MassRegisterComponent},

@@ -1,0 +1,25 @@
+form {
+    max-width: 350px;
+    padding: 20px 50px;
+    overflow: hidden;
+}
+
+mat-form-field {
+    min-width: 100%;
+}
+
+button {
+    width: 100%;
+    height: 60px;
+    font-size: 20px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: black;
+    background: white !important;
+    border-radius: 5px; 
+}
+
+::ng-deep .mat-form-field-label {
+    color: black;
+}

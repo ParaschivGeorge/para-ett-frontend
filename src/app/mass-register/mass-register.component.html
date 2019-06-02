@@ -2,7 +2,7 @@
   <div formArrayName="massRegister">    
     <div *ngFor="let userForm of massRegister.controls; let i = index">
       <div [formGroupName]="i">
-        <mat-form-field>
+        <mat-form-field floatLabel="true">
           <input matInput placeholder="Email" formControlName="email"
             [errorStateMatcher]="matcher">
         </mat-form-field>

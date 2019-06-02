@@ -1,12 +1,14 @@
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" *ngIf="loginForm">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
       <input matInput placeholder="Email" formControlName="email"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Password" formControlName="password" type="password"
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <button mat-button type="submit">Login</button>
+    <button mat-raised-button color="primary" type="submit">Log In</button>
   </form>

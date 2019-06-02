@@ -27,6 +27,7 @@ import { TimesheetRecordsComponent } from './timesheet-records/timesheet-records
 import { TimesheetRecordComponent } from './timesheet-records/timesheet-record/timesheet-record.component';
 import { ActivationComponent } from './activation/activation.component';
 import { MassRegisterComponent } from './mass-register/mass-register.component';
+import { StartComponent } from './start/start.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { MassRegisterComponent } from './mass-register/mass-register.component';
     TimesheetRecordsComponent,
     TimesheetRecordComponent,
     ActivationComponent,
-    MassRegisterComponent
+    MassRegisterComponent,
+    StartComponent
   ],
   entryComponents: [
   ],

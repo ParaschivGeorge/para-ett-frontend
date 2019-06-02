@@ -30,9 +30,9 @@ export class RegisterCompanyComponent implements OnInit {
     ownerRegisterUserDto: new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       firstName: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
-      freeDaysTotal:  new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
+      freeDaysTotal:  new FormControl(21, [Validators.required, Validators.pattern('[0-9]*')]),
       lastName: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
-      norm: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')])
+      norm: new FormControl(8, [Validators.required, Validators.pattern('[0-9]*')])
     })
   });
 
