@@ -5,7 +5,6 @@
         <mat-icon>menu</mat-icon>
       </button>
     </div>
-
     <img routerLink="/home" fxHide.lt-md="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  
     <span class="welcome">Hello, Dummy!</span>
     <span class="fill-remaining-space"></span>    
@@ -40,7 +39,9 @@
         <a mat-button routerLink="/timesheet-records">TS R</a>
       </div>
     </mat-sidenav>
-    <mat-sidenav-content fxFlexFill>
+    <mat-sidenav-content fxFlexFill>      
+      <mat-progress-bar mode="determinate" value="100" *ngIf="!loading"></mat-progress-bar>
+      <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

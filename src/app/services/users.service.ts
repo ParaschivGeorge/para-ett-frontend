@@ -30,6 +30,10 @@ export class UsersService {
     return this.http.get<User>(this.usersServiceUrl + '/' + id);
   }
 
+  getUserByEmail(email: string): Observable<User> {
+    return this.http.get<User>(this.usersServiceUrl + '/email/' + email);
+  }
+
   updateUser(id: number, user: User): Observable<User> {
     user.projects = [];
     return this.http.put<User>(this.usersServiceUrl + '/' + id, user);

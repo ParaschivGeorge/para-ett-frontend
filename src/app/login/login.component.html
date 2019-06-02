@@ -11,4 +11,5 @@
         [errorStateMatcher]="matcher">
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit">Log In</button>
+    <div class="error-div warn-background"*ngIf="error">{{error}}</div>
   </form>
