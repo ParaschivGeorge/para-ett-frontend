@@ -1,42 +1,131 @@
-<form [formGroup]="massRegisterForm" (ngSubmit)="onSubmit()">
-  <div formArrayName="massRegister">    
-    <div *ngFor="let userForm of massRegister.controls; let i = index">
-      <div [formGroupName]="i">
-        <mat-form-field floatLabel="true">
-          <input matInput placeholder="Email" formControlName="email"
-            [errorStateMatcher]="matcher">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="First Name" formControlName="firstName"
-            [errorStateMatcher]="matcher">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Last Name" formControlName="lastName"
-            [errorStateMatcher]="matcher">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Manager email" formControlName="managerEmail"
-            [errorStateMatcher]="matcher">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Free days per year" formControlName="freeDaysTotal"
-            [errorStateMatcher]="matcher">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="Norm" formControlName="norm"
-            [errorStateMatcher]="matcher">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-select placeholder="User type" formControlName="type" name="type">
-            <mat-option *ngFor="let type of userTypes" [value]="type">
-              {{type}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+<div class="container">
+  <!-- desktop -->
+  <form [formGroup]="massRegisterForm" (ngSubmit)="onSubmit()" fxHide.lt-lg="true">    
+    <button mat-raised-button color="primary" (click)="addUserForm()">+</button>
+    <mat-form-field appearance="outline" class="field-desktop">
+      <input disabled matInput placeholder="EMAIL">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field-desktop">
+      <input disabled matInput placeholder="FIRST NAME">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field-desktop">
+      <input disabled matInput placeholder="LAST NAME">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field-desktop">
+      <input disabled matInput placeholder="MANAGER EMAIL">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field-desktop">
+      <input disabled matInput placeholder="FDs/Y">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field-desktop">
+      <input disabled matInput placeholder="NORM">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field-desktop">
+      <input disabled matInput placeholder="ROLE">
+    </mat-form-field>
+    <div formArrayName="massRegister">  
+      <div *ngFor="let userForm of massRegister.controls; let i = index">
+        <div [formGroupName]="i">          
+          <button mat-raised-button color="warn" (click)="removeUsersForm(i)">-</button>
+          <mat-form-field appearance="outline" class="field-desktop">
+            <input matInput placeholder="Email" formControlName="email"
+              [errorStateMatcher]="matcher">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-desktop">
+            <input matInput placeholder="First Name" formControlName="firstName"
+              [errorStateMatcher]="matcher">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-desktop">
+            <input matInput placeholder="Last Name" formControlName="lastName"
+              [errorStateMatcher]="matcher">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-desktop">
+            <input matInput placeholder="Manager email" formControlName="managerEmail"
+              [errorStateMatcher]="matcher" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let email of getManagerAuto(i)" [value]="email">
+                {{email}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-desktop">
+            <input matInput placeholder="Free days per year" formControlName="freeDaysTotal"
+              [errorStateMatcher]="matcher">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-desktop">
+            <input matInput placeholder="Norm" formControlName="norm"
+              [errorStateMatcher]="matcher">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-desktop">
+            <mat-select placeholder="User type" formControlName="type" name="type">
+              <mat-option *ngFor="let type of userTypes" [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
     </div>
-  </div>
-  <button mat-button (click)="addUserForm()">Add</button>
-  <button mat-button (click)="removeUsersForm()">Remove</button>
-  <button mat-button type="submit">Submit</button>
-</form>
+    <button mat-raised-button color="accent" type="submit">Submit</button>
+    <div class="error-div warn-background" *ngIf="error">{{error}}</div>
+    <div class="success-div" *ngIf="success">{{success}}</div>
+  </form>
+
+  <!-- mobile -->
+  <form [formGroup]="massRegisterForm" class="mobile-form" (ngSubmit)="onSubmit()" fxHide.gt-md="true">    
+      <button mat-raised-button class="button-mobile" color="primary" (click)="addUserForm()">Add user</button>
+      <div formArrayName="massRegister">  
+        <div *ngFor="let userForm of massRegister.controls; let i = index">
+          <div [formGroupName]="i">          
+            <mat-form-field appearance="outline" class="field-mobile">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email"
+                [errorStateMatcher]="matcher">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-mobile">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName"
+                [errorStateMatcher]="matcher">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-mobile">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName"
+                [errorStateMatcher]="matcher">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-mobile">
+              <mat-label>Manager email</mat-label>
+              <input matInput formControlName="managerEmail"
+                [errorStateMatcher]="matcher" [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let email of getManagerAuto(i)" [value]="email">
+                  {{email}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-mobile">
+              <mat-label>Free days per year</mat-label>
+              <input matInput formControlName="freeDaysTotal"
+                [errorStateMatcher]="matcher">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-mobile">
+              <mat-label>Norm</mat-label>
+              <input matInput formControlName="norm"
+                [errorStateMatcher]="matcher">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-mobile">
+              <mat-label>User type</mat-label>
+              <mat-select formControlName="type" name="type">
+                <mat-option *ngFor="let type of userTypes" [value]="type">
+                  {{type}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-raised-button class="button-mobile" color="warn" (click)="removeUsersForm(i)">Remove user</button>
+          </div>
+        </div>
+      </div>
+      <button mat-raised-button color="accent" class="button-mobile" type="submit">Submit</button>
+      <div class="error-div-mobile warn-background" *ngIf="error">{{error}}</div>
+      <div class="success-div-mobile" *ngIf="success">{{success}}</div>
+    </form>
+</div>

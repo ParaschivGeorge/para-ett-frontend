@@ -21,7 +21,7 @@ button {
     border-radius: 5px; 
 }
 
-::ng-deep .mat-form-field-label {
+.mat-form-field-label {
     color: black;
 }
 

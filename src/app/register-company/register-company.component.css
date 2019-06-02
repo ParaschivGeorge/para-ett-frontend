@@ -15,13 +15,13 @@ button {
     font-size: 20px;
 }
 
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+.mat-form-field-appearance-outline .mat-form-field-outline {
     color: black;
     background: white !important;
     border-radius: 5px; 
 }
 
-::ng-deep .mat-form-field-label {
+.mat-form-field-label {
     color: black;
 }
 
