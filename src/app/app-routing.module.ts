@@ -20,10 +20,8 @@ import { StartComponent } from './start/start.component';
 
 const routes: Routes = [
   { path: 'start', component: StartComponent},
-  { path: 'register-company', component: RegisterCompanyComponent},
   { path: 'activation', component: ActivationComponent},
   { path: 'mass-register', component: MassRegisterComponent},
-  { path: 'login', component: LoginComponent},
   { path: 'companies',
    children: [
     { path: '', component: CompaniesComponent},
