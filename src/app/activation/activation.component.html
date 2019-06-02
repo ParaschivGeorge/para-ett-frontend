@@ -1,11 +1,17 @@
-<form [formGroup]="accountActivationForm" (ngSubmit)="onSubmit()">  
-  <mat-form-field>
-    <input matInput placeholder="Password" formControlName="password" type="password"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Confirm password" formControlName="passwordConfirm" type="password"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <button mat-button type="submit">Submit</button>
-</form>
+<div class="container">
+  <p>Set your account password to activate your account</p>
+  <form [formGroup]="accountActivationForm" (ngSubmit)="onSubmit()">  
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Confirm password</mat-label>
+      <input matInput formControlName="passwordConfirm" type="password"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+    <div class="error-div warn-background"*ngIf="error">{{error}}</div>
+  </form>
+</div>
