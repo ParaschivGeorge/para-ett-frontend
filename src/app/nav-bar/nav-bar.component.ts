@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataHolderService } from '../services/data-holder.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-nav-bar',
@@ -15,5 +16,9 @@ export class NavBarComponent implements OnInit {
 
   get loading(): boolean {
     return this.dataHolderService.loading;
+  }
+
+  get user(): User {
+    return this.dataHolderService.user;
   }
 }

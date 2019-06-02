@@ -1,11 +1,18 @@
-<form [formGroup]="companyEditForm" (ngSubmit)="onSubmit()">
-  <mat-form-field>
-    <input matInput placeholder="Name" formControlName="name"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Description" formControlName="description"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <button mat-button type="submit">Submit</button>
-</form>
+<div class="container">
+  <form [formGroup]="companyEditForm">
+    <h2>Your company data</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>Company name</mat-label>
+      <input matInput formControlName="name"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Company motto</mat-label>
+      <input matInput formControlName="description"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="edit()">{{editLabel}}</button>
+    <button [disabled]="!editing" mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    <div class="error-div warn-background"*ngIf="error">{{error}}</div>
+  </form>
+</div>
