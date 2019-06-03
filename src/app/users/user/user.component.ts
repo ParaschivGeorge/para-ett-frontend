@@ -4,7 +4,7 @@ import { ErrorStateMatcher } from '@angular/material';
 import { User } from 'src/app/models/user';
 import { UsersService } from 'src/app/services/users.service';
 import { ProjectsService } from 'src/app/services/projects.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from 'src/app/models/project';
 import { DataHolderService } from 'src/app/services/data-holder.service';
 
@@ -28,30 +28,57 @@ export class UserComponent implements OnInit {
   user: User;
   userTypes = ['EMPLOYEE', 'MANAGER', 'HR', 'OWNER'];
   userEditForm: FormGroup = new FormGroup({
-    firstName: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
-    freeDaysLeft: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-    lastName: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
-    managerId: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-    norm: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-    type: new FormControl(null, [Validators.required])
+    firstName: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
+    freeDaysLeft: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[0-9]*')]),
+    lastName: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
+    managerId: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[0-9]*')]),
+    norm: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[0-9]*')]),
+    type: new FormControl({value: null, disabled: true}, [Validators.required])
   });
   projects: Project[] = [];
+  users: User[] = [];
+  editing = false;
+  editLabel = 'Edit';
 
   constructor(
     private usersService: UsersService,
     private projectsService: ProjectsService,
     private route: ActivatedRoute,
-    private dataHolderService: DataHolderService) { }
+    private dataHolderService: DataHolderService,
+    private router: Router) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
     this.getUser(this.id);
   }
 
+  edit() {
+    this.editing = !this.editing;
+    if (this.editing) {
+      this.editLabel = 'Cancel';
+      if (this.isCurrentUser()) {
+        this.userEditForm.get('firstName').enable();
+        this.userEditForm.get('lastName').enable();
+      }
+      if (this.isHR()) {
+        this.userEditForm.get('norm').enable();
+        this.userEditForm.get('freeDaysLeft').enable();
+      }
+      if (this.isOwner()) {
+        this.userEditForm.get('managerId').enable();
+      }
+    } else {
+      this.editLabel = 'Edit';
+      this.userEditForm.disable();
+    }
+  }
+
   getUser(id: number) {
     this.dataHolderService.loading = true;
-    this.usersService.getUser(id).subscribe(
-      user => {
+    this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
+      users => {
+        this.users = users;
+        const user = users.filter(u => u.id == id)[0];
         this.user = JSON.parse(JSON.stringify(user));
         console.log(this.user);
         delete user.id;
@@ -78,7 +105,9 @@ export class UserComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.dataHolderService.loading = false;
+    });
   }
 
   onSubmit() {
@@ -90,6 +119,45 @@ export class UserComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  isCurrentUser(): boolean {
+    return this.dataHolderService.user && this.dataHolderService.user.id == this.id;
+  }
+
+  isOwner(): boolean {
+    return this.dataHolderService.user && this.dataHolderService.user.type === 'OWNER';
+  }
+
+  isHR(): boolean {
+    return this.dataHolderService.user && this.dataHolderService.user.type === 'HR';
+  }
+
+  deleteUser(id: number) {
+    this.dataHolderService.loading = true;
+    this.usersService.deleteUser(id).subscribe(
+      data => {
+        console.log(data);
+        this.router.navigate(['/users']);
+      },
+      error => {
+        console.log(error);
+      }
+    ).add(() => this.dataHolderService.loading = true);
+  }
+
+  canEdit() {
+    return this.isCurrentUser() || this.isHR() || this.isOwner();
+  }
+
+  getManagers(): User[] {
+    const users = [];
+    this.users.forEach(user => {
+      if (user.type === 'MANAGER' || user.type === 'OWNER') {
+        users.push(user);
+      }
+    });
+    return users;
   }
 
 }

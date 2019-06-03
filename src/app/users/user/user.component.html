@@ -1,30 +1,46 @@
-<form [formGroup]="userEditForm" (ngSubmit)="onSubmit()">
-  <mat-form-field>
-    <input matInput placeholder="First Name" formControlName="firstName"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Last Name" formControlName="lastName"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Free days left" formControlName="freeDaysLeft"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Norm" formControlName="norm"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <mat-form-field class="full-width">
-    <mat-select placeholder="User type" formControlName="type" name="type">
-      <mat-option *ngFor="let type of userTypes" [value]="type">
-        {{type}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Manager Id" formControlName="managerId"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <button mat-button type="submit">Submit</button>
-</form>
+<div class="my-container row">
+  <form [formGroup]="userEditForm" (ngSubmit)="onSubmit()" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Remaining free days</mat-label>
+      <input matInput formControlName="freeDaysLeft"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Norm</mat-label>
+      <input matInput formControlName="norm"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>User type</mat-label>
+      <mat-select formControlName="type" name="type">
+        <mat-option *ngFor="let type of userTypes" [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Manager Email</mat-label>
+      <mat-select formControlName="managerId" name="managerId">
+        <mat-option *ngFor="let user of getManagers()" [value]="user.id">
+          {{user.email}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="edit()" *ngIf="canEdit()">{{editLabel}}</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!editing" *ngIf="canEdit()">Submit</button>
+    <button mat-raised-button color="warn" (click)="deleteUser(id)" *ngIf="isOwner() && !isCurrentUser()">Delete</button>
+  </form>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+    <p>Active projects: //TODO</p>
+  </div>
+</div>

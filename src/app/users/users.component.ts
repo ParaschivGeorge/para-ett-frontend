@@ -52,17 +52,4 @@ export class UsersComponent implements OnInit {
       this.router.navigate(['start']);
     }
   }
-
-  deleteUser(id: number) {
-    this.usersService.deleteUser(id).subscribe(
-      data => {
-        console.log(data);
-        this.getUsers();
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
-
 }
