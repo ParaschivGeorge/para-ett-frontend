@@ -4,6 +4,10 @@ import { Project } from '../models/project';
 import { FormArray, FormControl, Validators, FormGroupDirective, NgForm, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { ProjectDto } from '../models/project-dto';
+import { DataHolderService } from '../services/data-holder.service';
+import { UsersService } from '../services/users.service';
+import { User } from '../models/user';
+import { Router } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -22,6 +26,7 @@ export class ProjectsComponent implements OnInit {
 
   projects: Project[] = [];
   matcher = new MyErrorStateMatcher();
+  users: User[] = [];
 
   projectCreateForm: FormGroup = new FormGroup({
     name: new FormControl(null, [Validators.required]),
@@ -29,20 +34,50 @@ export class ProjectsComponent implements OnInit {
     users: new FormArray([])
   });
 
-  constructor(private projectsService: ProjectsService) { }
+  constructor(
+    private projectsService: ProjectsService,
+    private dataHolderService: DataHolderService,
+    private usersService: UsersService,
+    private router: Router) { }
 
   ngOnInit() {
     this.getProjects();
   }
 
   getProjects() {
-    // TODO provide user company id
-    this.projectsService.getProjects(null, null).subscribe(
-      projects => {
-        this.projects = projects;
-        console.log(projects);
-      }
-    );
+    if (this.dataHolderService.user) {
+      this.dataHolderService.loading = true;
+      this.projectsService.getProjects(this.dataHolderService.user.companyId, null).subscribe(
+        projects => {
+          this.projects = projects;
+          this.getUsers();
+          console.log(projects);
+        }
+      ).add(() => {
+        this.dataHolderService.loading = false;
+      });
+    } else {
+      this.router.navigate(['start']);
+    }
+  }
+
+  getUsers() {
+    if (this.dataHolderService.user) {
+      this.dataHolderService.loading = true;
+      this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
+        users => {
+          this.users = users;
+          console.log(users);
+        },
+        error => {
+          console.log(error);
+        }
+      ).add(() => {
+        this.dataHolderService.loading = false;
+      });
+    } else {
+      this.router.navigate(['start']);
+    }
   }
 
   deleteProject(id: number) {
@@ -73,7 +108,7 @@ export class ProjectsComponent implements OnInit {
     console.log(this.projectCreateForm.valid);
     if (this.projectCreateForm.valid) {
       const projectDto = this.projectCreateForm.value as ProjectDto;
-      projectDto.companyId = 1; // TODO set user company id
+      projectDto.companyId = this.dataHolderService.user.companyId;
       this.projectsService.createProject(projectDto).subscribe(
         data => {
           console.log(data);

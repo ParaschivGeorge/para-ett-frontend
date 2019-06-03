@@ -1,4 +1,4 @@
-..my-container {
+.my-container {
     background: linear-gradient(to bottom, #f0f9ff 0%,#70c8ff 100%,#a1dbff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     min-height: calc(100vh - 120px);
     padding: 30px 30px;

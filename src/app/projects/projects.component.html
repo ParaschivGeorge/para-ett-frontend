@@ -1,28 +1,42 @@
-<form [formGroup]="projectCreateForm" (ngSubmit)="onSubmit()">
-  <mat-form-field>
-    <input matInput placeholder="Name" formControlName="name"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="Responsible Id" formControlName="responsibleId"
-      [errorStateMatcher]="matcher">
-  </mat-form-field>
-  <div formArrayName="users">
-    <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">
-      <input matInput placeholder="User Id" [formControlName]="i"
-      [errorStateMatcher]="matcher">
+<div class="my-container">
+  <form [formGroup]="projectCreateForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">      
+      <mat-label>Project name</mat-label>
+      <input matInput formControlName="name"
+        [errorStateMatcher]="matcher">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Responsible Email</mat-label>
+      <mat-select formControlName="responsibleId" name="responsibleId">
+        <mat-option *ngFor="let user of users" [value]="user.id">
+          {{user.email}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div formArrayName="users">
+      <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">      
+        <mat-form-field appearance="outline">
+          <mat-label>User Email</mat-label>
+          <mat-select [formControlName]="i">
+            <mat-option *ngFor="let user of users" [value]="user.id">
+              {{user.email}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
+    <button mat-raised-button color="accent" (click)="addUser()">Add user</button>
+    <button mat-raised-button color="warn" (click)="removeUser()">Remove User</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+  </form>
+  
+  <div *ngFor="let project of projects">
+    <p>{{project.id}}</p>
+    <p>{{project.name}}</p>
+    <p>{{project.responsibleId}}</p>
+    <button mat-button color="warn" (click)="deleteProject(project.id)">Delete</button>
+    <button mat-button color="accent" [routerLink]="['./' + project.id]">View</button>
   </div>
-  <button mat-button (click)="addUser()">Add user</button>
-  <button mat-button (click)="removeUser()">Remove User</button>
-  <button mat-button type="submit">Submit</button>
-</form>
-
-<div *ngFor="let project of projects">
-  <p>{{project.id}}</p>
-  <p>{{project.name}}</p>
-  <p>{{project.responsibleId}}</p>
-  <button mat-button color="warn" (click)="deleteProject(project.id)">Delete</button>
-  <button mat-button color="accent" [routerLink]="['./' + project.id]">View</button>
 </div>
+
 
