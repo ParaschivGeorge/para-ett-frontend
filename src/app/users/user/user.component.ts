@@ -6,6 +6,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { Project } from 'src/app/models/project';
+import { DataHolderService } from 'src/app/services/data-holder.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -25,7 +26,7 @@ export class UserComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   id: number;
   user: User;
-  userTypes = ['EMPLOYEE', 'MANAGER', 'HR'];
+  userTypes = ['EMPLOYEE', 'MANAGER', 'HR', 'OWNER'];
   userEditForm: FormGroup = new FormGroup({
     firstName: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     freeDaysLeft: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
@@ -36,7 +37,11 @@ export class UserComponent implements OnInit {
   });
   projects: Project[] = [];
 
-  constructor(private usersService: UsersService, private projectsService: ProjectsService, private route: ActivatedRoute) { }
+  constructor(
+    private usersService: UsersService,
+    private projectsService: ProjectsService,
+    private route: ActivatedRoute,
+    private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
@@ -44,6 +49,7 @@ export class UserComponent implements OnInit {
   }
 
   getUser(id: number) {
+    this.dataHolderService.loading = true;
     this.usersService.getUser(id).subscribe(
       user => {
         this.user = JSON.parse(JSON.stringify(user));
@@ -58,6 +64,7 @@ export class UserComponent implements OnInit {
       },
       error => {
         console.log(error);
+        this.dataHolderService.loading = false;
       }
     );
   }

@@ -49,7 +49,7 @@ export class MassRegisterComponent implements OnInit {
           console.log(error);
         }
       ).add(() => {
-        setTimeout(() => this.dataHolderService.loading = false, 500);
+        setTimeout(() => this.dataHolderService.loading = false, 1000);
       });
     } else {
       this.router.navigate(['start']);
@@ -105,7 +105,7 @@ export class MassRegisterComponent implements OnInit {
           this.error = 'There was a problem processing your request! Please recheck the form or retry later.';
         }
       ).add(() => {
-        this.dataHolderService.loading = false;
+        setTimeout(() => this.dataHolderService.loading = false, 1000);
       });
     }
   }

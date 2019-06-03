@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { User } from '../models/user';
+import { DataHolderService } from '../services/data-holder.service';
+import { Router } from '@angular/router';
+import { MatTableDataSource, MatSort } from '@angular/material';
 
 @Component({
   selector: 'app-users',
@@ -10,24 +13,44 @@ import { User } from '../models/user';
 export class UsersComponent implements OnInit {
 
   users: User[] = [];
+  displayedColumnsDesktop: string[] = ['email', 'firstName', 'lastName', 'type', 'freeDaysLeft', 'norm'];
+  displayedColumnsMobile: string[] = ['email', 'firstName', 'lastName'];
+  dataSource = null;
 
-  constructor(private usersService: UsersService) { }
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(
+    private usersService: UsersService,
+    private dataHolderService: DataHolderService,
+    private router: Router) { }
 
   ngOnInit() {
     this.getUsers();
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getUsers() {
-    // TODO provide user company id
-    this.usersService.getAllUsers(null, null).subscribe(
-      users => {
-        this.users = users;
-        console.log(users);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    if (this.dataHolderService.user) {
+      this.dataHolderService.loading = true;
+      this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
+        users => {
+          this.users = users;
+          this.dataSource = new MatTableDataSource(users);
+          this.dataSource.sort = this.sort;
+          console.log(users);
+        },
+        error => {
+          console.log(error);
+        }
+      ).add(() => {
+        this.dataHolderService.loading = false;
+      });
+    } else {
+      this.router.navigate(['start']);
+    }
   }
 
   deleteUser(id: number) {

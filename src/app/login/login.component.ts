@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ErrorStateMatcher } from '@angular/material';
 import { AuthenticationRequest } from '../models/authentication-request';
-import * as jwt_decode from "jwt-decode";
+import * as jwt_decode from 'jwt-decode';
 import { UsersService } from '../services/users.service';
 import { DataHolderService } from '../services/data-holder.service';
 
@@ -59,11 +59,11 @@ export class LoginComponent implements OnInit {
         authResp => {
           console.log(authResp);
           console.log(JSON.parse(jwt_decode(authResp.token).sub));
+          sessionStorage.setItem('token', authResp.token);
           this.usersService.getUserByEmail(JSON.parse(jwt_decode(authResp.token).sub).username).subscribe(
             user => {
               console.log(user);
               this.dataHolderService.user = user;
-              sessionStorage.setItem('token', authResp.token);
               setTimeout(() => {
                 this.router.navigate(['timesheet-records']);
               }, 1000);
@@ -71,6 +71,7 @@ export class LoginComponent implements OnInit {
             error => {
               console.log(error);
               this.error = 'User data unavailable!';
+              sessionStorage.removeItem('token');
             }
           ).add(() => {
             this.dataHolderService.loading = false;
