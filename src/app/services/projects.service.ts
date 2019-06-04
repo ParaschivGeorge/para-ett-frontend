@@ -18,13 +18,16 @@ export class ProjectsService {
     return this.http.post<Project>(this.projectsServiceUrl, projectDto);
   }
 
-  getProjects(companyId: number, responsibleId: number): Observable<Project[]> {
+  getProjects(companyId: number, responsibleId: number, userId: number): Observable<Project[]> {
     let queryParam = new HttpParams();
     if (companyId) {
       queryParam = queryParam.append('companyId', companyId.toString());
     }
     if (responsibleId) {
       queryParam = queryParam.append('responsibleId', responsibleId.toString());
+    }
+    if (userId) {
+      queryParam = queryParam.append('userId', userId.toString());
     }
     return this.http.get<Project[]>(this.projectsServiceUrl, {params : queryParam});
   }

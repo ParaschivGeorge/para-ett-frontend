@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from 'src/app/services/projects.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material';
 import { FormControl, FormGroupDirective, NgForm, FormArray, FormGroup, Validators } from '@angular/forms';
 import { Project } from 'src/app/models/project';
 import { ProjectDto } from 'src/app/models/project-dto';
 import { User } from 'src/app/models/user';
+import { UsersService } from 'src/app/services/users.service';
+import { DataHolderService } from 'src/app/services/data-holder.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -21,6 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class ProjectComponent implements OnInit {
 
+  users: User[] = [];
   matcher = new MyErrorStateMatcher();
   id: number;
   project: Project;
@@ -30,7 +33,12 @@ export class ProjectComponent implements OnInit {
     users: new FormArray([])
   });
 
-  constructor(private projectsService: ProjectsService, private route: ActivatedRoute) { }
+  constructor(
+    private projectsService: ProjectsService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private usersService: UsersService,
+    private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
@@ -51,6 +59,7 @@ export class ProjectComponent implements OnInit {
         users.forEach(user => {
           this.addUser(user.id);
         });
+        this.getUsers();
       },
       error => {
         console.log(error);
@@ -76,7 +85,7 @@ export class ProjectComponent implements OnInit {
     console.log(this.projectEditForm.valid);
     if (this.projectEditForm.valid) {
       const projectDto = this.projectEditForm.value as ProjectDto;
-      projectDto.companyId = 1; // TODO set user company id
+      projectDto.companyId = this.dataHolderService.user.companyId;
       this.projectsService.updateProject(this.id, projectDto).subscribe(
         project => {
           console.log(project);
@@ -92,6 +101,25 @@ export class ProjectComponent implements OnInit {
   private removeAllUsers() {
     for (let index = this.usersFormArray.length - 1; index >= 0; index--) {
       this.removeUser(index);
+    }
+  }
+
+  getUsers() {
+    if (this.dataHolderService.user) {
+      this.dataHolderService.loading = true;
+      this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
+        users => {
+          this.users = users;
+          console.log(users);
+        },
+        error => {
+          console.log(error);
+        }
+      ).add(() => {
+        this.dataHolderService.loading = false;
+      });
+    } else {
+      this.router.navigate(['start']);
     }
   }
 

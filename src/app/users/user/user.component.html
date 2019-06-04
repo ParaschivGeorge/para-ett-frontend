@@ -40,7 +40,29 @@
     <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!editing" *ngIf="canEdit()">Submit</button>
     <button mat-raised-button color="warn" (click)="deleteUser(id)" *ngIf="isOwner() && !isCurrentUser()">Delete</button>
   </form>
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-    <p>Active projects: //TODO</p>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngIf="projects.length > 0">
+    <h2>Your projects</h2>
+    <div *ngFor="let project of projects">
+      <mat-accordion>
+        <mat-expansion-panel class="panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{project.name}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{getUserData(project.responsibleId)}}            
+            </mat-panel-description>                   
+          </mat-expansion-panel-header>
+          
+          <table class="panel-content">
+            <tr  *ngFor="let user of project.users">
+              <td>{{user.firstName}}</td>
+              <td>{{user.lastName}}</td>
+              <td>{{user.email}}</td>
+            </tr>
+          </table>          
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
   </div>
 </div>

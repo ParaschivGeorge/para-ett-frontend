@@ -78,16 +78,15 @@ export class UserComponent implements OnInit {
     this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
       users => {
         this.users = users;
-        const user = users.filter(u => u.id == id)[0];
-        this.user = JSON.parse(JSON.stringify(user));
-        console.log(this.user);
+        this.user = users.filter(u => u.id == id)[0];
+        const user = JSON.parse(JSON.stringify(this.user));
         delete user.id;
         delete user.companyId;
         delete user.email;
         delete user.projects;
         delete user.lastLoginDate;
         this.userEditForm.setValue(user);
-        this.getProjects(this.user.companyId, this.user.id);
+        this.getProjects(this.user.companyId, id);
       },
       error => {
         console.log(error);
@@ -96,11 +95,18 @@ export class UserComponent implements OnInit {
     );
   }
 
-  getProjects(companyId: number, responsibleId: number) {
-    this.projectsService.getProjects(companyId, responsibleId).subscribe(
+  getProjects(companyId: number, userId: number) {
+    this.projectsService.getProjects(companyId, null, userId).subscribe(
       projects => {
-        this.projects = projects;
-        console.log(projects);
+        this.projectsService.getProjects(companyId, userId, null).subscribe(
+          projectsR => {
+            this.projects = projects.concat(projectsR);
+            console.log(this.projects);
+          },
+          error => {{
+            console.log(error);
+          }}
+        );
       },
       error => {
         console.log(error);
@@ -160,4 +166,12 @@ export class UserComponent implements OnInit {
     return users;
   }
 
+  getUserData(id: number) {
+    const user = this.users.filter(u => u.id === id)[0];
+    return user.firstName + ' ' + user.lastName + ' ' + user.email;
+  }
+
+  canEditOrDelete(responsibleId: number) {
+    return this.dataHolderService.user.type === 'OWNER' || this.dataHolderService.user.id === responsibleId;
+  }
 }

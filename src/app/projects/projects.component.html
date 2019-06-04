@@ -1,4 +1,5 @@
 <div class="my-container">
+  <h2>Add a new project</h2>
   <form [formGroup]="projectCreateForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline">      
       <mat-label>Project name</mat-label>
@@ -30,12 +31,34 @@
     <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
   </form>
   
+  <h2>Your projects</h2>
   <div *ngFor="let project of projects">
-    <p>{{project.id}}</p>
-    <p>{{project.name}}</p>
-    <p>{{project.responsibleId}}</p>
-    <button mat-button color="warn" (click)="deleteProject(project.id)">Delete</button>
-    <button mat-button color="accent" [routerLink]="['./' + project.id]">View</button>
+    <mat-accordion>
+      <mat-expansion-panel class="panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{project.name}}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{getUserData(project.responsibleId)}}            
+          </mat-panel-description>                   
+        </mat-expansion-panel-header>
+        
+        <table class="panel-content">
+          <tr  *ngFor="let user of project.users">
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </table>
+
+        <mat-action-row>
+          <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-raised-button color="warn" (click)="deleteProject(project.id)">Delete</button>
+          <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-raised-button color="accent" [routerLink]="['./' + project.id]">Edit</button> 
+        </mat-action-row>
+        
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </div>
 

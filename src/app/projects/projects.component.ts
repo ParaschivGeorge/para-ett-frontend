@@ -47,7 +47,7 @@ export class ProjectsComponent implements OnInit {
   getProjects() {
     if (this.dataHolderService.user) {
       this.dataHolderService.loading = true;
-      this.projectsService.getProjects(this.dataHolderService.user.companyId, null).subscribe(
+      this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
         projects => {
           this.projects = projects;
           this.getUsers();
@@ -92,16 +92,27 @@ export class ProjectsComponent implements OnInit {
     );
   }
 
+  getUserData(id: number) {
+    const user = this.users.filter(u => u.id === id)[0];
+    return user.firstName + ' ' + user.lastName + ' ' + user.email;
+  }
+
   get usersFormArray(): FormArray {
     return this.projectCreateForm.get('users') as FormArray;
   }
 
   addUser() {
-    this.usersFormArray.push(new FormControl(null ,Validators.required));
+    if (this.projectCreateForm.valid) {
+      this.usersFormArray.push(new FormControl(null ,Validators.required));
+    }
   }
 
   removeUser() {
     this.usersFormArray.removeAt(this.usersFormArray.length - 1);
+  }
+
+  canEditOrDelete(responsibleId: number) {
+    return this.dataHolderService.user.type === 'OWNER' || this.dataHolderService.user.id === responsibleId;
   }
 
   onSubmit() {
