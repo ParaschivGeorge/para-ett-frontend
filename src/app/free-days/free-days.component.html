@@ -28,8 +28,8 @@
     </div>
   </form>
   
-  <div *ngFor="let freeDay of freeDays">
-    <app-free-day [freeDay]="freeDay"></app-free-day>
+  <div *ngFor="let freeDay of freeDays" class="free-days-div">
+    <app-free-day [freeDay]="freeDay"  (deleteEmitter)="deleteFreeDay($event)"></app-free-day>
   </div>
 
 </div>

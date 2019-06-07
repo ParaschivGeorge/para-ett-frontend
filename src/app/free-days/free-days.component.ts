@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FreeDaysService } from '../services/free-days.service';
 import { FreeDay } from '../models/free-day';
 import { FormArray, FormControl, FormGroupDirective, NgForm, FormGroup, Validators } from '@angular/forms';
@@ -83,4 +83,16 @@ export class FreeDaysComponent implements OnInit {
     }
   }
 
+  deleteFreeDay(id: number) {
+    console.log(id);
+    this.freeDaysService.deleteFreeDay(id).subscribe(
+      data => {
+        console.log(data);
+        this.getFreeDays();
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
 }

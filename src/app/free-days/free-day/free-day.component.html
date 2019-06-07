@@ -7,14 +7,12 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" class="col-xs-12 col-sm-4">
     <mat-label>Date</mat-label>
     <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
-  <div>
-    <button mat-button (click)="onSubmit()">Submit</button>  
-    <button mat-raised-button color="warn" (click)="deleteFreeDay(freeDay.id)">Delete</button>
-  </div>
+  <button mat-raised-button color="accent" (click)="onSubmit()" *ngIf="isOwner()">Submit</button>  
+  <button mat-raised-button color="warn" (click)="deleteFreeDay(freeDay.id)" *ngIf="isOwner()">Delete</button>
 </form>

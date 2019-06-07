@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FreeDay } from 'src/app/models/free-day';
 import { ErrorStateMatcher } from '@angular/material';
 import { FormControl, FormGroupDirective, NgForm, FormGroup, Validators } from '@angular/forms';
 import { FreeDaysService } from 'src/app/services/free-days.service';
 import { ActivatedRoute } from '@angular/router';
+import { DataHolderService } from 'src/app/services/data-holder.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -23,22 +24,22 @@ export class FreeDayComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   id: number;
   @Input() freeDay: FreeDay;
+  @Output() deleteEmitter: EventEmitter<number> = new EventEmitter<number>();
   freeDayTypes = ['NATIONAL', 'COMPANY_HOLIDAY'];
   freeDayEditForm: FormGroup = new FormGroup({
     date: new FormControl(null, Validators.required),
     type: new FormControl(null, Validators.required)
   });
 
-  constructor(private freeDaysService: FreeDaysService, private route: ActivatedRoute) { }
+  constructor(
+    private freeDaysService: FreeDaysService,
+    private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.params.id;
-    // this.getFreeDay(this.id);
     if (this.freeDay) {
       this.id = this.freeDay.id;
       this.freeDay.date = new Date(this.freeDay.date);
       const freeDay = JSON.parse(JSON.stringify(this.freeDay));
-      // console.log(this.freeDay);
       delete freeDay.id;
       delete freeDay.companyId;
       freeDay.date = new Date(freeDay.date);
@@ -50,7 +51,6 @@ export class FreeDayComponent implements OnInit {
     this.freeDaysService.getFreeDay(id).subscribe(
       freeDay => {
         this.freeDay = JSON.parse(JSON.stringify(freeDay));
-        // console.log(this.freeDay);
         delete freeDay.id;
         delete freeDay.companyId;
         freeDay.date = new Date(freeDay.date);
@@ -70,7 +70,6 @@ export class FreeDayComponent implements OnInit {
       freeDay.companyId = this.freeDay.companyId;
       this.freeDaysService.updateFreeDay(this.id, freeDay).subscribe(
         editedFreeDay => {
-          // console.log(editedFreeDay);
           this.getFreeDay(this.id);
         },
         error => {
@@ -81,14 +80,11 @@ export class FreeDayComponent implements OnInit {
   }
 
   deleteFreeDay(id: number) {
-    this.freeDaysService.deleteFreeDay(id).subscribe(
-      data => {
-        console.log(data);
-      },
-      error => {
-        console.log(error);
-      }
-    );
+    this.deleteEmitter.emit(id);
+  }
+
+  isOwner() {
+    return this.dataHolderService.user && this.dataHolderService.user.type === 'OWNER';
   }
 
 }
