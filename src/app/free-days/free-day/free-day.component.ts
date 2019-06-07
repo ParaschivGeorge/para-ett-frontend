@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FreeDay } from 'src/app/models/free-day';
 import { ErrorStateMatcher } from '@angular/material';
 import { FormControl, FormGroupDirective, NgForm, FormGroup, Validators } from '@angular/forms';
@@ -22,7 +22,7 @@ export class FreeDayComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
   id: number;
-  freeDay: FreeDay;
+  @Input() freeDay: FreeDay;
   freeDayTypes = ['NATIONAL', 'COMPANY_HOLIDAY'];
   freeDayEditForm: FormGroup = new FormGroup({
     date: new FormControl(null, Validators.required),
@@ -33,14 +33,24 @@ export class FreeDayComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
-    this.getFreeDay(this.id);
+    // this.getFreeDay(this.id);
+    if (this.freeDay) {
+      this.id = this.freeDay.id;
+      this.freeDay.date = new Date(this.freeDay.date);
+      const freeDay = JSON.parse(JSON.stringify(this.freeDay));
+      // console.log(this.freeDay);
+      delete freeDay.id;
+      delete freeDay.companyId;
+      freeDay.date = new Date(freeDay.date);
+      this.freeDayEditForm.setValue(freeDay);
+    }
   }
 
   getFreeDay(id: number) {
     this.freeDaysService.getFreeDay(id).subscribe(
       freeDay => {
         this.freeDay = JSON.parse(JSON.stringify(freeDay));
-        console.log(this.freeDay);
+        // console.log(this.freeDay);
         delete freeDay.id;
         delete freeDay.companyId;
         freeDay.date = new Date(freeDay.date);
@@ -60,7 +70,7 @@ export class FreeDayComponent implements OnInit {
       freeDay.companyId = this.freeDay.companyId;
       this.freeDaysService.updateFreeDay(this.id, freeDay).subscribe(
         editedFreeDay => {
-          console.log(editedFreeDay);
+          // console.log(editedFreeDay);
           this.getFreeDay(this.id);
         },
         error => {
@@ -68,6 +78,17 @@ export class FreeDayComponent implements OnInit {
         }
       );
     }
+  }
+
+  deleteFreeDay(id: number) {
+    this.freeDaysService.deleteFreeDay(id).subscribe(
+      data => {
+        console.log(data);
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
 }
