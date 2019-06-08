@@ -74,6 +74,9 @@ export class FreeDaysComponent implements OnInit {
       this.freeDaysService.createFreeDays(freeDays).subscribe(
         createdFreeDays => {
           console.log(createdFreeDays);
+          this.freeDaysCreateForm = new FormGroup({
+            freeDays: new FormArray([])
+          });
           this.getFreeDays();
         },
         error => {
@@ -94,5 +97,9 @@ export class FreeDaysComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  isOwner() {
+    return this.dataHolderService.user && this.dataHolderService.user.type === 'OWNER';
   }
 }

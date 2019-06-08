@@ -1,11 +1,12 @@
 <div class= "my-container">
-  <form [formGroup]="freeDaysCreateForm">
+  <form [formGroup]="freeDaysCreateForm" *ngIf="isOwner()">
+    <h2>Add more vacation days</h2>
     <div formArrayName="freeDays">    
       <div *ngFor="let freeDayForm of freeDaysFormArray.controls; let i = index">
         <div [formGroupName]="i" class="row">
           <mat-form-field appearance="outline" class="col-xs-12 col-sm-5">
             <mat-label>Type</mat-label>
-            <mat-select formControlName="type" name="type">
+            <mat-select formControlName="type" name="type" [errorStateMatcher]="matcher">
               <mat-option *ngFor="let type of freeDayTypes" [value]="type">
                 {{type}}
               </mat-option>
@@ -13,7 +14,7 @@
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-xs-12 col-sm-5">
             <mat-label>Date</mat-label>
-            <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
+            <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date" [errorStateMatcher]="matcher">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -22,12 +23,13 @@
       </div>
     </div>
 
-    <div>
+    <div *ngIf="isOwner()">
       <button class="bottom-button" mat-raised-button color="accent" (click)="addFreeDay()">Add</button>
       <button class="bottom-button" mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
     </div>
   </form>
   
+  <h2>Vacation days</h2>
   <div *ngFor="let freeDay of freeDays" class="free-days-div">
     <app-free-day [freeDay]="freeDay"  (deleteEmitter)="deleteFreeDay($event)"></app-free-day>
   </div>
