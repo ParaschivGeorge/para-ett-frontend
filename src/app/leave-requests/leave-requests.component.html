@@ -1,27 +1,31 @@
-<form [formGroup]="leaveRequestCreateForm" (ngSubmit)="onSubmit()">
-  <mat-form-field>
-    <mat-select placeholder="Type" formControlName="type" name="type">
-      <mat-option *ngFor="let type of leaveRequestTypes" [value]="type">
-        {{type}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-  <button mat-button type="submit">Submit</button>
-</form>
-
-<div *ngFor="let leaveRequest of leaveRequests">
-  <p>{{leaveRequest.id}}</p>
-  <p>{{leaveRequest.companyId}}</p>
-  <p>{{leaveRequest.managerId}}</p>
-  <p>{{leaveRequest.userId}}</p>
-  <p>{{leaveRequest.approved}}</p>
-  <p>{{leaveRequest.date}}</p>
-  <p>{{leaveRequest.type}}</p>  
-  <button mat-button color="warn" (click)="deleteLeaveRequest(leaveRequest.id)">Delete</button>
-  <button mat-button color="accent" [routerLink]="['./' + leaveRequest.id]">View</button>
+<div class="my-container">
+  <form [formGroup]="leaveRequestCreateForm">
+    <h2>Add a new leave request</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type" name="type">
+        <mat-option *ngFor="let type of leaveRequestTypes" [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Choose a date</mat-label>
+      <input formControlName="date" matInput [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+  </form>
+  <h2 *ngIf="leaveRequests?.length">Your leave requests</h2>
+  <div *ngFor="let leaveRequest of leaveRequests">
+    <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
+    <button class="delete-button" mat-raised-button color="warn" (click)="deleteLeaveRequest(leaveRequest.id)">Delete</button>
+  </div>
+  <div *ngIf="isManager() && teamLeaveRequests?.length">
+    <h2>Team leave requests</h2>
+    <div *ngFor="let leaveRequest of teamLeaveRequests">
+      <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
+    </div>
+  </div>
 </div>

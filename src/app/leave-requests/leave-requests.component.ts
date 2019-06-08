@@ -3,6 +3,7 @@ import { LeaveRequestsService } from '../services/leave-requests.service';
 import { LeaveRequest } from '../models/leave-request';
 import { FormGroup, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
+import { DataHolderService } from '../services/data-holder.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -24,22 +25,47 @@ export class LeaveRequestsComponent implements OnInit {
     type: new FormControl(null, Validators.required)
   });
   leaveRequests: LeaveRequest[] = [];
+  teamLeaveRequests: LeaveRequest[] = [];
   leaveRequestTypes = ['ANNUAL_LEAVE_OR_ABSENCE', 'BEREAVEMENT_LEAVE', 'BLOOD_DONATION', 'BUSINESS_TRIP', 'CHILD_BIRTH', 'CHILD_MARRIAGE_LEAVE',
         'CHILDCARE_LEAVE', 'MARRIAGE_LEAVE', 'MATERNITY_LEAVE', 'OTHER_UNPAID_LEAVE', 'OVERTIME_COMPENSATION', 'PATERNITY_LEAVE',
         'PRE_NATAL_EXAMINATION_LEAVE', 'PUBLIC_STATUTORY_DUTIES', 'PUBLIC_HOLIDAYS_OTHER_RELIGION', 'RELOCATION_LEAVE', 'SICKNESS',
         'TRAINING', 'UNPAID_INFANT_CARE_LEAVE', 'VOLUNTEER_LEAVE', 'WORK_FROM_HOME'];
 
-  constructor(private leaveRequestsService: LeaveRequestsService) { }
+  constructor(
+    private leaveRequestsService: LeaveRequestsService,
+    private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
     this.getLeaveRequests();
+    if (this.isManager()) {
+      this.getTeamLeaveRequests();
+    }
+  }
+
+  get user() {
+    return this.dataHolderService.user;
+  }
+
+  isManager() {
+    return this.user && (this.user.type === 'MANAGER' || this.user.type === 'OWNER');
   }
 
   getLeaveRequests() {
-    // TODO: set filters
-    this.leaveRequestsService.getLeaveRequests(null, null, null, null, null, null).subscribe(
+    this.leaveRequestsService.getLeaveRequests(this.user.companyId, null, this.user.id, null, null, null).subscribe(
       leaveRequests => {
         this.leaveRequests = leaveRequests;
+        console.log(leaveRequests);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  getTeamLeaveRequests() {
+    this.leaveRequestsService.getLeaveRequests(this.user.companyId, this.user.id, null, null, null, null).subscribe(
+      leaveRequests => {
+        this.teamLeaveRequests = leaveRequests;
         console.log(leaveRequests);
       },
       error => {
@@ -64,10 +90,9 @@ export class LeaveRequestsComponent implements OnInit {
     console.log(this.leaveRequestCreateForm.valid);
     if (this.leaveRequestCreateForm.valid) {
       const leaveRequest = this.leaveRequestCreateForm.value as LeaveRequest;
-      // TODO: set user data
-      leaveRequest.companyId = 1;
-      leaveRequest.managerId = 1;
-      leaveRequest.userId = 1;
+      leaveRequest.companyId = this.user.companyId;
+      leaveRequest.managerId = this.user.managerId;
+      leaveRequest.userId = this.user.id;
       leaveRequest.status = 'PENDING';
       this.leaveRequestsService.createLeaveRequest(leaveRequest).subscribe(
         createdLeaveRequest => {

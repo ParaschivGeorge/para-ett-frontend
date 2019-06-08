@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { LeaveRequest } from 'src/app/models/leave-request';
 import { LeaveRequestsService } from 'src/app/services/leave-requests.service';
 import { ActivatedRoute } from '@angular/router';
+import { DataHolderService } from 'src/app/services/data-holder.service';
+import { UsersService } from 'src/app/services/users.service';
+import { User } from 'src/app/models/user';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -22,23 +25,47 @@ export class LeaveRequestComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
   id: number;
-  leaveRequest: LeaveRequest;
+  @Input() leaveRequest: LeaveRequest;
   leaveRequestTypes = ['ANNUAL_LEAVE_OR_ABSENCE', 'BEREAVEMENT_LEAVE', 'BLOOD_DONATION', 'BUSINESS_TRIP', 'CHILD_BIRTH', 'CHILD_MARRIAGE_LEAVE',
         'CHILDCARE_LEAVE', 'MARRIAGE_LEAVE', 'MATERNITY_LEAVE', 'OTHER_UNPAID_LEAVE', 'OVERTIME_COMPENSATION', 'PATERNITY_LEAVE',
         'PRE_NATAL_EXAMINATION_LEAVE', 'PUBLIC_STATUTORY_DUTIES', 'PUBLIC_HOLIDAYS_OTHER_RELIGION', 'RELOCATION_LEAVE', 'SICKNESS',
         'TRAINING', 'UNPAID_INFANT_CARE_LEAVE', 'VOLUNTEER_LEAVE', 'WORK_FROM_HOME'];
   leaveRequestStatuses = ['APPROVED', 'DENIED', 'PENDING'];
   leaveRequestEditForm: FormGroup = new FormGroup({
-    date: new FormControl(null, Validators.required),
-    type: new FormControl(null, Validators.required),
-    approved: new FormControl(null, Validators.required)
+    date: new FormControl({value: null, disabled: !this.userLeaveRequest()}, Validators.required),
+    type: new FormControl({value: null, disabled: !this.userLeaveRequest()}, Validators.required),
+    status: new FormControl({value: null, disabled: !this.teamLeaveRequest()}, Validators.required)
   });
+  user: User = null;
 
-  constructor(private leaveRequestsService: LeaveRequestsService, private route: ActivatedRoute) { }
+  constructor(
+    private leaveRequestsService: LeaveRequestsService,
+    private route: ActivatedRoute,
+    private dataHolderService: DataHolderService,
+    private usersService: UsersService) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.params.id;
-    this.getLeaveRequest(this.id);
+    if (this.leaveRequest) {
+      const leaveRequest = JSON.parse(JSON.stringify(this.leaveRequest));
+      this.id = this.leaveRequest.id;
+      delete leaveRequest.id;
+      delete leaveRequest.companyId;
+      delete leaveRequest.managerId;
+      delete leaveRequest.userId;
+      leaveRequest.date = new Date(leaveRequest.date);
+      console.log(leaveRequest);
+      this.leaveRequestEditForm.setValue(leaveRequest);
+      if (this.userLeaveRequest()) {
+        this.leaveRequestEditForm.get('date').disable();
+        this.leaveRequestEditForm.get('type').disable();
+        this.leaveRequestEditForm.get('status').disable();
+      } else if (this.teamLeaveRequest()) {
+        this.leaveRequestEditForm.get('date').disable();
+        this.leaveRequestEditForm.get('type').disable();
+        this.leaveRequestEditForm.get('status').enable();
+        this.getUser();
+      }
+    }
   }
 
   getLeaveRequest(id: number) {
@@ -51,6 +78,15 @@ export class LeaveRequestComponent implements OnInit {
         delete leaveRequest.userId;
         leaveRequest.date = new Date(leaveRequest.date);
         this.leaveRequestEditForm.setValue(leaveRequest);
+        if (this.userLeaveRequest()) {
+          this.leaveRequestEditForm.get('date').disable();
+          this.leaveRequestEditForm.get('type').disable();
+          this.leaveRequestEditForm.get('status').disable();
+        } else if (this.teamLeaveRequest()) {
+          this.leaveRequestEditForm.get('date').disable();
+          this.leaveRequestEditForm.get('type').disable();
+          this.leaveRequestEditForm.get('status').enable();
+        }
       },
       error => {
         console.log(error);
@@ -63,10 +99,9 @@ export class LeaveRequestComponent implements OnInit {
     if (this.leaveRequestEditForm.valid) {
       const leaveRequest = this.leaveRequestEditForm.value as LeaveRequest;
       leaveRequest.id = this.id;
-      // TODO: set user data
-      leaveRequest.companyId = 1;
-      leaveRequest.managerId = 1;
-      leaveRequest.userId = 1;
+      leaveRequest.companyId = this.dataHolderService.user.companyId;
+      leaveRequest.managerId = this.dataHolderService.user.managerId;
+      leaveRequest.userId = this.dataHolderService.user.id;
       this.leaveRequestsService.updateLeaveRequest(this.id, leaveRequest).subscribe(
         editedLeaveRequest => {
           console.log(editedLeaveRequest);
@@ -79,5 +114,22 @@ export class LeaveRequestComponent implements OnInit {
     }
   }
 
+  getUser() {
+    this.usersService.getUser(this.leaveRequest.userId).subscribe(
+      user => {
+        this.user = user;
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
 
+  userLeaveRequest(): boolean {
+    return this.dataHolderService.user && this.leaveRequest && (this.dataHolderService.user.id === this.leaveRequest.userId);
+  }
+
+  teamLeaveRequest(): boolean {
+    return this.dataHolderService.user && this.leaveRequest && (this.dataHolderService.user.id === this.leaveRequest.managerId);
+  }
 }

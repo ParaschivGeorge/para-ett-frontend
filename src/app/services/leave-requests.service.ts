@@ -17,7 +17,7 @@ export class LeaveRequestsService {
     return this.http.post<LeaveRequest>(this.leaveRequestsServiceUrl, leaveRequest);
   }
 
-  getLeaveRequests(companyId: number, managerId: number, userId: number, approved: boolean, minDate: Date, maxDate: Date): Observable<LeaveRequest[]> {
+  getLeaveRequests(companyId: number, managerId: number, userId: number, status: string, minDate: Date, maxDate: Date): Observable<LeaveRequest[]> {
     let queryParam = new HttpParams();
     if (companyId) {
       queryParam = queryParam.append('companyId', companyId.toString());
@@ -28,8 +28,8 @@ export class LeaveRequestsService {
     if (userId) {
       queryParam = queryParam.append('userId', userId.toString());
     }
-    if (approved) {
-      queryParam = queryParam.append('approved', approved.toString());
+    if (status) {
+      queryParam = queryParam.append('approved', status);
     }
     if (minDate) {
       queryParam = queryParam.append('minDate', minDate.toString());

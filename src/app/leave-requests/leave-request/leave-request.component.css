@@ -1,0 +1,40 @@
+button {
+    height: 60px;
+    font-size: 15px;
+    margin: 5px 0;
+}
+
+.bottom-button {
+    margin: 5px 5px;
+    max-width: 40%;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    color: black;
+    background: white !important;
+    border-radius: 5px; 
+}
+
+.mat-form-field-label {
+    color: black;
+}
+
+.error-div {
+    line-height: 60px;
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 5px;
+    width: 100%;
+    min-height: 60px;
+    font-size: 20px;
+    color: white;
+}
+
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after, .mat-input-element:disabled {
+    color: black !important;
+}
+
+h2 {
+    font-size: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

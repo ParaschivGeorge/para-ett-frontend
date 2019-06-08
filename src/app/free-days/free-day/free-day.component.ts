@@ -27,8 +27,8 @@ export class FreeDayComponent implements OnInit {
   @Output() deleteEmitter: EventEmitter<number> = new EventEmitter<number>();
   freeDayTypes = ['NATIONAL', 'COMPANY_HOLIDAY'];
   freeDayEditForm: FormGroup = new FormGroup({
-    date: new FormControl(null, Validators.required),
-    type: new FormControl(null, Validators.required)
+    date: new FormControl({value: null}, Validators.required),
+    type: new FormControl({value: null}, Validators.required)
   });
 
   constructor(
@@ -44,6 +44,11 @@ export class FreeDayComponent implements OnInit {
       delete freeDay.companyId;
       freeDay.date = new Date(freeDay.date);
       this.freeDayEditForm.setValue(freeDay);
+      if (this.isOwner()) {
+        this.freeDayEditForm.enable();
+      } else {
+        this.freeDayEditForm.disable();
+      }
     }
   }
 
@@ -55,6 +60,11 @@ export class FreeDayComponent implements OnInit {
         delete freeDay.companyId;
         freeDay.date = new Date(freeDay.date);
         this.freeDayEditForm.setValue(freeDay);
+        if (this.isOwner()) {
+          this.freeDayEditForm.enable();
+        } else {
+          this.freeDayEditForm.disable();
+        }
       },
       error => {
         console.log(error);
