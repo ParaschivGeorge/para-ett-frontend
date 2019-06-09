@@ -8,7 +8,23 @@
     </mat-select>
   </mat-form-field>
   <button mat-button (click)="next()">&#62;</button>
+  <div>
+    <div *ngFor="let week of calendar">
+      <div>
+        <p class="project-name"></p>
+        <p class="calendar-input" *ngFor="let day of week">{{day !== -1 ? day : ''}}</p>
+      </div>
+      <div *ngFor="let project of projects">
+        <div>
+          <p class="project-name">{{project.name}}</p>
+          <input (change)="onChange($event, day, project)" *ngFor="let day of week" class="calendar-input" [disabled]="day === -1" type="text">
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
 <form [formGroup]="timesheetRecordsCreateForm" (ngSubmit)="onSubmit()">
   <div formArrayName="timesheetRecords">    
     <div *ngFor="let timesheetRecordForm of timesheetRecordsFormArray.controls; let i = index">

@@ -3,6 +3,10 @@ import { TimesheetRecordsService } from '../services/timesheet-records.service';
 import { TimesheetRecord } from '../models/timesheet-record';
 import { ErrorStateMatcher } from '@angular/material';
 import { FormControl, FormGroupDirective, NgForm, FormGroup, FormArray, Validators } from '@angular/forms';
+import { DataHolderService } from '../services/data-holder.service';
+import { UsersService } from '../services/users.service';
+import { Project } from '../models/project';
+import { ProjectsService } from '../services/projects.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -32,17 +36,23 @@ export class TimesheetRecordsComponent implements OnInit {
   });
   overtimeStatus = [false, true];
   monthFormControl: FormControl = new FormControl(this.month);
+  calendarForm: FormGroup;
 
-  constructor(private timesheetRecordsService: TimesheetRecordsService) { }
+  projects: Project[] = [];
+
+  constructor(
+    private timesheetRecordsService: TimesheetRecordsService,
+    private projectsService: ProjectsService,
+    private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
     // this.getTimesheetRecords();
     console.log(this.month, this.year);
-    this.updateCalendar();
     this.monthFormControl.valueChanges.subscribe(value => {
       this.month = this.monthFormControl.value;
       this.updateCalendar();
     });
+    this.getProjects();
   }
 
   updateCalendar() {
@@ -55,7 +65,6 @@ export class TimesheetRecordsComponent implements OnInit {
       const week = [];
       for (let j = 0; j < 7; j++) {
         if ((i === 0 && j < firstDay) || (date > daysInMonth && date <= (daysInMonth - (daysInMonth % 7) + 7 - diff))) {
-          // TODO foreach project disabled
           if (j > firstDay) {
             date++;
           } else {
@@ -69,7 +78,6 @@ export class TimesheetRecordsComponent implements OnInit {
             break;
           }
         } else {
-          // TODO foreach project enabled
           week.push(date);
           date++;
         }
@@ -80,6 +88,7 @@ export class TimesheetRecordsComponent implements OnInit {
     }
     this.calendar = month;
     console.log(this.calendar);
+    this.updateCalendarForm();
   }
 
   next() {
@@ -96,6 +105,25 @@ export class TimesheetRecordsComponent implements OnInit {
 
   daysInMonth(month: number, year: number): number {
     return 32 - new Date(month, year, 32).getDate();
+  }
+
+  updateCalendarForm() {
+    this.calendarForm = new FormGroup({
+      calendar: new FormArray([])
+    });
+    const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+    this.calendar.forEach(week => {
+      week.forEach(day => {
+        if (day !== -1) {
+          const dayForm = new FormGroup({});
+          this.projects.forEach(project => {
+            dayForm.addControl(project.name, new FormControl(0));
+          });
+          calendarFormArray.push(dayForm);
+        }
+      });
+    });
+    // console.log(this.calendarForm.value);
   }
 
   getTimesheetRecords() {
@@ -164,5 +192,28 @@ export class TimesheetRecordsComponent implements OnInit {
         }
       );
     }
+  }
+
+  getProjects() {
+    if (this.dataHolderService.user) {
+      this.dataHolderService.loading = true;
+      this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
+        projects => {
+          this.projects = projects;
+          console.log(projects);
+          this.updateCalendar();
+        }
+      ).add(() => {
+        this.dataHolderService.loading = false;
+      });
+    } else {
+      // this.router.navigate(['start']);
+    }
+  }
+
+  onChange(event, day: number, project: Project) {
+    const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+    calendarFormArray.controls[day - 1].get(project.name).setValue(event.srcElement.value);
+    // console.log(this.calendarForm.value);
   }
 }

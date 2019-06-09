@@ -4,3 +4,13 @@
     padding: 30px 30px;
     text-align: center;
 }
+
+.calendar-input {
+    display: inline-block;
+    width: 60px;
+}
+
+.project-name {
+    display: inline-block;
+    width: 100px;
+}
