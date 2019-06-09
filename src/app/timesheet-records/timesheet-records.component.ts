@@ -123,15 +123,25 @@ export class TimesheetRecordsComponent implements OnInit {
         }
       });
     });
+    this.getTimesheetRecords();
     // console.log(this.calendarForm.value);
   }
 
   getTimesheetRecords() {
-    // TODO: set filters
-    this.timesheetRecordsService.getTimesheetRecords(null, null, null, null, null).subscribe(
+    this.timesheetRecordsService.getTimesheetRecords(
+      this.dataHolderService.user.companyId,
+      null,
+      this.dataHolderService.user.id,
+      new Date(this.year, this.month, 0),
+      new Date(this.year, this.month + 1, 0)).subscribe(
       timesheetRecords => {
         this.timesheetRecords = timesheetRecords;
         console.log(timesheetRecords);
+        timesheetRecords.forEach(timesheetRecord => {
+          const date = new Date(timesheetRecord.date);
+          const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+          calendarFormArray.controls[date.getDay()].get(timesheetRecord.projectId.toString()).setValue(timesheetRecord.noHours);
+        });
       },
       error => {
         console.log(error);
@@ -177,10 +187,9 @@ export class TimesheetRecordsComponent implements OnInit {
     if (this.timesheetRecordsCreateForm.valid) {
       const timesheetRecords = this.timesheetRecordsFormArray.value as TimesheetRecord[];
       timesheetRecords.map(timesheetRecord => {
-          // TODO replace with user data
-        timesheetRecord.companyId = 1;
-        timesheetRecord.managerId = 1;
-        timesheetRecord.userId = 1;
+        timesheetRecord.companyId = this.dataHolderService.user.companyId;
+        timesheetRecord.managerId = this.dataHolderService.user.managerId;
+        timesheetRecord.userId = this.dataHolderService.user.id;
       });
       this.timesheetRecordsService.createTimesheetRecords(timesheetRecords).subscribe(
         createdTimesheetRecords => {

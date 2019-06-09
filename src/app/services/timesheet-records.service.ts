@@ -29,10 +29,10 @@ export class TimesheetRecordsService {
       queryParam = queryParam.append('userId', userId.toString());
     }
     if (minDate) {
-      queryParam = queryParam.append('minDate', minDate.toString());
+      queryParam = queryParam.append('minDate', minDate.toLocaleDateString('en-US'));
     }
     if (maxDate) {
-      queryParam = queryParam.append('maxDate', maxDate.toString());
+      queryParam = queryParam.append('maxDate', maxDate.toLocaleDateString('en-US'));
     }
     return this.http.get<TimesheetRecord[]>(this.timesheetRecordsServiceUrl, {params : queryParam});
   }
