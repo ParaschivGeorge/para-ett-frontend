@@ -19,17 +19,83 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class TimesheetRecordsComponent implements OnInit {
 
+  today = new Date();
+  year: number = this.today.getFullYear();
+  month: number = this.today.getMonth();
+  calendar = [];
+  monthsNumbers: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   matcher = new MyErrorStateMatcher();
   timesheetRecords: TimesheetRecord[] = [];
   timesheetRecordsCreateForm: FormGroup = new FormGroup({
     timesheetRecords: new FormArray([])
   });
   overtimeStatus = [false, true];
+  monthFormControl: FormControl = new FormControl(this.month);
 
   constructor(private timesheetRecordsService: TimesheetRecordsService) { }
 
   ngOnInit() {
-    this.getTimesheetRecords();
+    // this.getTimesheetRecords();
+    console.log(this.month, this.year);
+    this.updateCalendar();
+    this.monthFormControl.valueChanges.subscribe(value => {
+      this.month = this.monthFormControl.value;
+      this.updateCalendar();
+    });
+  }
+
+  updateCalendar() {
+    const firstDay = (new Date(this.year, this.month)).getDay();
+    let date = 1;
+    const daysInMonth = this.daysInMonth(this.month, this.year);
+    const month = [];
+    let diff = 0;
+    for (let i = 0; i < 6; i++) {
+      const week = [];
+      for (let j = 0; j < 7; j++) {
+        if ((i === 0 && j < firstDay) || (date > daysInMonth && date <= (daysInMonth - (daysInMonth % 7) + 7 - diff))) {
+          // TODO foreach project disabled
+          if (j > firstDay) {
+            date++;
+          } else {
+            diff++;
+          }
+          week.push(-1);
+        } else if (date + diff > (daysInMonth - (daysInMonth % 7) + 7) && date > daysInMonth) {
+          if (week.length < 7 && week.length > 0) {
+            week.push(-1);
+          } else {
+            break;
+          }
+        } else {
+          // TODO foreach project enabled
+          week.push(date);
+          date++;
+        }
+      }
+      if (week.length) {
+        month.push(week);
+      }
+    }
+    this.calendar = month;
+    console.log(this.calendar);
+  }
+
+  next() {
+    this.year = (this.month === 11) ? this.month + 1 : this.month;
+    this.month = (this.month + 1) % 12;
+    this.monthFormControl.setValue(this.month);
+  }
+
+  previous() {
+    this.year = (this.month === 0) ? this.year - 1 : this.year;
+    this.month = (this.month === 0) ? 11 : this.month - 1;
+    this.monthFormControl.setValue(this.month);
+  }
+
+  daysInMonth(month: number, year: number): number {
+    return 32 - new Date(month, year, 32).getDate();
   }
 
   getTimesheetRecords() {

@@ -1,3 +1,14 @@
+<div class="my-container">
+  <button mat-button (click)="previous()">&#60;</button>
+  <mat-form-field appearance="outline">
+    <mat-select placeholder="Month" [formControl]="monthFormControl" name="month">
+      <mat-option *ngFor="let monthNb of monthsNumbers" [value]="monthNb">
+        {{months[monthNb]}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-button (click)="next()">&#62;</button>
+</div>
 <form [formGroup]="timesheetRecordsCreateForm" (ngSubmit)="onSubmit()">
   <div formArrayName="timesheetRecords">    
     <div *ngFor="let timesheetRecordForm of timesheetRecordsFormArray.controls; let i = index">
