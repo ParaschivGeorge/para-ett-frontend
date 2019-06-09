@@ -117,7 +117,7 @@ export class TimesheetRecordsComponent implements OnInit {
         if (day !== -1) {
           const dayForm = new FormGroup({});
           this.projects.forEach(project => {
-            dayForm.addControl(project.name, new FormControl(0));
+            dayForm.addControl(project.id.toString(), new FormControl(0));
           });
           calendarFormArray.push(dayForm);
         }
@@ -213,7 +213,7 @@ export class TimesheetRecordsComponent implements OnInit {
 
   onChange(event, day: number, project: Project) {
     const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
-    calendarFormArray.controls[day - 1].get(project.name).setValue(event.srcElement.value);
+    calendarFormArray.controls[day - 1].get(project.id.toString()).setValue(event.srcElement.value);
     // console.log(this.calendarForm.value);
   }
 }
