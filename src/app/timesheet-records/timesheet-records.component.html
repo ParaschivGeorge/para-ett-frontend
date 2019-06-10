@@ -17,11 +17,12 @@
       <div *ngFor="let project of projects">
         <div>
           <p class="project-name">{{project.name}}</p>
-          <input (change)="onChange($event, day, project)" *ngFor="let day of week" class="calendar-input" [disabled]="day === -1" type="text">
+          <input [formControl]="getFormControl(day, project)" *ngFor="let day of week" class="calendar-input" type="text">
         </div>
       </div>
     </div>
-  </div>
+    <button mat-button (click)="submit()">Submit</button>
+  </div>  
 </div>
 
 

@@ -47,7 +47,7 @@ export class TimesheetRecordComponent implements OnInit {
         delete timesheetRecord.companyId;
         delete timesheetRecord.managerId;
         delete timesheetRecord.userId;
-        timesheetRecord.date = new Date(timesheetRecord.date);
+        timesheetRecord.date = new Date(timesheetRecord.date).toLocaleDateString('en-US');
         this.timesheetRecordEditForm.setValue(timesheetRecord);
       },
       error => {
@@ -65,6 +65,7 @@ export class TimesheetRecordComponent implements OnInit {
       timesheetRecord.companyId = 1;
       timesheetRecord.managerId = 1;
       timesheetRecord.userId = 1;
+      timesheetRecord.date = new Date(timesheetRecord.date).toLocaleDateString('en-US');
       this.timesheetRecordsService.updateTimesheetRecord(this.id, timesheetRecord).subscribe(
         editedTimesheetRecord => {
           console.log(editedTimesheetRecord);

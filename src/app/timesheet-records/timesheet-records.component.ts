@@ -50,6 +50,8 @@ export class TimesheetRecordsComponent implements OnInit {
     console.log(this.month, this.year);
     this.monthFormControl.valueChanges.subscribe(value => {
       this.month = this.monthFormControl.value;
+      console.log(this.month);
+      console.log('here');
       this.updateCalendar();
     });
     this.getProjects();
@@ -92,7 +94,7 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   next() {
-    this.year = (this.month === 11) ? this.month + 1 : this.month;
+    this.year = (this.month === 11) ? this.year + 1 : this.year;
     this.month = (this.month + 1) % 12;
     this.monthFormControl.setValue(this.month);
   }
@@ -112,12 +114,13 @@ export class TimesheetRecordsComponent implements OnInit {
       calendar: new FormArray([])
     });
     const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+    calendarFormArray.setValue([]);
     this.calendar.forEach(week => {
       week.forEach(day => {
         if (day !== -1) {
           const dayForm = new FormGroup({});
           this.projects.forEach(project => {
-            dayForm.addControl(project.id.toString(), new FormControl(0));
+            dayForm.addControl(project.id.toString(), new FormControl(0, Validators.pattern('[0-9]*')));
           });
           calendarFormArray.push(dayForm);
         }
@@ -133,15 +136,20 @@ export class TimesheetRecordsComponent implements OnInit {
       null,
       this.dataHolderService.user.id,
       new Date(this.year, this.month, 0),
-      new Date(this.year, this.month + 1, 0)).subscribe(
+      new Date(this.year, this.month + 1, 1)).subscribe(
       timesheetRecords => {
         this.timesheetRecords = timesheetRecords;
         console.log(timesheetRecords);
         timesheetRecords.forEach(timesheetRecord => {
           const date = new Date(timesheetRecord.date);
           const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
-          calendarFormArray.controls[date.getDay()].get(timesheetRecord.projectId.toString()).setValue(timesheetRecord.noHours);
+          calendarFormArray.controls[date.getDate() - 1].get(timesheetRecord.projectId.toString()).setValue(timesheetRecord.noHours);
+          if (timesheetRecord.noHours !== 0) {
+            console.log(timesheetRecord);
+            console.log(calendarFormArray.controls[date.getDate() - 1].get(timesheetRecord.projectId.toString()).value);
+          }
         });
+        // console.log(this.calendarForm.get('calendar').value);
       },
       error => {
         console.log(error);
@@ -190,6 +198,7 @@ export class TimesheetRecordsComponent implements OnInit {
         timesheetRecord.companyId = this.dataHolderService.user.companyId;
         timesheetRecord.managerId = this.dataHolderService.user.managerId;
         timesheetRecord.userId = this.dataHolderService.user.id;
+        timesheetRecord.date = new Date(timesheetRecord.date).toLocaleDateString('en-US');
       });
       this.timesheetRecordsService.createTimesheetRecords(timesheetRecords).subscribe(
         createdTimesheetRecords => {
@@ -220,9 +229,60 @@ export class TimesheetRecordsComponent implements OnInit {
     }
   }
 
-  onChange(event, day: number, project: Project) {
+  getFormControl(day: number, project: Project): FormControl {
+    if (day === -1) {
+      return new FormControl({value: null, disabled: true});
+    }
     const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
-    calendarFormArray.controls[day - 1].get(project.id.toString()).setValue(event.srcElement.value);
-    // console.log(this.calendarForm.value);
+    const control = calendarFormArray.controls[day - 1].get(project.id.toString()) as FormControl;
+    if (control.value !== 0) {
+      console.log(control);
+    }
+    return control;
+  }
+
+  submit() {
+    if (this.calendarForm.valid) {
+      const timesheetRecords: TimesheetRecord[] = [];
+      const daysInMonth = this.daysInMonth(this.month, this.year);
+      const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+      for (let day = 1; day <= daysInMonth; day++) {
+        this.projects.forEach(project => {
+          const formControl = calendarFormArray.controls[day - 1].get(project.id.toString()) as FormControl;
+          const records = this.timesheetRecords.filter(tsr => tsr.projectId === project.id && new Date(tsr.date).getDate() === day);
+          const timesheetRecord: TimesheetRecord = {
+            companyId: this.dataHolderService.user.companyId,
+            date: new Date(this.year, this.month, day).toLocaleDateString('en-US'),
+            id: null,
+            managerId: this.dataHolderService.user.managerId,
+            noHours: null,
+            overtime: false,
+            projectId: project.id,
+            userId: this.dataHolderService.user.id
+          };
+          if (records.length > 0) {
+            timesheetRecord.id = records[0].id;
+            if (records.length > 1) {
+              console.log('records: ', records);
+            }
+          }
+          timesheetRecord.noHours = formControl.value;
+          if (timesheetRecord.noHours !== 0) {
+            console.log(timesheetRecord);
+          }
+          timesheetRecords.push(timesheetRecord);
+        });
+      }
+      console.log(timesheetRecords);
+      this.timesheetRecordsService.createTimesheetRecords(timesheetRecords).subscribe(
+        createdTimesheetRecords => {
+          console.log(createdTimesheetRecords);
+          this.getTimesheetRecords();
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
   }
 }

@@ -1,6 +1,6 @@
 export interface TimesheetRecord {
     companyId: number;
-    date: Date;
+    date: string;
     id: number;
     managerId: number;
     noHours: number;
