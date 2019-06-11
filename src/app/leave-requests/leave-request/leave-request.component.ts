@@ -58,7 +58,11 @@ export class LeaveRequestComponent implements OnInit {
       if (this.userLeaveRequest()) {
         this.leaveRequestEditForm.get('date').disable();
         this.leaveRequestEditForm.get('type').disable();
-        this.leaveRequestEditForm.get('status').disable();
+        if (!this.isMainOwner()) {
+          this.leaveRequestEditForm.get('status').disable();
+        } else {
+          this.leaveRequestEditForm.get('status').enable();
+        }
       } else if (this.teamLeaveRequest()) {
         this.leaveRequestEditForm.get('date').disable();
         this.leaveRequestEditForm.get('type').disable();
@@ -97,6 +101,7 @@ export class LeaveRequestComponent implements OnInit {
   onSubmit() {
     console.log(this.leaveRequestEditForm.valid);
     if (this.leaveRequestEditForm.valid) {
+      // TODO this is not ok!
       const leaveRequest = this.leaveRequestEditForm.value as LeaveRequest;
       leaveRequest.id = this.id;
       leaveRequest.companyId = this.dataHolderService.user.companyId;
@@ -131,5 +136,9 @@ export class LeaveRequestComponent implements OnInit {
 
   teamLeaveRequest(): boolean {
     return this.dataHolderService.user && this.leaveRequest && (this.dataHolderService.user.id === this.leaveRequest.managerId);
+  }
+
+  isMainOwner() {
+    return this.dataHolderService.user && this.dataHolderService.user.managerId === null && this.dataHolderService.user.type === 'OWNER';
   }
 }

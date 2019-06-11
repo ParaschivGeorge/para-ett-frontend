@@ -7,6 +7,10 @@ import { DataHolderService } from '../services/data-holder.service';
 import { UsersService } from '../services/users.service';
 import { Project } from '../models/project';
 import { ProjectsService } from '../services/projects.service';
+import { FreeDaysService } from '../services/free-days.service';
+import { FreeDay } from '../models/free-day';
+import { LeaveRequestsService } from '../services/leave-requests.service';
+import { LeaveRequest } from '../models/leave-request';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -39,10 +43,14 @@ export class TimesheetRecordsComponent implements OnInit {
   calendarForm: FormGroup;
 
   projects: Project[] = [];
+  freeDays: FreeDay[] = [];
+  leaveRequests: LeaveRequest[] = [];
 
   constructor(
     private timesheetRecordsService: TimesheetRecordsService,
     private projectsService: ProjectsService,
+    private freeDaysService: FreeDaysService,
+    private leaveRequestsService: LeaveRequestsService,
     private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
@@ -55,6 +63,82 @@ export class TimesheetRecordsComponent implements OnInit {
       this.updateCalendar();
     });
     this.getProjects();
+    this.getFreeDays();
+    this.getLeaveRequests();
+  }
+
+  getLeaveRequests() {
+    this.leaveRequestsService.getLeaveRequests(this.dataHolderService.user.companyId, null, this.dataHolderService.user.id, 'APPROVED', null, null).subscribe(
+      leaveRequests => {
+        this.leaveRequests = leaveRequests;
+        console.log(leaveRequests);
+        this.updateFormWithLeaveRequests();
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  getFreeDays() {
+    this.freeDaysService.getFreeDays(this.dataHolderService.user.companyId).subscribe(
+      freeDays => {
+        this.freeDays = freeDays;
+        console.log(freeDays);
+        this.updateFormWithFreeDays();
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  updateFormWithFreeDays() {
+    if (this.timesheetRecords.length > 0 && this.projects.length) {
+      let needsUpdate = false;
+      this.freeDays.forEach(freeDay => {
+        // console.log(freeDay);
+        const date = new Date(freeDay.date);
+        if (date.getMonth() === this.month && date.getFullYear() === this.year) {
+          const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+          const control = calendarFormArray.controls[date.getDate() - 1] as FormControl;
+          this.projects.forEach(project => {
+            if (control.get(project.id.toString()).value != 0) {
+              needsUpdate = true;
+              control.get(project.id.toString()).setValue(0);
+            }
+          });
+          control.disable();
+        }
+      });
+      if (needsUpdate) {
+        this.submit();
+      }
+    }
+  }
+
+  updateFormWithLeaveRequests() {
+    if (this.timesheetRecords.length > 0 && this.projects.length) {
+      let needsUpdate = false;
+      this.leaveRequests.forEach(leaveRequest => {
+        // console.log(leaveRequest);
+        const date = new Date(leaveRequest.date);
+        if (date.getMonth() === this.month && date.getFullYear() === this.year) {
+          const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+          const control = calendarFormArray.controls[date.getDate() - 1] as FormControl;
+          this.projects.forEach(project => {
+            if (control.get(project.id.toString()).value != 0) {
+              needsUpdate = true;
+              control.get(project.id.toString()).setValue(0);
+            }
+          });
+          control.disable();
+        }
+      });
+      if (needsUpdate) {
+        this.submit();
+      }
+    }
   }
 
   updateCalendar() {
@@ -144,12 +228,18 @@ export class TimesheetRecordsComponent implements OnInit {
           const date = new Date(timesheetRecord.date);
           const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
           calendarFormArray.controls[date.getDate() - 1].get(timesheetRecord.projectId.toString()).setValue(timesheetRecord.noHours);
-          if (timesheetRecord.noHours !== 0) {
-            console.log(timesheetRecord);
-            console.log(calendarFormArray.controls[date.getDate() - 1].get(timesheetRecord.projectId.toString()).value);
-          }
+          // if (timesheetRecord.noHours !== 0) {
+          //   console.log(timesheetRecord);
+          //   console.log(calendarFormArray.controls[date.getDate() - 1].get(timesheetRecord.projectId.toString()).value);
+          // }
         });
         // console.log(this.calendarForm.get('calendar').value);
+        if (this.freeDays.length) {
+          this.updateFormWithFreeDays();
+        }
+        if (this.leaveRequests.length) {
+          this.updateFormWithLeaveRequests();
+        }
       },
       error => {
         console.log(error);
@@ -235,9 +325,9 @@ export class TimesheetRecordsComponent implements OnInit {
     }
     const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
     const control = calendarFormArray.controls[day - 1].get(project.id.toString()) as FormControl;
-    if (control.value !== 0) {
-      console.log(control);
-    }
+    // if (control.value !== 0) {
+    //   console.log(control);
+    // }
     return control;
   }
 
@@ -262,14 +352,14 @@ export class TimesheetRecordsComponent implements OnInit {
           };
           if (records.length > 0) {
             timesheetRecord.id = records[0].id;
-            if (records.length > 1) {
-              console.log('records: ', records);
-            }
+            // if (records.length > 1) {
+            //   console.log('records: ', records);
+            // }
           }
           timesheetRecord.noHours = formControl.value;
-          if (timesheetRecord.noHours !== 0) {
-            console.log(timesheetRecord);
-          }
+          // if (timesheetRecord.noHours !== 0) {
+          //   console.log(timesheetRecord);
+          // }
           timesheetRecords.push(timesheetRecord);
         });
       }

@@ -50,6 +50,10 @@ export class LeaveRequestsComponent implements OnInit {
     return this.user && (this.user.type === 'MANAGER' || this.user.type === 'OWNER');
   }
 
+  isMainOwner() {
+    return this.user && this.user.managerId === null && this.user.type === 'OWNER';
+  }
+
   getLeaveRequests() {
     this.leaveRequestsService.getLeaveRequests(this.user.companyId, null, this.user.id, null, null, null).subscribe(
       leaveRequests => {

@@ -29,7 +29,7 @@ export class LeaveRequestsService {
       queryParam = queryParam.append('userId', userId.toString());
     }
     if (status) {
-      queryParam = queryParam.append('approved', status);
+      queryParam = queryParam.append('status', status);
     }
     if (minDate) {
       queryParam = queryParam.append('minDate', minDate.toString());
