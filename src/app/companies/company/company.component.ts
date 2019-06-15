@@ -73,7 +73,7 @@ export class CompanyComponent implements OnInit {
         this.error = 'An error has occured while changing your company data!';
       }
     ).add(() => {
-      setTimeout(() => this.dataHolderService.loading = false, 1000);
+      this.dataHolderService.loading = false;
     });
   }
 

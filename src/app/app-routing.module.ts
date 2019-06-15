@@ -21,6 +21,7 @@ import { CompanyRegisterRedirectComponent } from './company-register-redirect/co
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'start', pathMatch: 'full'},
   { path: 'start', component: StartComponent},
   { path: 'email-activation', component: CompanyRegisterRedirectComponent},
   { path: 'home', component: HomeComponent},
@@ -56,6 +57,9 @@ const routes: Routes = [
     { path: '', component: TimesheetRecordsComponent},
     { path: ':id', component: TimesheetRecordComponent},
   ]},
+  {
+    path: 'refresh', component: HomeComponent
+  }
   // { path: '', redirectTo: 'login', pathMatch: 'full'},
   // { path: 'login', component: LoginComponent},
   // { path: 'admin-incidents', component: AdminIncidentsComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},

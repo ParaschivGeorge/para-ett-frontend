@@ -45,39 +45,31 @@ export class ProjectsComponent implements OnInit {
   }
 
   getProjects() {
-    if (this.dataHolderService.user) {
-      this.dataHolderService.loading = true;
-      this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
-        projects => {
-          this.projects = projects;
-          this.getUsers();
-          console.log(projects);
-        }
-      ).add(() => {
-        this.dataHolderService.loading = false;
-      });
-    } else {
-      this.router.navigate(['start']);
-    }
+    this.dataHolderService.loading = true;
+    this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
+      projects => {
+        this.projects = projects;
+        this.getUsers();
+        console.log(projects);
+      }
+    ).add(() => {
+      this.dataHolderService.loading = false;
+    });
   }
 
   getUsers() {
-    if (this.dataHolderService.user) {
-      this.dataHolderService.loading = true;
-      this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
-        users => {
-          this.users = users;
-          console.log(users);
-        },
-        error => {
-          console.log(error);
-        }
-      ).add(() => {
-        this.dataHolderService.loading = false;
-      });
-    } else {
-      this.router.navigate(['start']);
-    }
+    this.dataHolderService.loading = true;
+    this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
+      users => {
+        this.users = users;
+        console.log(users);
+      },
+      error => {
+        console.log(error);
+      }
+    ).add(() => {
+      this.dataHolderService.loading = false;
+    });
   }
 
   deleteProject(id: number) {

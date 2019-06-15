@@ -243,20 +243,16 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   getProjects() {
-    if (this.dataHolderService.user) {
-      this.dataHolderService.loading = true;
-      this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
-        projects => {
-          this.projects = projects;
-          console.log(projects);
-          this.updateCalendar();
-        }
-      ).add(() => {
-        this.dataHolderService.loading = false;
-      });
-    } else {
-      // this.router.navigate(['start']);
-    }
+    this.dataHolderService.loading = true;
+    this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
+      projects => {
+        this.projects = projects;
+        console.log(projects);
+        this.updateCalendar();
+      }
+    ).add(() => {
+      this.dataHolderService.loading = false;
+    });
   }
 
   getFormControl(day: number, project: Project): FormControl {

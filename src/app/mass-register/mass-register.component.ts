@@ -38,22 +38,18 @@ export class MassRegisterComponent implements OnInit {
 
   ngOnInit() {
     this.addUserForm();
-    if (this.dataHolderService.user) {
-      this.dataHolderService.loading = true;
-      this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
-        users => {
-          this.users = users;
-          console.log(users);
-        },
-        error => {
-          console.log(error);
-        }
-      ).add(() => {
-        setTimeout(() => this.dataHolderService.loading = false, 1000);
-      });
-    } else {
-      this.router.navigate(['start']);
-    }
+    this.dataHolderService.loading = true;
+    this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
+      users => {
+        this.users = users;
+        console.log(users);
+      },
+      error => {
+        console.log(error);
+      }
+    ).add(() => {
+      this.dataHolderService.loading = false;
+    });
 
     this.massRegisterForm.valueChanges.subscribe(
       value => {
@@ -105,7 +101,7 @@ export class MassRegisterComponent implements OnInit {
           this.error = 'There was a problem processing your request! Please recheck the form or retry later.';
         }
       ).add(() => {
-        setTimeout(() => this.dataHolderService.loading = false, 1000);
+        this.dataHolderService.loading = false;
       });
     }
   }

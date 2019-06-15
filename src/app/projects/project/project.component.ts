@@ -105,22 +105,18 @@ export class ProjectComponent implements OnInit {
   }
 
   getUsers() {
-    if (this.dataHolderService.user) {
-      this.dataHolderService.loading = true;
-      this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
-        users => {
-          this.users = users;
-          console.log(users);
-        },
-        error => {
-          console.log(error);
-        }
-      ).add(() => {
-        this.dataHolderService.loading = false;
-      });
-    } else {
-      this.router.navigate(['start']);
-    }
+    this.dataHolderService.loading = true;
+    this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
+      users => {
+        this.users = users;
+        console.log(users);
+      },
+      error => {
+        console.log(error);
+      }
+    ).add(() => {
+      this.dataHolderService.loading = false;
+    });
   }
 
 }

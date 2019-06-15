@@ -89,7 +89,7 @@ export class ActivationComponent implements OnInit {
               this.dataHolderService.user = null;
               this.error = 'Authentification failed! Redirecting home...';
               setTimeout(() => {
-                this.router.navigate(['home']);
+                this.router.navigate(['start']);
               }, 1000);
             }
           );
