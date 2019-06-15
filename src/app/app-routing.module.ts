@@ -19,43 +19,51 @@ import { TimesheetRecordComponent } from './timesheet-records/timesheet-record/t
 import { StartComponent } from './start/start.component';
 import { CompanyRegisterRedirectComponent } from './company-register-redirect/company-register-redirect.component';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './auth/auth.guard';
+import { NotAuthGuard } from './auth/not-auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'start', pathMatch: 'full'},
-  { path: 'start', component: StartComponent},
-  { path: 'email-activation', component: CompanyRegisterRedirectComponent},
+  { path: 'start', component: StartComponent, canActivate: [NotAuthGuard]},
+  { path: 'email-activation', component: CompanyRegisterRedirectComponent, canActivate: [NotAuthGuard]},
   { path: 'home', component: HomeComponent},
-  { path: 'activation', component: ActivationComponent},
-  { path: 'mass-register', component: MassRegisterComponent},
+  { path: 'activation', component: ActivationComponent, canActivate: [NotAuthGuard]},
+  { path: 'mass-register', component: MassRegisterComponent, canActivate: [AuthGuard], data: {
+    roles: ['OWNER']
+  }},
   { path: 'companies',
    children: [
-    { path: '', component: CompaniesComponent},
-    { path: ':id', component: CompanyComponent},
+    { path: '', component: CompaniesComponent, canActivate: [AuthGuard], data: {
+      roles: ['ADMIN']
+    }},
+    { path: ':id', component: CompanyComponent, canActivate: [AuthGuard], data: {
+      roles: ['OWNER']
+    }},
   ]},
   { path: 'users',
    children: [
-    { path: '', component: UsersComponent},
-    { path: ':id', component: UserComponent},
+    { path: '', component: UsersComponent, canActivate: [AuthGuard]},
+    { path: ':id', component: UserComponent, canActivate: [AuthGuard]},
   ]},
   { path: 'projects',
    children: [
-    { path: '', component: ProjectsComponent},
-    { path: ':id', component: ProjectComponent},
+    { path: '', component: ProjectsComponent, canActivate: [AuthGuard]},
+    { path: ':id', component: ProjectComponent, canActivate: [AuthGuard]},
   ]},
   { path: 'free-days',
    children: [
-    { path: '', component: FreeDaysComponent},
-    { path: ':id', component: FreeDayComponent},
+    { path: '', component: FreeDaysComponent, canActivate: [AuthGuard]},
+    { path: ':id', component: FreeDayComponent, canActivate: [AuthGuard]},
   ]},
   { path: 'leave-requests',
    children: [
-    { path: '', component: LeaveRequestsComponent},
-    { path: ':id', component: LeaveRequestComponent},
+    { path: '', component: LeaveRequestsComponent, canActivate: [AuthGuard]},
+    { path: ':id', component: LeaveRequestComponent, canActivate: [AuthGuard]},
   ]},
   { path: 'timesheet-records',
    children: [
-    { path: '', component: TimesheetRecordsComponent},
-    { path: ':id', component: TimesheetRecordComponent},
+    { path: '', component: TimesheetRecordsComponent, canActivate: [AuthGuard]},
+    { path: ':id', component: TimesheetRecordComponent, canActivate: [AuthGuard]},
   ]},
   {
     path: 'refresh', component: HomeComponent

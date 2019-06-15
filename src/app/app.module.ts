@@ -30,6 +30,7 @@ import { MassRegisterComponent } from './mass-register/mass-register.component';
 import { StartComponent } from './start/start.component';
 import { CompanyRegisterRedirectComponent } from './company-register-redirect/company-register-redirect.component';
 import { HomeComponent } from './home/home.component';
+import { NotAuthGuard } from './auth/not-auth.guard';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { HomeComponent } from './home/home.component';
   ],
   providers: [
     AuthGuard,
+    NotAuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
