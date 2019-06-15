@@ -30,3 +30,7 @@ a{
     text-decoration: none;
     white-space: normal;
 }
+
+.active-link {
+    display: none;
+}

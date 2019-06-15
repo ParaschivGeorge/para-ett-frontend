@@ -32,6 +32,10 @@ export class LeaveRequestComponent implements OnInit {
         'TRAINING', 'UNPAID_INFANT_CARE_LEAVE', 'VOLUNTEER_LEAVE', 'WORK_FROM_HOME'];
   leaveRequestStatuses = ['APPROVED', 'DENIED', 'PENDING'];
   leaveRequestEditForm: FormGroup = new FormGroup({
+    id: new FormControl({value: null, disabled: true}),
+    companyId: new FormControl({value: null, disabled: true}),
+    managerId: new FormControl({value: null, disabled: true}),
+    userId: new FormControl({value: null, disabled: true}),
     date: new FormControl({value: null, disabled: !this.userLeaveRequest()}, Validators.required),
     type: new FormControl({value: null, disabled: !this.userLeaveRequest()}, Validators.required),
     status: new FormControl({value: null, disabled: !this.teamLeaveRequest()}, Validators.required)
@@ -48,10 +52,6 @@ export class LeaveRequestComponent implements OnInit {
     if (this.leaveRequest) {
       const leaveRequest = JSON.parse(JSON.stringify(this.leaveRequest));
       this.id = this.leaveRequest.id;
-      delete leaveRequest.id;
-      delete leaveRequest.companyId;
-      delete leaveRequest.managerId;
-      delete leaveRequest.userId;
       leaveRequest.date = new Date(leaveRequest.date);
       console.log(leaveRequest);
       this.leaveRequestEditForm.setValue(leaveRequest);
@@ -101,12 +101,7 @@ export class LeaveRequestComponent implements OnInit {
   onSubmit() {
     console.log(this.leaveRequestEditForm.valid);
     if (this.leaveRequestEditForm.valid) {
-      // TODO this is not ok!
       const leaveRequest = this.leaveRequestEditForm.value as LeaveRequest;
-      leaveRequest.id = this.id;
-      leaveRequest.companyId = this.dataHolderService.user.companyId;
-      leaveRequest.managerId = this.dataHolderService.user.managerId;
-      leaveRequest.userId = this.dataHolderService.user.id;
       this.leaveRequestsService.updateLeaveRequest(this.id, leaveRequest).subscribe(
         editedLeaveRequest => {
           console.log(editedLeaveRequest);

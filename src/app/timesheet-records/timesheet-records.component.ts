@@ -35,9 +35,6 @@ export class TimesheetRecordsComponent implements OnInit {
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   matcher = new MyErrorStateMatcher();
   timesheetRecords: TimesheetRecord[] = [];
-  timesheetRecordsCreateForm: FormGroup = new FormGroup({
-    timesheetRecords: new FormArray([])
-  });
   overtimeStatus = [false, true];
   monthFormControl: FormControl = new FormControl(this.month);
   calendarForm: FormGroup;
@@ -54,12 +51,10 @@ export class TimesheetRecordsComponent implements OnInit {
     private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
-    // this.getTimesheetRecords();
     console.log(this.month, this.year);
     this.monthFormControl.valueChanges.subscribe(value => {
       this.month = this.monthFormControl.value;
       console.log(this.month);
-      console.log('here');
       this.updateCalendar();
     });
     this.getProjects();
@@ -245,61 +240,6 @@ export class TimesheetRecordsComponent implements OnInit {
         console.log(error);
       }
     );
-  }
-
-  deleteTimesheetRecord(id: number) {
-    this.timesheetRecordsService.deleteTimesheetRecord(id).subscribe(
-      data => {
-        console.log(data);
-        this.getTimesheetRecords();
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
-
-  get timesheetRecordsFormArray(): FormArray {
-    return this.timesheetRecordsCreateForm.get('timesheetRecords') as FormArray;
-  }
-
-  addTimesheetRecord() {
-    if (this.timesheetRecordsCreateForm.valid) {
-      this.timesheetRecordsFormArray.push(
-        new FormGroup({
-          date: new FormControl(null, Validators.required),
-          noHours: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')]),
-          overtime: new FormControl(null, Validators.required),
-          projectId: new FormControl(null, [Validators.required, Validators.pattern('[0-9]*')])
-        })
-      );
-    }
-  }
-
-  removeTimesheetRecord(index: number) {
-    this.timesheetRecordsFormArray.removeAt(index);
-  }
-
-  onSubmit() {
-    console.log(this.timesheetRecordsCreateForm.valid);
-    if (this.timesheetRecordsCreateForm.valid) {
-      const timesheetRecords = this.timesheetRecordsFormArray.value as TimesheetRecord[];
-      timesheetRecords.map(timesheetRecord => {
-        timesheetRecord.companyId = this.dataHolderService.user.companyId;
-        timesheetRecord.managerId = this.dataHolderService.user.managerId;
-        timesheetRecord.userId = this.dataHolderService.user.id;
-        timesheetRecord.date = new Date(timesheetRecord.date).toLocaleDateString('en-US');
-      });
-      this.timesheetRecordsService.createTimesheetRecords(timesheetRecords).subscribe(
-        createdTimesheetRecords => {
-          console.log(createdTimesheetRecords);
-          this.getTimesheetRecords();
-        },
-        error => {
-          console.log(error);
-        }
-      );
-    }
   }
 
   getProjects() {

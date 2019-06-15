@@ -6,42 +6,46 @@
       </button>
     </div>
     <img routerLink="/home" fxHide.lt-md="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  
-    <span class="welcome">Hello, Dummy!</span>
+    <span class="welcome" *ngIf="user">Hello, {{user.firstName}}!</span>
     <span class="fill-remaining-space"></span>    
-    <mat-icon fxHide.gt-sm="true" class="logout-mobile">meeting_room</mat-icon>
+    <mat-icon fxHide.gt-sm="true" class="logout-mobile" *ngIf="user" (click)="logout()">meeting_room</mat-icon>
     <img fxHide.gt-sm="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  
     
     <div fxShow="true" fxHide.lt-md="true">
-      <a mat-button routerLink="/start">Start</a>
-      <a mat-button routerLink="/activation">Activation</a>
-      <a mat-button routerLink="/mass-register">M reg</a>
-      <a mat-button *ngIf="user && user.type === 'OWNER'" [routerLink]="'/companies/' + user.companyId">Your company</a>
-      <a mat-button routerLink="/users">Users</a>
-      <a mat-button routerLink="/projects">Projects</a>
-      <a mat-button routerLink="/free-days">F days</a>
-      <a mat-button routerLink="/leave-requests">L req</a>
-      <a mat-button routerLink="/timesheet-records">TS R</a>
-      <button mat-raised-button>Logout</button>
+      <a mat-button routerLink="/start" routerLinkActive="active-link" *ngIf="!user">Start</a>
+      <!-- <a mat-button routerLink="/activation">Activation</a> -->
+      <a mat-button routerLink="/mass-register" routerLinkActive="active-link" *ngIf="user && user.type === 'OWNER'">Add users</a>
+      <a mat-button *ngIf="user && user.type === 'OWNER'" routerLinkActive="active-link" [routerLink]="'/companies/' + user.companyId">Your company</a>
+      <a mat-button routerLink="/users" *ngIf="user" routerLinkActive="active-link">Users</a>
+      <a mat-button routerLink="/projects" *ngIf="user" routerLinkActive="active-link">Projects</a>
+      <a mat-button routerLink="/free-days" *ngIf="user" routerLinkActive="active-link">Vacation days</a>
+      <a mat-button routerLink="/leave-requests" *ngIf="user" routerLinkActive="active-link">Leave requests</a>
+      <a mat-button routerLink="/timesheet-records" *ngIf="user" routerLinkActive="active-link">Timesheet records</a>
+      <button mat-raised-button *ngIf="user" (click)="logout()">Logout</button>
     </div>
   </mat-toolbar>
 
   <mat-sidenav-container fxFlexFill class="content" hasBackdrop="false" >
     <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over" opened="false" fxHide.gt-sm="true">
       <div fxLayout="column">
-        <a mat-button routerLink="/start">Start</a>
-        <a mat-button routerLink="/activation">Activation</a>
-        <a mat-button routerLink="/mass-register">M reg</a>
-        <a mat-button *ngIf="user && user.type === 'OWNER'" [routerLink]="'/companies/' + user.companyId">Your company</a>
-        <a mat-button routerLink="/users">Users</a>
-        <a mat-button routerLink="/projects">Projects</a>
-        <a mat-button routerLink="/free-days">F days</a>
-        <a mat-button routerLink="/leave-requests">L req</a>
-        <a mat-button routerLink="/timesheet-records">TS R</a>
+        <a mat-button routerLink="/start" routerLinkActive="active-link" *ngIf="!user" routerLinkActive="active-link">Start</a>
+        <!-- <a mat-button routerLink="/activation">Activation</a> -->
+        <a mat-button routerLink="/mass-register" *ngIf="user && user.type === 'OWNER'" routerLinkActive="active-link">Add users</a>
+        <a mat-button *ngIf="user && user.type === 'OWNER'" [routerLink]="'/companies/' + user.companyId" routerLinkActive="active-link">Your company</a>
+        <a mat-button routerLink="/users" *ngIf="user" routerLinkActive="active-link">Users</a>
+        <a mat-button routerLink="/projects" *ngIf="user" routerLinkActive="active-link">Projects</a>
+        <a mat-button routerLink="/free-days" *ngIf="user" routerLinkActive="active-link">Vacation days</a>
+        <a mat-button routerLink="/leave-requests" *ngIf="user" routerLinkActive="active-link">Leave requests</a>
+        <a mat-button routerLink="/timesheet-records" *ngIf="user" routerLinkActive="active-link">Timesheet records</a>
       </div>
     </mat-sidenav>
-    <mat-sidenav-content fxFlexFill>      
-      <!-- <mat-progress-bar mode="determinate" value="100" *ngIf="!loading"></mat-progress-bar>
-      <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar> -->
+    <mat-sidenav-content fxFlexFill>
+      <div [hidden]="loading">
+        <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+      </div>
+      <div [hidden]="!loading">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
