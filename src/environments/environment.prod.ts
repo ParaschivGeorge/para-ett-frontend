@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "http://localhost:8765" // TODO replace with deployed url
+  apiUrl: "http://207.180.240.134:8765"
 };
