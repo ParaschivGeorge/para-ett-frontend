@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { AccountActivationUserDto } from '../models/account-activation-user-dto';
 import { MassRegisterUserDto } from '../models/mass-register-user-dto';
+import { OwnerRegisterUserDto } from '../models/owner-register-user-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -61,5 +62,13 @@ export class UsersService {
       queryParam = queryParam.append('companyId', companyId.toString());
     }
     return this.http.post<User[]>(this.usersServiceUrl + '/massRegister', massRegisterUserDtoList, {params : queryParam});
+  }
+
+  registerOwner(companyId: number, ownerRegisterUserDto: OwnerRegisterUserDto): Observable<User> {
+    let queryParam = new HttpParams();
+    if (companyId) {
+      queryParam = queryParam.append('companyId', companyId.toString());
+    }
+    return this.http.post<User>(this.usersServiceUrl + '/registerOwner', ownerRegisterUserDto, {params : queryParam});
   }
 }

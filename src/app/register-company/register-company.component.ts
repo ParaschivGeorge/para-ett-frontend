@@ -7,6 +7,7 @@ import { Company } from '../models/company';
 import { OwnerRegisterUserDto } from '../models/owner-register-user-dto';
 import { Router } from '@angular/router';
 import { DataHolderService } from '../services/data-holder.service';
+import { UsersService } from '../services/users.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -41,6 +42,7 @@ export class RegisterCompanyComponent implements OnInit {
 
   constructor(
     private companiesService: CompaniesService,
+    private usersService: UsersService,
     private router: Router,
     private dataHolderService: DataHolderService) { }
 
@@ -57,10 +59,17 @@ export class RegisterCompanyComponent implements OnInit {
       console.log('crdto: ', companyRegisterDto);
       this.dataHolderService.loading = true;
       this.companiesService.createCompany(companyRegisterDto).subscribe(
-        data => {
-          console.log(data);
-          this.dataHolderService.email = companyRegisterDto.ownerRegisterUserDto.email;
-          this.router.navigate(['email-activation']);
+        company => {
+          console.log(company);
+          this.usersService.registerOwner(company.id, companyRegisterDto.ownerRegisterUserDto).subscribe(
+            user => {
+              this.dataHolderService.email = companyRegisterDto.ownerRegisterUserDto.email;
+              this.router.navigate(['email-activation']);
+            },
+            error => {
+              console.log(error);
+            }
+          );
         },
         error => {
           console.log(error);
