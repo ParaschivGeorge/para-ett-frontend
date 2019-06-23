@@ -59,6 +59,23 @@
 
 <!-- mobile -->
 <div class="my-container" fxHide.gt-sm="true" fxHide.sm="true">
+  <button mat-icon-button (click)="scrollToTop()" class="scroll-top-button">
+    <mat-icon>keyboard_arrow_up</mat-icon>
+  </button>
+  <div class="days-info">
+    <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
+      <p class="days-title">Free days this month:</p>
+      <div *ngFor="let freeDay of currentMonthFreeDays()">
+        {{parseDate(freeDay.date)}} - {{freeDay.type}}
+      </div>
+    </div>
+    <div class="leave-requests-info" *ngIf="currentMonthLeaveRequests().length">
+      <p class="days-title">Approved leave requests this month:</p>
+      <div *ngFor="let leaveRequest of currentMonthLeaveRequests()">
+        {{parseDate(leaveRequest.date)}} - {{leaveRequest.type}}
+      </div>
+    </div>
+  </div> 
   <div class="tsrecords">
     <div class="calendar-selector">
       <button class="arrow-button" mat-stroked-button mat-raised-button (click)="previous()">&#60;</button>
@@ -71,7 +88,11 @@
       </mat-form-field>
       <button class="arrow-button" mat-stroked-button mat-raised-button (click)="next()">&#62;</button>
     </div>
-    <div class="calendar">     
+    <div class="calendar">      
+      <div fxLayout="row" fxLayoutAlign="space-between none">
+        <button mat-raised-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
+        <button mat-raised-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
+      </div>     
       <div *ngFor="let week of calendar">          
         <div *ngFor="let project of projects">
           <p class="project-name-mobile">{{project.name}}</p>
@@ -88,25 +109,7 @@
           </div>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutAlign="space-between none">
-        <button mat-raised-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
-        <button mat-raised-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
-      </div>
     </div>
-    <div class="days-info">
-      <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
-        <p class="days-title">Free days this month:</p>
-        <div *ngFor="let freeDay of currentMonthFreeDays()">
-          {{parseDate(freeDay.date)}} - {{freeDay.type}}
-        </div>
-      </div>
-      <div class="leave-requests-info" *ngIf="currentMonthLeaveRequests().length">
-        <p class="days-title">Approved leave requests this month:</p>
-        <div *ngFor="let leaveRequest of currentMonthLeaveRequests()">
-          {{parseDate(leaveRequest.date)}} - {{leaveRequest.type}}
-        </div>
-      </div>
-    </div> 
   </div>  
 </div>
   

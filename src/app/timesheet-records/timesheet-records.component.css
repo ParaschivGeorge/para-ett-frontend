@@ -103,4 +103,9 @@
     border-top-left-radius: 5px;
 }
 
+.scroll-top-button {
+    right: 15px;
+    bottom: 15px;
+    position: fixed;
+}
 

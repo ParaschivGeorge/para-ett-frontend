@@ -66,6 +66,10 @@ export class TimesheetRecordsComponent implements OnInit {
     this.getLeaveRequests();
   }
 
+  scrollToTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
   currentMonthLeaveRequests(): LeaveRequest[] {
     if (!this.leaveRequests) { return []; }
     return this.leaveRequests.filter(lr => {
