@@ -89,12 +89,13 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   updateFormWithFreeDays() {
-    if (this.timesheetRecords.length > 0 && this.projects.length) {
+    if (this.projects.length) {
       let needsUpdate = false;
       this.freeDays.forEach(freeDay => {
-        // console.log(freeDay);
+        console.log(freeDay);
         const date = new Date(freeDay.date);
         if (date.getMonth() === this.month && date.getFullYear() === this.year) {
+          console.log('here');
           const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
           const control = calendarFormArray.controls[date.getDate() - 1] as FormControl;
           this.projects.forEach(project => {
@@ -113,7 +114,7 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   updateFormWithLeaveRequests() {
-    if (this.timesheetRecords.length > 0 && this.projects.length) {
+    if (this.projects.length) {
       let needsUpdate = false;
       this.leaveRequests.forEach(leaveRequest => {
         // console.log(leaveRequest);
@@ -244,11 +245,21 @@ export class TimesheetRecordsComponent implements OnInit {
 
   getProjects() {
     this.dataHolderService.loading = true;
-    this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
+    this.projectsService.getProjects(this.dataHolderService.user.companyId, null, this.dataHolderService.user.id).subscribe(
       projects => {
-        this.projects = projects;
-        console.log(projects);
-        this.updateCalendar();
+        this.projectsService.getProjects(this.dataHolderService.user.companyId, this.dataHolderService.user.id, null).subscribe(
+          projectsR => {
+            this.projects = projects.concat(projectsR);
+            console.log(this.projects);
+            this.updateCalendar();
+          },
+          error => {{
+            console.log(error);
+          }}
+        );
+      },
+      error => {
+        console.log(error);
       }
     ).add(() => {
       this.dataHolderService.loading = false;

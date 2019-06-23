@@ -14,24 +14,3 @@ button {
     height: 60px;
     font-size: 20px;
 }
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: black;
-    background: white !important;
-    border-radius: 5px; 
-}
-
-.mat-form-field-label {
-    color: black;
-}
-
-.error-div {
-    line-height: 60px;
-    margin-top: 20px;
-    text-align: center;
-    border-radius: 5px;
-    width: 100%;
-    min-height: 60px;
-    font-size: 20px;
-    color: white;
-}

@@ -1,15 +1,4 @@
-.my-container {
-    background: linear-gradient(to bottom, #f0f9ff 0%,#70c8ff 100%,#a1dbff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    min-height: calc(100vh - 90px);
-    padding-top: 30px;
-}
-
 mat-tab-group {
     max-width: 500px;
     margin: 0 auto;
-}
-
-::ng-deep .mat-tab-label .mat-tab-label-content {
-    font-size: 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }

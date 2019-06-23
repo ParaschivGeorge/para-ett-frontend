@@ -101,7 +101,7 @@ export class LeaveRequestComponent implements OnInit {
   onSubmit() {
     console.log(this.leaveRequestEditForm.valid);
     if (this.leaveRequestEditForm.valid) {
-      const leaveRequest = this.leaveRequestEditForm.value as LeaveRequest;
+      const leaveRequest = this.leaveRequestEditForm.getRawValue() as LeaveRequest;
       this.leaveRequestsService.updateLeaveRequest(this.id, leaveRequest).subscribe(
         editedLeaveRequest => {
           console.log(editedLeaveRequest);

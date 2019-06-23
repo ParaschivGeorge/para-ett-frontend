@@ -1,13 +1,15 @@
 <div class="my-container">
-  <button mat-button (click)="previous()">&#60;</button>
-  <mat-form-field appearance="outline">
-    <mat-select placeholder="Month" [formControl]="monthFormControl" name="month">
-      <mat-option *ngFor="let monthNb of monthsNumbers" [value]="monthNb">
-        {{months[monthNb]}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button mat-button (click)="next()">&#62;</button>
+  <!-- <div class="calendar-selector"> -->
+    <button class="arrow-button" mat-stroked-button mat-raised-button (click)="previous()">&#60;</button>
+    <mat-form-field appearance="outline" class="month-select">
+      <mat-select placeholder="Month" [formControl]="monthFormControl" name="month">
+        <mat-option *ngFor="let monthNb of monthsNumbers" [value]="monthNb">
+          {{months[monthNb]}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button class="arrow-button" mat-stroked-button mat-raised-button (click)="next()">&#62;</button>
+  <!-- </div> -->
   <div>
     <div *ngFor="let week of calendar">
       <div>
