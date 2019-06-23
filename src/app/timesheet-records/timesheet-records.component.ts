@@ -43,6 +43,10 @@ export class TimesheetRecordsComponent implements OnInit {
   freeDays: FreeDay[] = [];
   leaveRequests: LeaveRequest[] = [];
 
+  headers = ['Project', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+
+  canClockWeekends = false;
+
   constructor(
     private timesheetRecordsService: TimesheetRecordsService,
     private projectsService: ProjectsService,
@@ -60,6 +64,26 @@ export class TimesheetRecordsComponent implements OnInit {
     this.getProjects();
     this.getFreeDays();
     this.getLeaveRequests();
+  }
+
+  toggleWeekends() {
+    this.canClockWeekends = ! this.canClockWeekends;
+    const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
+    console.log(calendarFormArray.controls.length);
+    this.calendar.forEach(week => {
+      week.forEach((day, index) => {
+        if (day !== -1) {
+          if (index >= 5) {
+            const group = calendarFormArray.controls[day - 1];
+            if (this.canClockWeekends) {
+              group.enable();
+            } else {
+              group.disable();
+            }
+          }
+        }
+      });
+    });
   }
 
   getLeaveRequests() {
@@ -196,12 +220,15 @@ export class TimesheetRecordsComponent implements OnInit {
     const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
     calendarFormArray.setValue([]);
     this.calendar.forEach(week => {
-      week.forEach(day => {
+      week.forEach((day, index) => {
         if (day !== -1) {
           const dayForm = new FormGroup({});
           this.projects.forEach(project => {
             dayForm.addControl(project.id.toString(), new FormControl(0, Validators.pattern('[0-9]*')));
           });
+          if ((index === 6 || index === 5) && !this.canClockWeekends) {
+            dayForm.disable();
+          }
           calendarFormArray.push(dayForm);
         }
       });

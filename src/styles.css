@@ -74,6 +74,12 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.mat-form-field-appearance-outline .mat-form-field-subscript-wrapper {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
 .error-div {
     padding: 10px 0;
     line-height: 20px;

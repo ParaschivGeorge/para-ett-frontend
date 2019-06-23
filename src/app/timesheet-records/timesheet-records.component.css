@@ -1,6 +1,17 @@
 .calendar-input {
     display: inline-block;
     width: 60px;
+    height: 60px;
+    /* border: 1px solid black;
+    border-radius: 5px; */
+    text-align: center;
+    margin: 5px 0;
+}
+
+.header {
+    display: inline-block;
+    width: 60px;
+    text-align: center;
 }
 
 .project-name {
@@ -10,13 +21,16 @@
 
 .month-select {
     margin-top: 30px;
+    text-align: center;
 }
 
 .arrow-button {
-    height: 60px;
-    margin-bottom: 5px;
+    height: 55px;
+    font-size: 20px;
 }
 
 /* .calendar-selector {
     height: 60px;
 } */
+
+
