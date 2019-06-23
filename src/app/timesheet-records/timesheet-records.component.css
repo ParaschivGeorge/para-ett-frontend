@@ -1,3 +1,13 @@
+.tsrecords {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.desktop-button {
+    width: 30%;
+    margin-top: 10px;
+}
+
 .calendar-input {
     display: inline-block;
     width: 60px;
@@ -9,14 +19,25 @@
 }
 
 .header {
+    background: white;
+    padding: 2px 0;
+    border-radius: 5px;
+}
+
+.header-cell {
     display: inline-block;
     width: 60px;
     text-align: center;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .project-name {
     display: inline-block;
     width: 60px;
+    border-bottom: 1px solid black;
+    background: white;
+    border-top-left-radius: 5px;
 }
 
 .month-select {
