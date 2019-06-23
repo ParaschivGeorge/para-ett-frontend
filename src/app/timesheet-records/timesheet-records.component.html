@@ -1,3 +1,4 @@
+<!-- desktop -->
 <div class="my-container" fxHide.lt-sm="true">
   <div class="tsrecords">
     <div class="calendar-selector">
@@ -19,7 +20,67 @@
         <div *ngFor="let project of projects">
           <div>
             <p class="project-name">{{project.name}}</p>
-            <mat-form-field appearance="outline"  *ngFor="let day of week" class="calendar-input">      
+            <mat-form-field
+              appearance="outline" 
+              *ngFor="let day of week; let i = index"
+              class="calendar-input"
+              [matTooltip]=" i < 5 ? 'Leave request approved or company vacation' : 'Weekend'"              
+              [matTooltipDisabled]="getFormControl(day, project).enabled || day === -1"
+              matTooltipPosition="above"
+              [ngClass]="{'today': isToday(day)}">      
+              <mat-label>{{day === -1 ? null : day}}</mat-label>
+              <input matInput [formControl]="getFormControl(day, project)"
+                [errorStateMatcher]="matcher">
+            </mat-form-field>            
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between none">
+        <button mat-raised-button color="primary" class="desktop-button" (click)="submit()">Submit</button>
+        <button mat-raised-button color="accent" class="desktop-button" (click)="toggleWeekends()">Toggle weekends</button>
+      </div>
+    </div>
+    <div class="days-info">
+      <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
+        <p class="days-title">Free days this month:</p>
+        <div *ngFor="let freeDay of currentMonthFreeDays()">
+          {{parseDate(freeDay.date)}} - {{freeDay.type}}
+        </div>
+      </div>
+      <div class="leave-requests-info" *ngIf="currentMonthLeaveRequests().length">
+        <p class="days-title">Approved leave requests this month:</p>
+        <div *ngFor="let leaveRequest of currentMonthLeaveRequests()">
+          {{parseDate(leaveRequest.date)}} - {{leaveRequest.type}}
+        </div>
+      </div>
+    </div> 
+  </div>  
+</div>
+
+<!-- mobile -->
+<div class="my-container" fxHide.gt-sm="true" fxHide.sm="true">
+  <div class="tsrecords">
+    <div class="calendar-selector">
+      <button class="arrow-button" mat-stroked-button mat-raised-button (click)="previous()">&#60;</button>
+      <mat-form-field appearance="outline" class="month-select-mobile">
+        <mat-select placeholder="Month" [formControl]="monthFormControl" name="month">
+          <mat-option *ngFor="let monthNb of monthsNumbers" [value]="monthNb">
+            {{months[monthNb]}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button class="arrow-button" mat-stroked-button mat-raised-button (click)="next()">&#62;</button>
+    </div>
+    <div class="calendar">     
+      <div *ngFor="let week of calendar">          
+        <div *ngFor="let project of projects">
+          <p class="project-name-mobile">{{project.name}}</p>
+          <div *ngFor="let day of week; let i = index">
+            <p class="header-cell-mobile">{{headers[i + 1]}}</p>
+            <mat-form-field
+              appearance="outline"              
+              class="calendar-input-mobile"
+              [ngClass]="{'today': isToday(day)}">      
               <mat-label>{{day === -1 ? null : day}}</mat-label>
               <input matInput [formControl]="getFormControl(day, project)"
                 [errorStateMatcher]="matcher">
@@ -28,9 +89,24 @@
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between none">
-        <button mat-raised-button color="primary" class="desktop-button" (click)="submit()">Submit</button>
-        <button mat-raised-button color="accent" class="desktop-button" (click)="toggleWeekends()">Toggle weekends</button>
+        <button mat-raised-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
+        <button mat-raised-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
       </div>
-    </div>  
+    </div>
+    <div class="days-info">
+      <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
+        <p class="days-title">Free days this month:</p>
+        <div *ngFor="let freeDay of currentMonthFreeDays()">
+          {{parseDate(freeDay.date)}} - {{freeDay.type}}
+        </div>
+      </div>
+      <div class="leave-requests-info" *ngIf="currentMonthLeaveRequests().length">
+        <p class="days-title">Approved leave requests this month:</p>
+        <div *ngFor="let leaveRequest of currentMonthLeaveRequests()">
+          {{parseDate(leaveRequest.date)}} - {{leaveRequest.type}}
+        </div>
+      </div>
+    </div> 
   </div>  
 </div>
+  

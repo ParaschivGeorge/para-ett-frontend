@@ -66,6 +66,26 @@ export class TimesheetRecordsComponent implements OnInit {
     this.getLeaveRequests();
   }
 
+  currentMonthLeaveRequests(): LeaveRequest[] {
+    if (!this.leaveRequests) { return []; }
+    return this.leaveRequests.filter(lr => {
+      const date = new Date(lr.date);
+      return date.getFullYear() === this.year && date.getMonth() === this.month;
+    });
+  }
+
+  currentMonthFreeDays(): FreeDay[] {
+    if (!this.freeDays) { return []; }
+    return this.freeDays.filter(fd => {
+      const date = new Date(fd.date);
+      return date.getFullYear() === this.year && date.getMonth() === this.month;
+    });
+  }
+
+  parseDate(date: string): string {
+    return new Date(date).toDateString();
+  }
+
   toggleWeekends() {
     this.canClockWeekends = ! this.canClockWeekends;
     const calendarFormArray = this.calendarForm.get('calendar') as FormArray;
@@ -84,6 +104,14 @@ export class TimesheetRecordsComponent implements OnInit {
         }
       });
     });
+  }
+
+  isToday(day: number): boolean {
+    const today = new Date();
+    const date = new Date(this.year, this.month, day);
+    return today.getFullYear() === date.getFullYear() &&
+      today.getMonth() === date.getMonth() &&
+      today.getDate() === date.getDate();
   }
 
   getLeaveRequests() {
