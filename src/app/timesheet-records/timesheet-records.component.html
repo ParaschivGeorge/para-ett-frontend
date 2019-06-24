@@ -42,15 +42,15 @@
     </div>
     <div class="days-info">
       <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
-        <p class="days-title">Free days this month:</p>
+        <p class="days-title">Vacations this month:</p>
         <div *ngFor="let freeDay of currentMonthFreeDays()">
-          {{parseDate(freeDay.date)}} - {{freeDay.type}}
+          {{parseDate(freeDay.date)}} - {{freeDay.type.replace(regex, ' ')}}
         </div>
       </div>
       <div class="leave-requests-info" *ngIf="currentMonthLeaveRequests().length">
         <p class="days-title">Approved leave requests this month:</p>
         <div *ngFor="let leaveRequest of currentMonthLeaveRequests()">
-          {{parseDate(leaveRequest.date)}} - {{leaveRequest.type}}
+          {{parseDate(leaveRequest.date)}} - {{leaveRequest.type.replace(regex, ' ')}}
         </div>
       </div>
     </div> 
@@ -66,13 +66,13 @@
     <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
       <p class="days-title">Free days this month:</p>
       <div *ngFor="let freeDay of currentMonthFreeDays()">
-        {{parseDate(freeDay.date)}} - {{freeDay.type}}
+        {{parseDate(freeDay.date)}} - {{freeDay.type.replace(regex, ' ')}}
       </div>
     </div>
     <div class="leave-requests-info" *ngIf="currentMonthLeaveRequests().length">
       <p class="days-title">Approved leave requests this month:</p>
       <div *ngFor="let leaveRequest of currentMonthLeaveRequests()">
-        {{parseDate(leaveRequest.date)}} - {{leaveRequest.type}}
+        {{parseDate(leaveRequest.date)}} - {{leaveRequest.type.replace(regex, ' ')}}
       </div>
     </div>
   </div> 

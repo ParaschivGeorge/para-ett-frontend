@@ -44,6 +44,7 @@ export class TimesheetRecordsComponent implements OnInit {
   leaveRequests: LeaveRequest[] = [];
 
   headers = ['Project', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  regex = new RegExp('_', 'g');
 
   canClockWeekends = false;
 

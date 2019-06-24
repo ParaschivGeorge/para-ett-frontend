@@ -107,5 +107,7 @@
     right: 15px;
     bottom: 15px;
     position: fixed;
+    z-index: 999;
+    background: rgba(255, 64, 129, 0.8);
 }
 
