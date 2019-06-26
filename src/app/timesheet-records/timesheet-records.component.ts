@@ -72,6 +72,7 @@ export class TimesheetRecordsComponent implements OnInit {
       this.month = this.monthFormControl.value;
       console.log(this.month);
       this.updateHoursInfo();
+      this.updateCalendar();
     });
 
     this.route.params.subscribe(params => {
@@ -412,7 +413,7 @@ export class TimesheetRecordsComponent implements OnInit {
     if (this.user && this.dhUser.id !== this.user.id) {
       control.disable();
     }
-    
+
     return control;
   }
 
