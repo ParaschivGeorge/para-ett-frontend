@@ -1,24 +1,24 @@
 <div class="my-container">
   <!-- desktop -->
   <form [formGroup]="massRegisterForm" (ngSubmit)="onSubmit()" fxHide.lt-lg="true">    
-    <button mat-raised-button color="primary" (click)="addUserForm()">+</button>
+    <button mat-flat-button color="primary" (click)="addUserForm()">+</button>
     <mat-form-field appearance="outline" class="field-desktop">
-      <input disabled matInput placeholder="EMAIL">
+      <input disabled matInput placeholder="Email">
     </mat-form-field>
     <mat-form-field appearance="outline" class="field-desktop">
-      <input disabled matInput placeholder="FIRST NAME">
+      <input disabled matInput placeholder="First name">
     </mat-form-field>
     <mat-form-field appearance="outline" class="field-desktop">
-      <input disabled matInput placeholder="LAST NAME">
+      <input disabled matInput placeholder="Last name">
     </mat-form-field>
     <mat-form-field appearance="outline" class="field-desktop">
-      <input disabled matInput placeholder="MNG EMAIL">
+      <input disabled matInput placeholder="Manager">
     </mat-form-field>
     <mat-form-field appearance="outline" class="field-desktop">
-      <input disabled matInput placeholder="FDs/Y">
+      <input disabled matInput placeholder="Annual leave">
     </mat-form-field>
     <mat-form-field appearance="outline" class="field-desktop">
-      <input disabled matInput placeholder="NORM">
+      <input disabled matInput placeholder="Norm">
     </mat-form-field>
     <mat-form-field appearance="outline" class="field-desktop">
       <input disabled matInput placeholder="ROLE">
@@ -26,7 +26,7 @@
     <div formArrayName="massRegister">  
       <div *ngFor="let userForm of massRegister.controls; let i = index">
         <div [formGroupName]="i">          
-          <button mat-raised-button color="warn" (click)="removeUsersForm(i)">-</button>
+          <button mat-flat-button color="warn" (click)="removeUsersForm(i)">-</button>
           <mat-form-field appearance="outline" class="field-desktop">
             <input matInput placeholder="Email" formControlName="email"
               [errorStateMatcher]="matcher">
@@ -49,7 +49,7 @@
             </mat-autocomplete>
           </mat-form-field>
           <mat-form-field appearance="outline" class="field-desktop">
-            <input matInput placeholder="Free days per year" formControlName="freeDaysTotal"
+            <input matInput placeholder="Annual leave" formControlName="freeDaysTotal"
               [errorStateMatcher]="matcher">
           </mat-form-field>
           <mat-form-field appearance="outline" class="field-desktop">
@@ -66,14 +66,14 @@
         </div>
       </div>
     </div>
-    <button mat-raised-button color="accent" type="submit">Submit</button>
+    <button mat-flat-button color="accent" type="submit">Submit</button>
     <div class="error-div warn-background" *ngIf="error">{{error}}</div>
     <div class="success-div" *ngIf="success">{{success}}</div>
   </form>
 
   <!-- mobile -->
   <form [formGroup]="massRegisterForm" class="mobile-form" (ngSubmit)="onSubmit()" fxHide.gt-md="true">    
-      <button mat-raised-button class="button-mobile" color="primary" (click)="addUserForm()">Add user</button>
+      <button mat-flat-button class="button-mobile" color="primary" (click)="addUserForm()">Add user</button>
       <div formArrayName="massRegister">  
         <div *ngFor="let userForm of massRegister.controls; let i = index">
           <div [formGroupName]="i">          
@@ -120,11 +120,11 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <button mat-raised-button class="button-mobile" color="warn" (click)="removeUsersForm(i)">Remove user</button>
+            <button mat-flat-button class="button-mobile" color="warn" (click)="removeUsersForm(i)">Remove user</button>
           </div>
         </div>
       </div>
-      <button mat-raised-button color="accent" class="button-mobile" type="submit">Submit</button>
+      <button mat-flat-button color="accent" class="button-mobile" type="submit">Submit</button>
       <div class="error-div-mobile warn-background" *ngIf="error">{{error}}</div>
       <div class="success-div-mobile" *ngIf="success">{{success}}</div>
     </form>

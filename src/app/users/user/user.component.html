@@ -36,9 +36,9 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="accent" (click)="edit()" *ngIf="canEdit()">{{editLabel}}</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!editing" *ngIf="canEdit()">Submit</button>
-    <button mat-raised-button color="warn" (click)="deleteUser(id)" *ngIf="isOwner() && !isCurrentUser()">Delete</button>
+    <button mat-flat-button color="accent" (click)="edit()" *ngIf="canEdit()">{{editLabel}}</button>
+    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!editing" *ngIf="canEdit()">Submit</button>
+    <button mat-flat-button color="warn" (click)="deleteUser(id)" *ngIf="isOwner() && !isCurrentUser()">Delete</button>
   </form>
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngIf="projects.length > 0">
     <h2>Your projects</h2>

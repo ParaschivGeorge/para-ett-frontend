@@ -14,7 +14,7 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <div class="buttons-container" *ngIf="isOwner()">
-    <button mat-raised-button color="accent" (click)="onSubmit()" >Edit</button>  
-    <button mat-raised-button color="warn" (click)="deleteFreeDay(freeDay.id)">Delete</button>
+    <button mat-flat-button color="accent" (click)="onSubmit()" >Edit</button>  
+    <button mat-flat-button color="warn" (click)="deleteFreeDay(freeDay.id)">Delete</button>
   </div>
 </form>

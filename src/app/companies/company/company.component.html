@@ -11,8 +11,8 @@
       <input matInput formControlName="description"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <button mat-raised-button color="accent" (click)="edit()">{{editLabel}}</button>
-    <button [disabled]="!editing" mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    <button mat-flat-button color="accent" (click)="edit()">{{editLabel}}</button>
+    <button [disabled]="!editing" mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
     <div class="error-div warn-background"*ngIf="error">{{error}}</div>
   </form>
 </div>

@@ -11,7 +11,7 @@
       <input matInput formControlName="passwordConfirm" type="password"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Submit</button>
+    <button mat-flat-button color="primary" type="submit">Submit</button>
     <div class="error-div warn-background"*ngIf="error">{{error}}</div>
   </form>
 </div>

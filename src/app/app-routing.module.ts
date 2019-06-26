@@ -62,8 +62,8 @@ const routes: Routes = [
   ]},
   { path: 'timesheet-records',
    children: [
-    { path: '', component: TimesheetRecordsComponent, canActivate: [AuthGuard]},
-    { path: ':id', component: TimesheetRecordComponent, canActivate: [AuthGuard]},
+    // { path: '', component: TimesheetRecordsComponent, canActivate: [AuthGuard]},
+    { path: ':userId', component: TimesheetRecordsComponent, canActivate: [AuthGuard]},
   ]},
   {
     path: 'refresh', component: HomeComponent

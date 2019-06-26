@@ -1,8 +1,27 @@
 <!-- desktop -->
 <div class="my-container" fxHide.lt-sm="true">
   <div class="tsrecords">
+    <div class="clocking-info">
+      <h2>{{dhUser?.id === user?.id ? 'You' : user?.firstName + ' ' + user?.lastName}} clocked:</h2>
+      <table class="clocking-table">
+        <tr class="clocking-table-row numbers">
+          <td>{{workedHours}}</td>
+          <td>{{freeDaysHours}}</td>
+          <td>{{leaveRequestsHours}}</td>
+          <td [ngClass]="{'done': workedHours + freeDaysHours + leaveRequestsHours >= totalHours, 'undone': workedHours + freeDaysHours + leaveRequestsHours < totalHours}">{{workedHours + freeDaysHours + leaveRequestsHours}}</td>
+          <td>{{totalHours}}</td>
+        </tr>
+        <tr class="clocking-table-row info">
+          <td>hours of work</td>
+          <td>hours from vacations</td>
+          <td>hours from leaves</td>
+          <td>total clocked</td>
+          <td>required this month</td>
+        </tr>
+      </table>
+    </div>
     <div class="calendar-selector">
-      <button class="arrow-button" mat-stroked-button mat-raised-button (click)="previous()">&#60;</button>
+      <button class="arrow-button" mat-stroked-button mat-flat-button (click)="previous()">&#60;</button>
       <mat-form-field appearance="outline" class="month-select">
         <mat-select placeholder="Month" [formControl]="monthFormControl" name="month">
           <mat-option *ngFor="let monthNb of monthsNumbers" [value]="monthNb">
@@ -10,7 +29,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button class="arrow-button" mat-stroked-button mat-raised-button (click)="next()">&#62;</button>
+      <button class="arrow-button" mat-stroked-button mat-flat-button (click)="next()">&#62;</button>
     </div>
     <div class="calendar">
       <div class="header">
@@ -35,12 +54,12 @@
           </div>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutAlign="space-between none">
-        <button mat-raised-button color="primary" class="desktop-button" (click)="submit()">Submit</button>
-        <button mat-raised-button color="accent" class="desktop-button" (click)="toggleWeekends()">Toggle weekends</button>
+      <div fxLayout="row" fxLayoutAlign="space-between none" *ngIf="dhUser?.id === user?.id">
+        <button mat-flat-button color="primary" class="desktop-button" (click)="submit()">Submit</button>
+        <button mat-flat-button color="accent" class="desktop-button" (click)="toggleWeekends()">Toggle weekends</button>
       </div>
     </div>
-    <div class="days-info">
+    <div class="days-info clocking-info" *ngIf="currentMonthFreeDays().length || currentMonthLeaveRequests().length">
       <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
         <p class="days-title">Vacations this month:</p>
         <div *ngFor="let freeDay of currentMonthFreeDays()">
@@ -59,10 +78,29 @@
 
 <!-- mobile -->
 <div class="my-container" fxHide.gt-sm="true" fxHide.sm="true">
+  <div class="clocking-info">
+    <h2>{{dhUser?.id === user?.id ? 'You' : user?.firstName + ' ' + user?.lastName}} clocked:</h2>
+    <table class="clocking-table">
+      <tr class="clocking-table-row numbers">
+        <td>{{workedHours}}</td>
+        <td>{{freeDaysHours}}</td>
+        <td>{{leaveRequestsHours}}</td>
+        <td [ngClass]="{'done': workedHours + freeDaysHours + leaveRequestsHours >= totalHours, 'undone': workedHours + freeDaysHours + leaveRequestsHours < totalHours}">{{workedHours + freeDaysHours + leaveRequestsHours}}</td>
+        <td>{{totalHours}}</td>
+      </tr>
+      <tr class="clocking-table-row info">
+        <td>hours of work</td>
+        <td>hours from vacations</td>
+        <td>hours from leaves</td>
+        <td>total clocked</td>
+        <td>required this month</td>
+      </tr>
+    </table>
+  </div>
   <button mat-icon-button (click)="scrollToTop()" class="scroll-top-button">
     <mat-icon>keyboard_arrow_up</mat-icon>
   </button>
-  <div class="days-info">
+  <div class="days-info clocking-info" *ngIf="currentMonthFreeDays().length || currentMonthLeaveRequests().length">
     <div class="free-days-info" *ngIf="currentMonthFreeDays().length">
       <p class="days-title">Free days this month:</p>
       <div *ngFor="let freeDay of currentMonthFreeDays()">
@@ -78,7 +116,7 @@
   </div> 
   <div class="tsrecords">
     <div class="calendar-selector">
-      <button class="arrow-button" mat-stroked-button mat-raised-button (click)="previous()">&#60;</button>
+      <button class="arrow-button" mat-stroked-button mat-flat-button (click)="previous()">&#60;</button>
       <mat-form-field appearance="outline" class="month-select-mobile">
         <mat-select placeholder="Month" [formControl]="monthFormControl" name="month">
           <mat-option *ngFor="let monthNb of monthsNumbers" [value]="monthNb">
@@ -86,12 +124,12 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button class="arrow-button" mat-stroked-button mat-raised-button (click)="next()">&#62;</button>
+      <button class="arrow-button" mat-stroked-button mat-flat-button (click)="next()">&#62;</button>
     </div>
     <div class="calendar">      
-      <div fxLayout="row" fxLayoutAlign="space-between none">
-        <button mat-raised-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
-        <button mat-raised-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
+      <div fxLayout="row" fxLayoutAlign="space-between none" *ngIf="dhUser?.id === user?.id">
+        <button mat-flat-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
+        <button mat-flat-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
       </div>     
       <div *ngFor="let week of calendar">          
         <div *ngFor="let project of projects">

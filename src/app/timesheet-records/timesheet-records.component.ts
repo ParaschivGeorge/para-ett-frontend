@@ -11,6 +11,8 @@ import { FreeDaysService } from '../services/free-days.service';
 import { FreeDay } from '../models/free-day';
 import { LeaveRequestsService } from '../services/leave-requests.service';
 import { LeaveRequest } from '../models/leave-request';
+import { User } from '../models/user';
+import { ActivatedRoute } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -39,6 +41,11 @@ export class TimesheetRecordsComponent implements OnInit {
   monthFormControl: FormControl = new FormControl(this.month);
   calendarForm: FormGroup;
 
+  totalHours = 0;
+  workedHours = 0;
+  freeDaysHours = 0;
+  leaveRequestsHours = 0;
+
   projects: Project[] = [];
   freeDays: FreeDay[] = [];
   leaveRequests: LeaveRequest[] = [];
@@ -48,23 +55,87 @@ export class TimesheetRecordsComponent implements OnInit {
 
   canClockWeekends = false;
 
+  user: User;
+
   constructor(
     private timesheetRecordsService: TimesheetRecordsService,
     private projectsService: ProjectsService,
     private freeDaysService: FreeDaysService,
     private leaveRequestsService: LeaveRequestsService,
-    private dataHolderService: DataHolderService) { }
+    private dataHolderService: DataHolderService,
+    private usersService: UsersService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     console.log(this.month, this.year);
     this.monthFormControl.valueChanges.subscribe(value => {
       this.month = this.monthFormControl.value;
       console.log(this.month);
-      this.updateCalendar();
+      this.updateHoursInfo();
     });
-    this.getProjects();
-    this.getFreeDays();
-    this.getLeaveRequests();
+
+    this.route.params.subscribe(params => {
+      if (params.userId) {
+        this.usersService.getUser(params.userId).subscribe(
+          user => {
+            this.user = user;
+            this.getProjects();
+            this.getFreeDays();
+            this.getLeaveRequests();
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      }
+    });
+
+  }
+
+  calculateTotalHours() {
+    this.totalHours = this.user.norm * this.calculateWorkingDays();
+  }
+
+  calculateWorkingDays(): number {
+    let num = 0;
+    this.calendar.forEach(week => {
+      num += week[5] === -1 ? 0 : 1;
+      num += week[6] === -1 ? 0 : 1;
+    });
+
+    return this.daysInMonth(this.month, this.year) - num;
+  }
+
+  calculateWorkedHours() {
+    this.workedHours = this.timesheetRecords.filter(tsr => {
+      const date = new Date(tsr.date);
+      return date.getMonth() === this.month;
+    }).map(tsr => tsr.noHours).reduce(this.getSum, 0);
+  }
+
+  calculateFreeDaysHours() {
+    this.freeDaysHours = this.freeDays.filter(fd => {
+      const date = new Date(fd.date);
+      return date.getMonth() === this.month;
+    }).length * this.user.norm;
+  }
+
+  calculateLeaveRequestsHours() {
+    this.leaveRequestsHours = this.leaveRequests.filter(fd => {
+      const date = new Date(fd.date);
+      return date.getMonth() === this.month;
+    }).length * this.user.norm;
+  }
+
+  updateHoursInfo() {
+    this.calculateFreeDaysHours();
+    this.calculateLeaveRequestsHours();
+    this.calculateTotalHours();
+    this.calculateWorkedHours();
+  }
+
+  getSum(total: number, num: number) {
+    return total + num;
   }
 
   scrollToTop() {
@@ -120,7 +191,7 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   getLeaveRequests() {
-    this.leaveRequestsService.getLeaveRequests(this.dataHolderService.user.companyId, null, this.dataHolderService.user.id, 'APPROVED', null, null).subscribe(
+    this.leaveRequestsService.getLeaveRequests(this.user.companyId, null, this.user.id, 'APPROVED', null, null).subscribe(
       leaveRequests => {
         this.leaveRequests = leaveRequests;
         console.log(leaveRequests);
@@ -133,7 +204,7 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   getFreeDays() {
-    this.freeDaysService.getFreeDays(this.dataHolderService.user.companyId).subscribe(
+    this.freeDaysService.getFreeDays(this.user.companyId).subscribe(
       freeDays => {
         this.freeDays = freeDays;
         console.log(freeDays);
@@ -272,9 +343,9 @@ export class TimesheetRecordsComponent implements OnInit {
 
   getTimesheetRecords() {
     this.timesheetRecordsService.getTimesheetRecords(
-      this.dataHolderService.user.companyId,
+      this.user.companyId,
       null,
-      this.dataHolderService.user.id,
+      this.user.id,
       new Date(this.year, this.month, 0),
       new Date(this.year, this.month + 1, 1)).subscribe(
       timesheetRecords => {
@@ -290,6 +361,9 @@ export class TimesheetRecordsComponent implements OnInit {
           // }
         });
         // console.log(this.calendarForm.get('calendar').value);
+
+        this.updateHoursInfo();
+
         if (this.freeDays.length) {
           this.updateFormWithFreeDays();
         }
@@ -305,9 +379,9 @@ export class TimesheetRecordsComponent implements OnInit {
 
   getProjects() {
     this.dataHolderService.loading = true;
-    this.projectsService.getProjects(this.dataHolderService.user.companyId, null, this.dataHolderService.user.id).subscribe(
+    this.projectsService.getProjects(this.user.companyId, null, this.user.id).subscribe(
       projects => {
-        this.projectsService.getProjects(this.dataHolderService.user.companyId, this.dataHolderService.user.id, null).subscribe(
+        this.projectsService.getProjects(this.user.companyId, this.user.id, null).subscribe(
           projectsR => {
             this.projects = projects.concat(projectsR);
             console.log(this.projects);
@@ -335,7 +409,15 @@ export class TimesheetRecordsComponent implements OnInit {
     // if (control.value !== 0) {
     //   console.log(control);
     // }
+    if (this.user && this.dhUser.id !== this.user.id) {
+      control.disable();
+    }
+    
     return control;
+  }
+
+  get dhUser(): User {
+    return this.dataHolderService.user;
   }
 
   submit() {
@@ -348,14 +430,14 @@ export class TimesheetRecordsComponent implements OnInit {
           const formControl = calendarFormArray.controls[day - 1].get(project.id.toString()) as FormControl;
           const records = this.timesheetRecords.filter(tsr => tsr.projectId === project.id && new Date(tsr.date).getDate() === day);
           const timesheetRecord: TimesheetRecord = {
-            companyId: this.dataHolderService.user.companyId,
+            companyId: this.user.companyId,
             date: new Date(this.year, this.month, day).toLocaleDateString('en-US'),
             id: null,
-            managerId: this.dataHolderService.user.managerId,
+            managerId: this.user.managerId,
             noHours: null,
             overtime: false,
             projectId: project.id,
-            userId: this.dataHolderService.user.id
+            userId: this.user.id
           };
           if (records.length > 0) {
             timesheetRecord.id = records[0].id;

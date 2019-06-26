@@ -18,14 +18,14 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
-          <button mat-raised-button color="warn" (click)="removeFreeDay(i)" class="col-xs-12 col-sm-2">Remove</button>
+          <button mat-flat-button color="warn" (click)="removeFreeDay(i)" class="col-xs-12 col-sm-2">Remove</button>
         </div>
       </div>
     </div>
 
     <div *ngIf="isOwner()">
-      <button class="bottom-button" mat-raised-button color="accent" (click)="addFreeDay()">Add</button>
-      <button class="bottom-button" mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+      <button class="bottom-button" mat-flat-button color="accent" (click)="addFreeDay()">Add</button>
+      <button class="bottom-button" mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
     </div>
   </form>
   

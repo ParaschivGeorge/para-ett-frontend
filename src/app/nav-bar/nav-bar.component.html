@@ -20,8 +20,8 @@
       <a mat-button routerLink="/projects" *ngIf="user" routerLinkActive="active-link">Projects</a>
       <a mat-button routerLink="/free-days" *ngIf="user" routerLinkActive="active-link">Vacation days</a>
       <a mat-button routerLink="/leave-requests" *ngIf="user" routerLinkActive="active-link">Leave requests</a>
-      <a mat-button routerLink="/timesheet-records" *ngIf="user" routerLinkActive="active-link">Timesheet records</a>
-      <button mat-raised-button *ngIf="user" (click)="logout()">Logout</button>
+      <a mat-button [routerLink]="'/timesheet-records/' + user.id" *ngIf="user" routerLinkActive="active-link">Timesheet records</a>
+      <button mat-flat-button *ngIf="user" (click)="logout()">Logout</button>
     </div>
   </mat-toolbar>
 

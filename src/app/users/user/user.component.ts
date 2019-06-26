@@ -31,7 +31,7 @@ export class UserComponent implements OnInit {
     firstName: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     freeDaysLeft: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[0-9]*')]),
     lastName: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
-    managerId: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[0-9]*')]),
+    managerId: new FormControl({value: null, disabled: true}, [Validators.pattern('[0-9]*')]),
     norm: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[0-9]*')]),
     type: new FormControl({value: null, disabled: true}, [Validators.required])
   });

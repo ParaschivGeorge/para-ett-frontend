@@ -15,12 +15,12 @@
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    <button mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
   </form>
   <h2 *ngIf="leaveRequests?.length">Your leave requests</h2>
   <div *ngFor="let leaveRequest of leaveRequests">
     <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
-    <button class="delete-button" mat-raised-button color="warn" (click)="deleteLeaveRequest(leaveRequest.id)">Delete</button>
+    <button class="delete-button" mat-flat-button color="warn" (click)="deleteLeaveRequest(leaveRequest.id)">Delete</button>
   </div>
   <div *ngIf="isManager() && teamLeaveRequests?.length">
     <h2>Team leave requests</h2>
