@@ -114,7 +114,11 @@
       </div>
     </div>
   </div> 
-  <div class="tsrecords">
+  <div class="tsrecords">    
+    <div fxLayout="row" fxLayoutAlign="space-between none" *ngIf="dhUser?.id === user?.id">
+      <button mat-flat-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
+      <button mat-flat-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
+    </div>    
     <div class="calendar-selector">
       <button class="arrow-button" mat-stroked-button mat-flat-button (click)="previous()">&#60;</button>
       <mat-form-field appearance="outline" class="month-select-mobile">
@@ -126,11 +130,7 @@
       </mat-form-field>
       <button class="arrow-button" mat-stroked-button mat-flat-button (click)="next()">&#62;</button>
     </div>
-    <div class="calendar">      
-      <div fxLayout="row" fxLayoutAlign="space-between none" *ngIf="dhUser?.id === user?.id">
-        <button mat-flat-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
-        <button mat-flat-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
-      </div>     
+    <div class="calendar">       
       <div *ngFor="let week of calendar">          
         <div *ngFor="let project of projects">
           <p class="project-name-mobile">{{project.name}}</p>

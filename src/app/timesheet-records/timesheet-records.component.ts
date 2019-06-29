@@ -57,6 +57,8 @@ export class TimesheetRecordsComponent implements OnInit {
 
   user: User;
 
+  loadingRequests = 0;
+
   constructor(
     private timesheetRecordsService: TimesheetRecordsService,
     private projectsService: ProjectsService,
@@ -77,6 +79,8 @@ export class TimesheetRecordsComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       if (params.userId) {
+        this.dataHolderService.loading = true;
+        this.loadingRequests++;
         this.usersService.getUser(params.userId).subscribe(
           user => {
             this.user = user;
@@ -87,7 +91,12 @@ export class TimesheetRecordsComponent implements OnInit {
           error => {
             console.log(error);
           }
-        );
+        ).add(() => {
+          this.loadingRequests--;
+          if (this.loadingRequests === 0) {
+            this.dataHolderService.loading = false;
+          }
+        });
       }
     });
 
@@ -184,6 +193,7 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   isToday(day: number): boolean {
+    if (day === -1) { return false; }
     const today = new Date();
     const date = new Date(this.year, this.month, day);
     return today.getFullYear() === date.getFullYear() &&
@@ -192,6 +202,8 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   getLeaveRequests() {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.leaveRequestsService.getLeaveRequests(this.user.companyId, null, this.user.id, 'APPROVED', null, null).subscribe(
       leaveRequests => {
         this.leaveRequests = leaveRequests;
@@ -201,10 +213,17 @@ export class TimesheetRecordsComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   getFreeDays() {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.freeDaysService.getFreeDays(this.user.companyId).subscribe(
       freeDays => {
         this.freeDays = freeDays;
@@ -214,7 +233,12 @@ export class TimesheetRecordsComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   updateFormWithFreeDays() {
@@ -343,6 +367,8 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   getTimesheetRecords() {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.timesheetRecordsService.getTimesheetRecords(
       this.user.companyId,
       null,
@@ -375,13 +401,21 @@ export class TimesheetRecordsComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   getProjects() {
     this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.projectsService.getProjects(this.user.companyId, null, this.user.id).subscribe(
       projects => {
+        this.dataHolderService.loading = true;
+        this.loadingRequests++;
         this.projectsService.getProjects(this.user.companyId, this.user.id, null).subscribe(
           projectsR => {
             this.projects = projects.concat(projectsR);
@@ -391,13 +425,21 @@ export class TimesheetRecordsComponent implements OnInit {
           error => {{
             console.log(error);
           }}
-        );
+        ).add(() => {
+          this.loadingRequests--;
+          if (this.loadingRequests === 0) {
+            this.dataHolderService.loading = false;
+          }
+        });
       },
       error => {
         console.log(error);
       }
     ).add(() => {
-      this.dataHolderService.loading = false;
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
     });
   }
 
@@ -454,6 +496,8 @@ export class TimesheetRecordsComponent implements OnInit {
         });
       }
       console.log(timesheetRecords);
+      this.dataHolderService.loading = true;
+      this.loadingRequests++;
       this.timesheetRecordsService.createTimesheetRecords(timesheetRecords).subscribe(
         createdTimesheetRecords => {
           console.log(createdTimesheetRecords);
@@ -462,7 +506,12 @@ export class TimesheetRecordsComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );
+      ).add(() => {
+        this.loadingRequests--;
+        if (this.loadingRequests === 0) {
+          this.dataHolderService.loading = false;
+        }
+      });
     }
   }
 }

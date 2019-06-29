@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
               console.log(user);
               this.dataHolderService.user = user;
               setTimeout(() => {
-                this.router.navigate(['timesheet-records']);
+                this.router.navigate(['timesheet-records', user.id]);
               }, 1000);
             },
             error => {
