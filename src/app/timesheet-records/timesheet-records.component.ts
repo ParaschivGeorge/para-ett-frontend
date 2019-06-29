@@ -45,6 +45,7 @@ export class TimesheetRecordsComponent implements OnInit {
   workedHours = 0;
   freeDaysHours = 0;
   leaveRequestsHours = 0;
+  workingDays = 0;
 
   projects: Project[] = [];
   freeDays: FreeDay[] = [];
@@ -103,17 +104,17 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   calculateTotalHours() {
-    this.totalHours = this.user.norm * this.calculateWorkingDays();
+    this.totalHours = this.user.norm * this.workingDays;
   }
 
-  calculateWorkingDays(): number {
+  calculateWorkingDays() {
     let num = 0;
     this.calendar.forEach(week => {
       num += week[5] === -1 ? 0 : 1;
       num += week[6] === -1 ? 0 : 1;
     });
 
-    return this.daysInMonth(this.month, this.year) - num;
+    this.workingDays = this.daysInMonth(this.month, this.year) - num;
   }
 
   calculateWorkedHours() {
@@ -131,8 +132,8 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   calculateLeaveRequestsHours() {
-    this.leaveRequestsHours = this.leaveRequests.filter(fd => {
-      const date = new Date(fd.date);
+    this.leaveRequestsHours = this.leaveRequests.filter(lr => {
+      const date = new Date(lr.date);
       return date.getMonth() === this.month;
     }).length * this.user.norm;
   }
@@ -140,6 +141,7 @@ export class TimesheetRecordsComponent implements OnInit {
   updateHoursInfo() {
     this.calculateFreeDaysHours();
     this.calculateLeaveRequestsHours();
+    this.calculateWorkingDays();
     this.calculateTotalHours();
     this.calculateWorkedHours();
   }

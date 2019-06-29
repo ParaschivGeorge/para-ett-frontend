@@ -1,5 +1,9 @@
-td {
-    color: #3f51b5;
-    cursor: pointer;
-    text-decoration: underline;
+.month-select {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.arrow-button {
+    height: 55px;
+    font-size: 20px;
 }
