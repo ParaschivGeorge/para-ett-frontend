@@ -1,6 +1,6 @@
 form {
-    max-width: 350px;
-    padding: 20px 50px;
+    max-width: 250px;
+    padding: 20px 0;
     overflow: hidden;
     margin: 0 auto;
 }
@@ -17,4 +17,15 @@ button {
 
 p {
     font-size: 30px;
+}
+
+.main-card {
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin: 10px 0;
 }

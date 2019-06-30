@@ -60,11 +60,7 @@ const routes: Routes = [
     { path: '', component: LeaveRequestsComponent, canActivate: [AuthGuard]},
     { path: ':id', component: LeaveRequestComponent, canActivate: [AuthGuard]},
   ]},
-  { path: 'timesheet-records',
-   children: [
-    // { path: '', component: TimesheetRecordsComponent, canActivate: [AuthGuard]},
-    { path: ':userId', component: TimesheetRecordsComponent, canActivate: [AuthGuard]},
-  ]},
+  { path: 'timesheet-records/:userId', component: TimesheetRecordsComponent, canActivate: [AuthGuard] },
   {
     path: 'refresh', component: HomeComponent
   }

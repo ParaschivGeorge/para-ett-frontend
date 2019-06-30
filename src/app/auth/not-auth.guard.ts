@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { DataHolderService } from '../services/data-holder.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotAuthGuard implements CanActivate  {
   
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dataHolderService: DataHolderService) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -17,7 +18,7 @@ export class NotAuthGuard implements CanActivate  {
       if (!token) {
         return true;
       } else {
-        this.router.navigate(['timesheet-records']);
+        this.router.navigate(['users']);
         return false;
       }
     }
