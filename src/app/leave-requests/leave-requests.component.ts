@@ -4,6 +4,8 @@ import { LeaveRequest } from '../models/leave-request';
 import { FormGroup, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { DataHolderService } from '../services/data-holder.service';
+import { User } from '../models/user';
+import { UsersService } from '../services/users.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -24,15 +26,17 @@ export class LeaveRequestsComponent implements OnInit {
     date: new FormControl(null, Validators.required),
     type: new FormControl(null, Validators.required)
   });
-  leaveRequests: LeaveRequest[] = [];
+  futureLeaveRequests: LeaveRequest[] = [];
+  pastLeaveRequests: LeaveRequest[] = [];
   teamLeaveRequests: LeaveRequest[] = [];
   leaveRequestTypes = ['ANNUAL_LEAVE_OR_ABSENCE', 'BEREAVEMENT_LEAVE', 'BLOOD_DONATION', 'BUSINESS_TRIP', 'CHILD_BIRTH', 'CHILD_MARRIAGE_LEAVE',
         'CHILDCARE_LEAVE', 'MARRIAGE_LEAVE', 'MATERNITY_LEAVE', 'OTHER_UNPAID_LEAVE', 'OVERTIME_COMPENSATION', 'PATERNITY_LEAVE',
         'PRE_NATAL_EXAMINATION_LEAVE', 'PUBLIC_STATUTORY_DUTIES', 'PUBLIC_HOLIDAYS_OTHER_RELIGION', 'RELOCATION_LEAVE', 'SICKNESS',
-        'TRAINING', 'UNPAID_INFANT_CARE_LEAVE', 'VOLUNTEER_LEAVE', 'WORK_FROM_HOME'];
+        'TRAINING', 'UNPAID_INFANT_CARE_LEAVE', 'VOLUNTEER_LEAVE'];
 
   constructor(
     private leaveRequestsService: LeaveRequestsService,
+    private usersService: UsersService,
     private dataHolderService: DataHolderService) { }
 
   ngOnInit() {
@@ -40,6 +44,23 @@ export class LeaveRequestsComponent implements OnInit {
     if (this.isManager()) {
       this.getTeamLeaveRequests();
     }
+    this.dataHolderService.leavrRequestsSubject.subscribe(leaveRequest => {
+      let oldLr = this.futureLeaveRequests.find(lr => lr.id === leaveRequest.id);
+      if (oldLr) {
+        this.futureLeaveRequests = this.futureLeaveRequests.filter(lr => lr.id !== leaveRequest.id);
+        this.futureLeaveRequests.push(leaveRequest);
+      }
+      oldLr = this.pastLeaveRequests.find(lr => lr.id === leaveRequest.id);
+      if (oldLr) {
+        this.pastLeaveRequests = this.pastLeaveRequests.filter(lr => lr.id !== leaveRequest.id);
+        this.pastLeaveRequests.push(leaveRequest);
+      }
+      oldLr = this.teamLeaveRequests.find(lr => lr.id === leaveRequest.id);
+      if (oldLr) {
+        this.teamLeaveRequests = this.teamLeaveRequests.filter(lr => lr.id !== leaveRequest.id);
+        this.teamLeaveRequests.push(leaveRequest);
+      }
+    });
   }
 
   get user() {
@@ -57,7 +78,9 @@ export class LeaveRequestsComponent implements OnInit {
   getLeaveRequests() {
     this.leaveRequestsService.getLeaveRequests(this.user.companyId, null, this.user.id, null, null, null).subscribe(
       leaveRequests => {
-        this.leaveRequests = leaveRequests;
+        const today = new Date();
+        this.futureLeaveRequests = leaveRequests.filter(lr => new Date(lr.date) > today);
+        this.pastLeaveRequests = leaveRequests.filter(lr => new Date(lr.date) <= today);
         console.log(leaveRequests);
       },
       error => {
@@ -67,7 +90,7 @@ export class LeaveRequestsComponent implements OnInit {
   }
 
   getTeamLeaveRequests() {
-    this.leaveRequestsService.getLeaveRequests(this.user.companyId, this.user.id, null, null, null, null).subscribe(
+    this.leaveRequestsService.getLeaveRequests(this.user.companyId, this.user.id, null, 'PENDING', null, null).subscribe(
       leaveRequests => {
         this.teamLeaveRequests = leaveRequests;
         console.log(leaveRequests);
@@ -79,9 +102,25 @@ export class LeaveRequestsComponent implements OnInit {
   }
 
   deleteLeaveRequest(id: number) {
+    console.log(this.futureLeaveRequests.filter(lr => lr.id === id))
+    const leaveRequest = JSON.parse(JSON.stringify(this.futureLeaveRequests.filter(lr => lr.id === id)[0]));
+    console.log(leaveRequest)
     this.leaveRequestsService.deleteLeaveRequest(id).subscribe(
       data => {
         console.log(data);
+        console.log(leaveRequest)
+        if (leaveRequest.status === 'APPROVED') {
+          this.dataHolderService.user.freeDaysLeft++;
+          this.usersService.updateUser(this.dhUser.id, this.dhUser).subscribe(
+            user => {
+              console.log(user);
+              this.dataHolderService.user = user;
+            },
+            error => {
+              console.log(error);
+            }
+          );
+        }
         this.getLeaveRequests();
       },
       error => {
@@ -108,5 +147,9 @@ export class LeaveRequestsComponent implements OnInit {
         }
       );
     }
+  }
+
+  get dhUser(): User {
+    return this.dataHolderService.user;
   }
 }

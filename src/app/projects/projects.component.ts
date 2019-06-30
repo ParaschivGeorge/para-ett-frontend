@@ -86,7 +86,10 @@ export class ProjectsComponent implements OnInit {
 
   getUserData(id: number) {
     const user = this.users.filter(u => u.id === id)[0];
-    return user.firstName + ' ' + user.lastName + ' ' + user.email;
+    if (user) {
+      return user.firstName + ' ' + user.lastName + ' ' + user.email;
+    }
+    return null;
   }
 
   get usersFormArray(): FormArray {

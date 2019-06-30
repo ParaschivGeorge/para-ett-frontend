@@ -66,6 +66,8 @@ export class UserComponent implements OnInit {
       }
       if (this.isOwner()) {
         this.userEditForm.get('managerId').enable();
+        this.userEditForm.get('norm').enable();
+        this.userEditForm.get('freeDaysLeft').enable();
       }
     } else {
       this.editLabel = 'Edit';

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { Subject, Observable } from 'rxjs';
+import { LeaveRequest } from '../models/leave-request';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class DataHolderService {
   email: string = null;
   private _user: User;
   userSubject: Subject<boolean> = new Subject<boolean>();
+  leavrRequestsSubject: Subject<LeaveRequest> = new Subject<LeaveRequest>();
 
   constructor() { }
 

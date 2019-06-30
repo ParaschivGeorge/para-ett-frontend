@@ -1,4 +1,5 @@
 <div class="my-container">
+  <h2>You have {{dhUser?.freeDaysLeft}} vacation days left</h2>
   <form [formGroup]="leaveRequestCreateForm">
     <h2>Add a new leave request</h2>
     <mat-form-field appearance="outline">
@@ -17,15 +18,19 @@
     </mat-form-field>
     <button mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
   </form>
-  <h2 *ngIf="leaveRequests?.length">Your leave requests</h2>
-  <div *ngFor="let leaveRequest of leaveRequests">
+  <h2 *ngIf="futureLeaveRequests?.length">Your future leave requests</h2>
+  <div *ngFor="let leaveRequest of futureLeaveRequests">
     <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
     <button class="delete-button" mat-flat-button color="warn" (click)="deleteLeaveRequest(leaveRequest.id)">Delete</button>
-  </div>
+  </div>  
   <div *ngIf="isManager() && teamLeaveRequests?.length">
     <h2>Team leave requests</h2>
     <div *ngFor="let leaveRequest of teamLeaveRequests">
       <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
     </div>
+  </div>
+  <h2 *ngIf="pastLeaveRequests?.length">Your past leave requests</h2>
+  <div *ngFor="let leaveRequest of pastLeaveRequests">
+    <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
   </div>
 </div>

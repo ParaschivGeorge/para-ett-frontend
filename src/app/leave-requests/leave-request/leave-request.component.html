@@ -22,5 +22,5 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button *ngIf="teamLeaveRequest() || isMainOwner()" mat-flat-button color="accent" (click)="onSubmit()">Update</button>
+  <button *ngIf="leaveRequestEditForm.get('status').enabled" mat-flat-button color="accent" (click)="onSubmit()">Update</button>
 </form>

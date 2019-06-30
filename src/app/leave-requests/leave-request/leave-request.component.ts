@@ -69,6 +69,10 @@ export class LeaveRequestComponent implements OnInit {
         this.leaveRequestEditForm.get('status').enable();
         this.getUser();
       }
+      const today = new Date();
+      if (new Date(this.leaveRequest.date) <= today) {
+        this.leaveRequestEditForm.get('status').disable();
+      }
     }
   }
 
@@ -76,10 +80,6 @@ export class LeaveRequestComponent implements OnInit {
     this.leaveRequestsService.getLeaveRequest(id).subscribe(
      leaveRequest => {
         this.leaveRequest = JSON.parse(JSON.stringify(leaveRequest));
-        delete leaveRequest.id;
-        delete leaveRequest.companyId;
-        delete leaveRequest.managerId;
-        delete leaveRequest.userId;
         leaveRequest.date = new Date(leaveRequest.date);
         this.leaveRequestEditForm.setValue(leaveRequest);
         if (this.userLeaveRequest()) {
@@ -90,6 +90,10 @@ export class LeaveRequestComponent implements OnInit {
           this.leaveRequestEditForm.get('date').disable();
           this.leaveRequestEditForm.get('type').disable();
           this.leaveRequestEditForm.get('status').enable();
+        }
+        const today = new Date();
+        if (this.leaveRequest.date <= today) {
+          this.leaveRequestEditForm.get('status').disable();
         }
       },
       error => {
@@ -105,6 +109,22 @@ export class LeaveRequestComponent implements OnInit {
       this.leaveRequestsService.updateLeaveRequest(this.id, leaveRequest).subscribe(
         editedLeaveRequest => {
           console.log(editedLeaveRequest);
+          this.dataHolderService.leavrRequestsSubject.next(editedLeaveRequest);
+          if (editedLeaveRequest.status === 'APPROVED') {
+            let user: User = this.user;
+            if (this.user === null) {
+              user = this.dataHolderService.user;
+            }
+            user.freeDaysLeft--;
+            this.usersService.updateUser(user.id, user).subscribe(
+              user2 => {
+                console.log(user2);
+              },
+              error => {
+                console.log(error);
+              }
+            );
+          }
           this.getLeaveRequest(this.id);
         },
         error => {
