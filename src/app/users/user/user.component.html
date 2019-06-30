@@ -3,7 +3,7 @@
     <mat-expansion-panel class="panel">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{user.firstName}} {{user.lastName}}'s profile
+          {{dhUser?.id === user?.id ? 'Your' : user?.firstName + ' ' + user?.lastName +'\'s'}} profile
         </mat-panel-title>                  
       </mat-expansion-panel-header>
 

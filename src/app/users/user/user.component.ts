@@ -167,6 +167,10 @@ export class UserComponent implements OnInit {
     return this.dataHolderService.user && this.dataHolderService.user.type === 'HR';
   }
 
+  get dhUser(): User {
+    return this.dataHolderService.user;
+  }
+
   deleteUser(id: number) {
     this.dataHolderService.loading = true;
     this.loadingRequests++;
