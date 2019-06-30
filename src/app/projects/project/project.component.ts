@@ -28,10 +28,12 @@ export class ProjectComponent implements OnInit {
   id: number;
   project: Project;
   projectEditForm: FormGroup = new FormGroup({
-    name: new FormControl(null, [Validators.required]),
+    name: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     responsibleId: new FormControl(null, [Validators.required]),
     users: new FormArray([])
   });
+
+  loadingRequests = 0;
 
   constructor(
     private projectsService: ProjectsService,
@@ -46,6 +48,8 @@ export class ProjectComponent implements OnInit {
   }
 
   getProject(id: number) {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.projectsService.getProject(id).subscribe(
       project => {
         this.project = JSON.parse(JSON.stringify(project));
@@ -64,7 +68,12 @@ export class ProjectComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   get usersFormArray(): FormArray {
@@ -86,6 +95,8 @@ export class ProjectComponent implements OnInit {
     if (this.projectEditForm.valid) {
       const projectDto = this.projectEditForm.value as ProjectDto;
       projectDto.companyId = this.dataHolderService.user.companyId;
+      this.dataHolderService.loading = true;
+      this.loadingRequests++;
       this.projectsService.updateProject(this.id, projectDto).subscribe(
         project => {
           console.log(project);
@@ -94,7 +105,12 @@ export class ProjectComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );
+      ).add(() => {
+        this.loadingRequests--;
+        if (this.loadingRequests === 0) {
+          this.dataHolderService.loading = false;
+        }
+      });
     }
   }
 
@@ -106,6 +122,7 @@ export class ProjectComponent implements OnInit {
 
   getUsers() {
     this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
       users => {
         this.users = users;
@@ -115,7 +132,10 @@ export class ProjectComponent implements OnInit {
         console.log(error);
       }
     ).add(() => {
-      this.dataHolderService.loading = false;
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
     });
   }
 

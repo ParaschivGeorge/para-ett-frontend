@@ -1,18 +1,20 @@
 <div class="my-container">
-  <form [formGroup]="companyEditForm">
-    <h2>Your company data</h2>
-    <mat-form-field appearance="outline">
-      <mat-label>Company name</mat-label>
-      <input matInput formControlName="name"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Company motto</mat-label>
-      <input matInput formControlName="description"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <button mat-flat-button color="accent" (click)="edit()">{{editLabel}}</button>
-    <button [disabled]="!editing" mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
-    <div class="error-div warn-background"*ngIf="error">{{error}}</div>
-  </form>
+  <mat-card class="main-card">
+    <form [formGroup]="companyEditForm">
+      <h2>Your company data</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Company name</mat-label>
+        <input matInput formControlName="name"
+          [errorStateMatcher]="matcher">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Company motto</mat-label>
+        <input matInput formControlName="description"
+          [errorStateMatcher]="matcher">
+      </mat-form-field>
+      <button mat-flat-button color="accent" (click)="edit()">{{editLabel}}</button>
+      <button [disabled]="!editing" mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
+      <div class="error-div warn-background"*ngIf="error">{{error}}</div>
+    </form>
+  </mat-card>
 </div>

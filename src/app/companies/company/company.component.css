@@ -1,7 +1,12 @@
 form {
-    max-width: 350px;
-    padding: 20px 50px;
+    max-width: 250px;
+    padding: 20px 0;
     overflow: hidden;
+    margin: 0 auto;
+}
+
+.main-card {
+    max-width: 350px;
     margin: 0 auto;
 }
 

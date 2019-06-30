@@ -34,6 +34,8 @@ export class LeaveRequestsComponent implements OnInit {
         'PRE_NATAL_EXAMINATION_LEAVE', 'PUBLIC_STATUTORY_DUTIES', 'PUBLIC_HOLIDAYS_OTHER_RELIGION', 'RELOCATION_LEAVE', 'SICKNESS',
         'TRAINING', 'UNPAID_INFANT_CARE_LEAVE', 'VOLUNTEER_LEAVE'];
 
+  loadingRequests = 0;
+
   constructor(
     private leaveRequestsService: LeaveRequestsService,
     private usersService: UsersService,
@@ -76,6 +78,8 @@ export class LeaveRequestsComponent implements OnInit {
   }
 
   getLeaveRequests() {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.leaveRequestsService.getLeaveRequests(this.user.companyId, null, this.user.id, null, null, null).subscribe(
       leaveRequests => {
         const today = new Date();
@@ -86,10 +90,17 @@ export class LeaveRequestsComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   getTeamLeaveRequests() {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.leaveRequestsService.getLeaveRequests(this.user.companyId, this.user.id, null, 'PENDING', null, null).subscribe(
       leaveRequests => {
         this.teamLeaveRequests = leaveRequests;
@@ -98,19 +109,25 @@ export class LeaveRequestsComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   deleteLeaveRequest(id: number) {
-    console.log(this.futureLeaveRequests.filter(lr => lr.id === id))
     const leaveRequest = JSON.parse(JSON.stringify(this.futureLeaveRequests.filter(lr => lr.id === id)[0]));
-    console.log(leaveRequest)
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.leaveRequestsService.deleteLeaveRequest(id).subscribe(
       data => {
         console.log(data);
-        console.log(leaveRequest)
         if (leaveRequest.status === 'APPROVED') {
           this.dataHolderService.user.freeDaysLeft++;
+          this.dataHolderService.loading = true;
+          this.loadingRequests++;
           this.usersService.updateUser(this.dhUser.id, this.dhUser).subscribe(
             user => {
               console.log(user);
@@ -119,14 +136,24 @@ export class LeaveRequestsComponent implements OnInit {
             error => {
               console.log(error);
             }
-          );
+          ).add(() => {
+            this.loadingRequests--;
+            if (this.loadingRequests === 0) {
+              this.dataHolderService.loading = false;
+            }
+          });
         }
         this.getLeaveRequests();
       },
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   onSubmit() {
@@ -137,6 +164,8 @@ export class LeaveRequestsComponent implements OnInit {
       leaveRequest.managerId = this.user.managerId;
       leaveRequest.userId = this.user.id;
       leaveRequest.status = 'PENDING';
+      this.dataHolderService.loading = true;
+      this.loadingRequests++;
       this.leaveRequestsService.createLeaveRequest(leaveRequest).subscribe(
         createdLeaveRequest => {
           console.log(createdLeaveRequest);
@@ -145,7 +174,12 @@ export class LeaveRequestsComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );
+      ).add(() => {
+        this.loadingRequests--;
+        if (this.loadingRequests === 0) {
+          this.dataHolderService.loading = false;
+        }
+      });
     }
   }
 

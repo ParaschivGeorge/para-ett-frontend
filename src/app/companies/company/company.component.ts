@@ -28,8 +28,8 @@ export class CompanyComponent implements OnInit {
   id: number;
   company: Company;
   companyEditForm: FormGroup = new FormGroup({
-    description: new FormControl({value: null, disabled: true}, [Validators.required]),
-    name: new FormControl({value: null, disabled: true}, [Validators.required])
+    description: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
+    name: new FormControl({value: null, disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z ]*')])
   });
 
   constructor(

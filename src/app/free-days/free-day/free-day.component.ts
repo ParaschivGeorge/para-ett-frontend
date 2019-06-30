@@ -53,6 +53,7 @@ export class FreeDayComponent implements OnInit {
   }
 
   getFreeDay(id: number) {
+    this.dataHolderService.loading = true;
     this.freeDaysService.getFreeDay(id).subscribe(
       freeDay => {
         this.freeDay = JSON.parse(JSON.stringify(freeDay));
@@ -69,7 +70,7 @@ export class FreeDayComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => this.dataHolderService.loading = false);
   }
 
   onSubmit() {
@@ -78,6 +79,7 @@ export class FreeDayComponent implements OnInit {
       const freeDay = this.freeDayEditForm.value as FreeDay;
       freeDay.id = this.id;
       freeDay.companyId = this.freeDay.companyId;
+      this.dataHolderService.loading = true;
       this.freeDaysService.updateFreeDay(this.id, freeDay).subscribe(
         editedFreeDay => {
           this.getFreeDay(this.id);
@@ -85,7 +87,7 @@ export class FreeDayComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );
+      ).add(() => this.dataHolderService.loading = false);
     }
   }
 

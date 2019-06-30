@@ -42,6 +42,8 @@ export class LeaveRequestComponent implements OnInit {
   });
   user: User = null;
 
+  loadingRequests = 0;
+
   constructor(
     private leaveRequestsService: LeaveRequestsService,
     private route: ActivatedRoute,
@@ -77,6 +79,8 @@ export class LeaveRequestComponent implements OnInit {
   }
 
   getLeaveRequest(id: number) {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.leaveRequestsService.getLeaveRequest(id).subscribe(
      leaveRequest => {
         this.leaveRequest = JSON.parse(JSON.stringify(leaveRequest));
@@ -99,13 +103,20 @@ export class LeaveRequestComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   onSubmit() {
     console.log(this.leaveRequestEditForm.valid);
     if (this.leaveRequestEditForm.valid) {
       const leaveRequest = this.leaveRequestEditForm.getRawValue() as LeaveRequest;
+      this.dataHolderService.loading = true;
+      this.loadingRequests++;
       this.leaveRequestsService.updateLeaveRequest(this.id, leaveRequest).subscribe(
         editedLeaveRequest => {
           console.log(editedLeaveRequest);
@@ -116,6 +127,8 @@ export class LeaveRequestComponent implements OnInit {
               user = this.dataHolderService.user;
             }
             user.freeDaysLeft--;
+            this.dataHolderService.loading = true;
+            this.loadingRequests++;
             this.usersService.updateUser(user.id, user).subscribe(
               user2 => {
                 console.log(user2);
@@ -123,18 +136,30 @@ export class LeaveRequestComponent implements OnInit {
               error => {
                 console.log(error);
               }
-            );
+            ).add(() => {
+              this.loadingRequests--;
+              if (this.loadingRequests === 0) {
+                this.dataHolderService.loading = false;
+              }
+            });
           }
           this.getLeaveRequest(this.id);
         },
         error => {
           console.log(error);
         }
-      );
+      ).add(() => {
+        this.loadingRequests--;
+        if (this.loadingRequests === 0) {
+          this.dataHolderService.loading = false;
+        }
+      });
     }
   }
 
   getUser() {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.usersService.getUser(this.leaveRequest.userId).subscribe(
       user => {
         this.user = user;
@@ -142,7 +167,12 @@ export class LeaveRequestComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   userLeaveRequest(): boolean {

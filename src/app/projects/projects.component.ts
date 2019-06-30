@@ -28,8 +28,10 @@ export class ProjectsComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   users: User[] = [];
 
+  loadingRequests = 0;
+
   projectCreateForm: FormGroup = new FormGroup({
-    name: new FormControl(null, [Validators.required]),
+    name: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
     responsibleId: new FormControl(null, [Validators.required]),
     users: new FormArray([])
   });
@@ -46,6 +48,7 @@ export class ProjectsComponent implements OnInit {
 
   getProjects() {
     this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.projectsService.getProjects(this.dataHolderService.user.companyId, null, null).subscribe(
       projects => {
         this.projects = projects;
@@ -53,12 +56,16 @@ export class ProjectsComponent implements OnInit {
         console.log(projects);
       }
     ).add(() => {
-      this.dataHolderService.loading = false;
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
     });
   }
 
   getUsers() {
     this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
       users => {
         this.users = users;
@@ -68,11 +75,16 @@ export class ProjectsComponent implements OnInit {
         console.log(error);
       }
     ).add(() => {
-      this.dataHolderService.loading = false;
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
     });
   }
 
   deleteProject(id: number) {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.projectsService.deleteProject(id).subscribe(
       data => {
         console.log(data);
@@ -81,7 +93,12 @@ export class ProjectsComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   getUserData(id: number) {
@@ -98,7 +115,7 @@ export class ProjectsComponent implements OnInit {
 
   addUser() {
     if (this.projectCreateForm.valid) {
-      this.usersFormArray.push(new FormControl(null ,Validators.required));
+      this.usersFormArray.push(new FormControl(null, Validators.required));
     }
   }
 
@@ -115,6 +132,8 @@ export class ProjectsComponent implements OnInit {
     if (this.projectCreateForm.valid) {
       const projectDto = this.projectCreateForm.value as ProjectDto;
       projectDto.companyId = this.dataHolderService.user.companyId;
+      this.dataHolderService.loading = true;
+      this.loadingRequests++;
       this.projectsService.createProject(projectDto).subscribe(
         data => {
           console.log(data);
@@ -123,7 +142,12 @@ export class ProjectsComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );
+      ).add(() => {
+        this.loadingRequests--;
+        if (this.loadingRequests === 0) {
+          this.dataHolderService.loading = false;
+        }
+      });
     }
   }
 

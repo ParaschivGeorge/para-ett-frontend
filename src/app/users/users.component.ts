@@ -36,6 +36,8 @@ export class UsersComponent implements OnInit {
   calendar = [];
   workingDays = 0;
 
+  loadingRequests = 0;
+
   private _filter = '';
 
   get filter(): string {
@@ -102,8 +104,6 @@ export class UsersComponent implements OnInit {
     this._myManagerTeamFilter = value;
     this.applyFilter();
   }
-
-  loadingRequests = 0;
 
   @ViewChild(MatSort) sort: MatSort;
 

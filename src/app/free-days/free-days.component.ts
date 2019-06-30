@@ -36,6 +36,7 @@ export class FreeDaysComponent implements OnInit {
   }
 
   getFreeDays() {
+    this.dataHolderService.loading = true;
     this.freeDaysService.getFreeDays(this.dataHolderService.user.companyId).subscribe(
       freeDays => {
         this.freeDays = freeDays;
@@ -44,7 +45,7 @@ export class FreeDaysComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => this.dataHolderService.loading = false);
   }
 
   get freeDaysFormArray(): FormArray {
@@ -71,6 +72,7 @@ export class FreeDaysComponent implements OnInit {
       const freeDays = this.freeDaysFormArray.value as FreeDay[];
       freeDays.map(freeday => freeday.companyId = this.dataHolderService.user.companyId);
       console.log(freeDays);
+      this.dataHolderService.loading = true;
       this.freeDaysService.createFreeDays(freeDays).subscribe(
         createdFreeDays => {
           console.log(createdFreeDays);
@@ -82,12 +84,13 @@ export class FreeDaysComponent implements OnInit {
         error => {
           console.log(error);
         }
-      );
+      ).add(() => this.dataHolderService.loading = false);
     }
   }
 
   deleteFreeDay(id: number) {
     console.log(id);
+    this.dataHolderService.loading = true;
     this.freeDaysService.deleteFreeDay(id).subscribe(
       data => {
         console.log(data);
@@ -96,7 +99,7 @@ export class FreeDaysComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => this.dataHolderService.loading = false);
   }
 
   isOwner() {

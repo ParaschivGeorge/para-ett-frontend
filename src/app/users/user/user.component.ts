@@ -39,6 +39,7 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   editing = false;
   editLabel = 'Edit';
+  loadingRequests = 0;
 
   constructor(
     private usersService: UsersService,
@@ -77,6 +78,7 @@ export class UserComponent implements OnInit {
 
   getUser(id: number) {
     this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.usersService.getAllUsers(this.dataHolderService.user.companyId, null).subscribe(
       users => {
         this.users = users;
@@ -94,12 +96,21 @@ export class UserComponent implements OnInit {
         console.log(error);
         this.dataHolderService.loading = false;
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   getProjects(companyId: number, userId: number) {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.projectsService.getProjects(companyId, null, userId).subscribe(
       projects => {
+        this.dataHolderService.loading = true;
+        this.loadingRequests++;
         this.projectsService.getProjects(companyId, userId, null).subscribe(
           projectsR => {
             this.projects = projects.concat(projectsR);
@@ -108,17 +119,27 @@ export class UserComponent implements OnInit {
           error => {{
             console.log(error);
           }}
-        );
+        ).add(() => {
+          this.loadingRequests--;
+          if (this.loadingRequests === 0) {
+            this.dataHolderService.loading = false;
+          }
+        });
       },
       error => {
         console.log(error);
       }
     ).add(() => {
-      this.dataHolderService.loading = false;
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
     });
   }
 
   onSubmit() {
+    this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.usersService.updateUser(this.id, this.userEditForm.value as User).subscribe(
       user => {
         this.getUser(this.id);
@@ -126,7 +147,12 @@ export class UserComponent implements OnInit {
       error => {
         console.log(error);
       }
-    );
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   isCurrentUser(): boolean {
@@ -143,6 +169,7 @@ export class UserComponent implements OnInit {
 
   deleteUser(id: number) {
     this.dataHolderService.loading = true;
+    this.loadingRequests++;
     this.usersService.deleteUser(id).subscribe(
       data => {
         console.log(data);
@@ -151,7 +178,12 @@ export class UserComponent implements OnInit {
       error => {
         console.log(error);
       }
-    ).add(() => this.dataHolderService.loading = true);
+    ).add(() => {
+      this.loadingRequests--;
+      if (this.loadingRequests === 0) {
+        this.dataHolderService.loading = false;
+      }
+    });
   }
 
   canEdit() {
