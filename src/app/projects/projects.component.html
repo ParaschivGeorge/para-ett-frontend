@@ -54,7 +54,7 @@
       </table>
 
       <mat-action-row>
-        <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-flat-button color="warn" (click)="deleteProject(project.id)">Delete</button>
+        <!-- <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-flat-button color="warn" (click)="deleteProject(project.id)">Delete</button> -->
         <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-flat-button color="accent" [routerLink]="['./' + project.id]">Edit</button> 
       </mat-action-row>
       

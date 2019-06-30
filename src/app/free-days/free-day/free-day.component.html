@@ -1,5 +1,5 @@
 <form [formGroup]="freeDayEditForm" *ngIf="freeDay">
-  <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+  <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
     <mat-label>Type</mat-label>
     <mat-select formControlName="type" name="type">
       <mat-option *ngFor="let type of freeDayTypes" [value]="type">
@@ -7,14 +7,14 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+  <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
     <mat-label>Date</mat-label>
     <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <div class="buttons-container" *ngIf="isOwner()">
-    <button mat-flat-button color="accent" (click)="onSubmit()" >Edit</button>  
-    <button mat-flat-button color="warn" (click)="deleteFreeDay(freeDay.id)">Delete</button>
+    <button mat-flat-button color="accent" (click)="onSubmit()" [ngStyle.xs]="{'width.%': 100}">Edit</button>  
+    <button mat-flat-button color="warn" (click)="deleteFreeDay(freeDay.id)" [ngStyle.xs]="{'width.%': 100}">Delete</button>
   </div>
 </form>

@@ -1,6 +1,6 @@
 form {
     max-width: 350px;
-    padding: 20px 50px;
+    padding: 20px 0px;
     overflow: hidden;
     margin: 0 auto;
 }
@@ -52,4 +52,13 @@ td {
 h2 {
     font-size: 20px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.projects-title {
+    margin: 10px auto;
+    padding: 10px 0;
+    max-width: 700px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background: white;
 }

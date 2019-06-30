@@ -1,14 +1,21 @@
 form {
-    max-width: 600px;
-    padding: 20px 50px;
+    max-width: 500px;
+    padding: 20px 0;
     overflow: hidden;
     margin: 0 auto;
 }
 
+.main-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 button {
-    height: 60px;
+    padding-top: 7px;
+    padding-bottom: 7px;
     font-size: 15px;
     margin: 5px 0;
+    width: 100px;
 }
 
 .bottom-button {
@@ -23,4 +30,8 @@ h2 {
 
 .free-days-div {
     margin: 0 auto;
+}
+
+.form-field {
+    width: 180px;
 }

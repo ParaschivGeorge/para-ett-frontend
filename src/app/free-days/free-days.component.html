@@ -1,38 +1,39 @@
 <div class= "my-container">
-  <form [formGroup]="freeDaysCreateForm" *ngIf="isOwner()">
-    <h2>Add more vacation days</h2>
-    <div formArrayName="freeDays">    
-      <div *ngFor="let freeDayForm of freeDaysFormArray.controls; let i = index">
-        <div [formGroupName]="i" class="row">
-          <mat-form-field appearance="outline" class="col-xs-12 col-sm-5">
-            <mat-label>Type</mat-label>
-            <mat-select formControlName="type" name="type" [errorStateMatcher]="matcher">
-              <mat-option *ngFor="let type of freeDayTypes" [value]="type">
-                {{type}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="col-xs-12 col-sm-5">
-            <mat-label>Date</mat-label>
-            <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date" [errorStateMatcher]="matcher">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <button mat-flat-button color="warn" (click)="removeFreeDay(i)" class="col-xs-12 col-sm-2">Remove</button>
+  <mat-card class="main-card">
+    <form [formGroup]="freeDaysCreateForm" *ngIf="isOwner()">
+      <h2>Add more vacation days</h2>
+      <div formArrayName="freeDays">    
+        <div *ngFor="let freeDayForm of freeDaysFormArray.controls; let i = index">
+          <div [formGroupName]="i">
+            <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
+              <mat-label>Type</mat-label>
+              <mat-select formControlName="type" name="type" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let type of freeDayTypes" [value]="type">
+                  {{type}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
+              <mat-label>Date</mat-label>
+              <input formControlName="date" matInput [matDatepicker]="picker" placeholder="Choose a date" [errorStateMatcher]="matcher">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <button mat-flat-button color="warn" (click)="removeFreeDay(i)" [ngStyle.xs]="{'width.%': 100}">Remove</button>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div *ngIf="isOwner()">
-      <button class="bottom-button" mat-flat-button color="accent" (click)="addFreeDay()">Add</button>
-      <button class="bottom-button" mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
-    </div>
-  </form>
   
-  <h2>Vacation days</h2>
-  <div *ngFor="let freeDay of freeDays" class="free-days-div">
-    <app-free-day [freeDay]="freeDay"  (deleteEmitter)="deleteFreeDay($event)"></app-free-day>
-  </div>
-
+      <div *ngIf="isOwner()">
+        <button class="bottom-button" mat-flat-button color="accent" (click)="addFreeDay()" [ngStyle.xs]="{'width.%': 100}">Add</button>
+        <button class="bottom-button" mat-flat-button color="primary" (click)="onSubmit()" [ngStyle.xs]="{'width.%': 100}">Submit</button>
+      </div>
+    </form>
+    
+    <h2>Vacation days</h2>
+    <div *ngFor="let freeDay of freeDays" class="free-days-div">
+      <app-free-day [freeDay]="freeDay"  (deleteEmitter)="deleteFreeDay($event)"></app-free-day>
+    </div>
+  </mat-card>
 </div>
 

@@ -1,36 +1,38 @@
 <div class="my-container">
-  <form [formGroup]="projectEditForm" (ngSubmit)="onSubmit()">
-    <h2>Edit project</h2>
-    <mat-form-field appearance="outline">
-      <mat-label>Project name</mat-label>
-      <input matInput placeholder="Name" formControlName="name"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Responsible Email</mat-label>
-      <mat-select formControlName="responsibleId" name="responsibleId">
-        <mat-option *ngFor="let user of users" [value]="user.id">
-          {{user.email}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div formArrayName="users">
-      <h2>Users</h2>
-      <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">
-        <mat-form-field appearance="outline">
-          <mat-label>User Email</mat-label>
-          <mat-select [formControlName]="i">
-            <mat-option *ngFor="let user of users" [value]="user.id">
-              {{user.email}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>   
-        <button mat-flat-button color="warn" (click)="removeUser(i)">Remove User</button>
+  <mat-card class="main-card">
+    <form [formGroup]="projectEditForm" (ngSubmit)="onSubmit()">
+      <h2>Edit project</h2>
+      <mat-form-field appearance="outline">
+        <mat-label>Project name</mat-label>
+        <input matInput placeholder="Name" formControlName="name"
+          [errorStateMatcher]="matcher">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Responsible Email</mat-label>
+        <mat-select formControlName="responsibleId" name="responsibleId">
+          <mat-option *ngFor="let user of users" [value]="user.id">
+            {{user.email}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div formArrayName="users">
+        <h2>Users</h2>
+        <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">
+          <mat-form-field appearance="outline">
+            <mat-label>User Email</mat-label>
+            <mat-select [formControlName]="i">
+              <mat-option *ngFor="let user of users" [value]="user.id">
+                {{user.email}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>   
+          <button mat-flat-button color="warn" (click)="removeUser(i)">Remove User</button>
+        </div>
       </div>
-    </div>
-    <button mat-flat-button color="accent" (click)="addUser(null)">Add user</button>
-    <button mat-flat-button color="primary" type="submit">Submit</button>
-  </form>
+      <button mat-flat-button color="accent" (click)="addUser(null)">Add user</button>
+      <button mat-flat-button color="primary" type="submit">Submit</button>
+    </form>
+  </mat-card>
 </div>
 
 

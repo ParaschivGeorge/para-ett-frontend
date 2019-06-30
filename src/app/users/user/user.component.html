@@ -1,68 +1,77 @@
-<div class="my-container row">
-  <form [formGroup]="userEditForm" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
-    <mat-form-field appearance="outline">
-      <mat-label>First Name</mat-label>
-      <input matInput formControlName="firstName"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Last Name</mat-label>
-      <input matInput formControlName="lastName"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Remaining free days</mat-label>
-      <input matInput formControlName="freeDaysLeft"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Norm</mat-label>
-      <input matInput formControlName="norm"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>User type</mat-label>
-      <mat-select formControlName="type" name="type">
-        <mat-option *ngFor="let type of userTypes" [value]="type">
-          {{type}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Manager Email</mat-label>
-      <mat-select formControlName="managerId" name="managerId">
-        <mat-option *ngFor="let user of getManagers()" [value]="user.id">
-          {{user.email}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button mat-flat-button color="accent" (click)="edit()" *ngIf="canEdit()">{{editLabel}}</button>
-    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!editing" *ngIf="canEdit()">Submit</button>
-    <button mat-flat-button color="warn" (click)="deleteUser(id)" *ngIf="isOwner() && !isCurrentUser()">Delete</button>
-  </form>
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" *ngIf="projects.length > 0">
-    <h2>Your projects</h2>
-    <div *ngFor="let project of projects">
-      <mat-accordion>
-        <mat-expansion-panel class="panel">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              {{project.name}}
-            </mat-panel-title>
-            <mat-panel-description>
-              {{getUserData(project.responsibleId)}}            
-            </mat-panel-description>                   
-          </mat-expansion-panel-header>
-          
-          <table class="panel-content">
-            <tr  *ngFor="let user of project.users">
-              <td>{{user.firstName}}</td>
-              <td>{{user.lastName}}</td>
-              <td>{{user.email}}</td>
-            </tr>
-          </table>          
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
+<div class="my-container">
+  <mat-accordion>
+    <mat-expansion-panel class="panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{user.firstName}} {{user.lastName}}'s profile
+        </mat-panel-title>                  
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="userEditForm" class="user-form">
+        <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+          <mat-label>Remaining free days</mat-label>
+          <input matInput formControlName="freeDaysLeft"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+          <mat-label>Norm</mat-label>
+          <input matInput formControlName="norm"
+            [errorStateMatcher]="matcher">
+        </mat-form-field>
+        <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+          <mat-label>User type</mat-label>
+          <mat-select formControlName="type" name="type">
+            <mat-option *ngFor="let type of userTypes" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+          <mat-label>Manager Email</mat-label>
+          <mat-select formControlName="managerId" name="managerId">
+            <mat-option *ngFor="let user of getManagers()" [value]="user.id">
+              {{user.email}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button color="accent" (click)="edit()" *ngIf="canEdit()" [ngStyle.xs]="{'width.%': 100}">{{editLabel}}</button>
+        <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!editing" *ngIf="canEdit()" [ngStyle.xs]="{'width.%': 100}">Submit</button>
+        <button mat-flat-button color="warn" (click)="deleteUser(id)" *ngIf="isOwner() && !isCurrentUser()" [ngStyle.xs]="{'width.%': 100}">Delete</button>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <h2 class="projects-title">Projects</h2>
+  <div *ngFor="let project of projects">
+    <mat-accordion>
+      <mat-expansion-panel class="panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{project.name}}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{getUserData(project.responsibleId)}}            
+          </mat-panel-description>                   
+        </mat-expansion-panel-header>
+        
+        <table class="panel-content">
+          <tr  *ngFor="let user of project.users">
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </table>          
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </div>

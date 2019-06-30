@@ -1,12 +1,17 @@
 form {
-    max-width: 350px;
-    padding: 20px 50px;
+    max-width: 250px;
+    padding: 20px 0;
     overflow: hidden;
     margin: 0 auto;
 }
 
+.main-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 mat-form-field {
-    min-width: 100%;
+    width: 100%;
 }
 
 button {

@@ -1,9 +1,13 @@
 button {
     height: 50px;
     padding: 5px 10px;
-    margin: 5px 10px;
+    margin: 5px 5px;
 }
 
 .buttons-container {
     display: inline-block;
+}
+
+.form-field {
+    width: 180px;
 }
