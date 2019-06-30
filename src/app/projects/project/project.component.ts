@@ -28,7 +28,7 @@ export class ProjectComponent implements OnInit {
   id: number;
   project: Project;
   projectEditForm: FormGroup = new FormGroup({
-    name: new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z ]*')]),
+    name: new FormControl(null, [Validators.required, Validators.pattern('[0-9a-zA-Z ]*')]),
     responsibleId: new FormControl(null, [Validators.required]),
     users: new FormArray([])
   });

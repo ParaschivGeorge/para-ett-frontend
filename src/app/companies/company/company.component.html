@@ -13,7 +13,7 @@
           [errorStateMatcher]="matcher">
       </mat-form-field>
       <button mat-flat-button color="accent" (click)="edit()">{{editLabel}}</button>
-      <button [disabled]="!editing" mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
+      <button [disabled]="!editing || companyEditForm.invalid" mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
       <div class="error-div warn-background"*ngIf="error">{{error}}</div>
     </form>
   </mat-card>

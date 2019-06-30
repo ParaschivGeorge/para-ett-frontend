@@ -26,7 +26,7 @@
   
       <div *ngIf="isOwner()">
         <button class="bottom-button" mat-flat-button color="accent" (click)="addFreeDay()" [ngStyle.xs]="{'width.%': 100}">Add</button>
-        <button class="bottom-button" mat-flat-button color="primary" (click)="onSubmit()" [ngStyle.xs]="{'width.%': 100}">Submit</button>
+        <button class="bottom-button" mat-flat-button color="primary" (click)="onSubmit()" [ngStyle.xs]="{'width.%': 100}" [disabled]="freeDaysCreateForm.invalid">Submit</button>
       </div>
     </form>
     

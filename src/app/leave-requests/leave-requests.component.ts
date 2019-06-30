@@ -23,7 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class LeaveRequestsComponent implements OnInit {
 
   leaveRequestCreateForm: FormGroup = new FormGroup({
-    date: new FormControl(null, Validators.required),
+    date: new FormControl(null, [Validators.required, this.isFutureDate]),
     type: new FormControl(null, Validators.required)
   });
   futureLeaveRequests: LeaveRequest[] = [];
@@ -63,6 +63,11 @@ export class LeaveRequestsComponent implements OnInit {
         this.teamLeaveRequests.push(leaveRequest);
       }
     });
+  }
+
+  isFutureDate(control: FormControl) {
+    if (control.value > new Date() ) {return null; }
+    return {'dateInThePast': true};
   }
 
   get user() {

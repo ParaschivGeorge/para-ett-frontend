@@ -45,7 +45,7 @@
           </mat-select>
         </mat-form-field>
         <button mat-flat-button color="accent" (click)="edit()" *ngIf="canEdit()" [ngStyle.xs]="{'width.%': 100}">{{editLabel}}</button>
-        <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!editing" *ngIf="canEdit()" [ngStyle.xs]="{'width.%': 100}">Submit</button>
+        <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!editing || userEditForm.invalid" *ngIf="canEdit()" [ngStyle.xs]="{'width.%': 100}">Submit</button>
         <button mat-flat-button color="warn" (click)="deleteUser(id)" *ngIf="isOwner() && !isCurrentUser()" [ngStyle.xs]="{'width.%': 100}">Delete</button>
       </form>
     </mat-expansion-panel>

@@ -56,7 +56,7 @@ export class FreeDaysComponent implements OnInit {
     if (this.freeDaysCreateForm.valid) {
       this.freeDaysFormArray.push(
         new FormGroup({
-          date: new FormControl(null, Validators.required),
+          date: new FormControl(null, [Validators.required]),
           type: new FormControl(null, Validators.required)
         })
       );
