@@ -1,7 +1,7 @@
 <div class="my-container">
   <mat-card class="main-card">
     <h2>You have {{dhUser?.freeDaysLeft}} vacation days left</h2>
-    <form [formGroup]="leaveRequestCreateForm">
+    <form [formGroup]="leaveRequestCreateForm" *ngIf="leaveRequestCreateForm">
       <h2>Add a new leave request</h2>
       <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
         <mat-label>Type</mat-label>

@@ -1,6 +1,6 @@
 <div class= "my-container">
   <mat-card class="main-card">
-    <form [formGroup]="freeDaysCreateForm" *ngIf="isOwner()">
+    <form [formGroup]="freeDaysCreateForm" *ngIf="isOwner() && freeDaysCreateForm">
       <h2>Add more vacation days</h2>
       <div formArrayName="freeDays">    
         <div *ngFor="let freeDayForm of freeDaysFormArray.controls; let i = index">

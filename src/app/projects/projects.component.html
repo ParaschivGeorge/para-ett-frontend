@@ -1,7 +1,7 @@
 <div class="my-container">
   <mat-card class="add-project-card">
     <h2>Add a new project</h2>
-    <form [formGroup]="projectCreateForm">
+    <form [formGroup]="projectCreateForm" *ngIf="projectCreateForm">
       <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">      
         <mat-label>Project name</mat-label>
         <input matInput formControlName="name"

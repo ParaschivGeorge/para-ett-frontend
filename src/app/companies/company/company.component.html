@@ -1,6 +1,6 @@
 <div class="my-container">
   <mat-card class="main-card">
-    <form [formGroup]="companyEditForm">
+    <form [formGroup]="companyEditForm" *ngIf="companyEditForm">
       <h2>Your company data</h2>
       <mat-form-field appearance="outline">
         <mat-label>Company name</mat-label>

@@ -7,7 +7,7 @@
         </mat-panel-title>                  
       </mat-expansion-panel-header>
 
-      <form [formGroup]="userEditForm" class="user-form">
+      <form [formGroup]="userEditForm" class="user-form" *ngIf="userEditForm">
         <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstName"

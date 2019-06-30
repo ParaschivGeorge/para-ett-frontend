@@ -1,6 +1,6 @@
 <div class="my-container">
   <!-- desktop -->
-  <form [formGroup]="massRegisterForm" (ngSubmit)="onSubmit()" fxHide.lt-lg="true">    
+  <form [formGroup]="massRegisterForm" *ngIf="massRegisterForm" fxHide.lt-lg="true">    
     <button mat-flat-button color="accent" (click)="addUserForm()">+</button>
     <mat-form-field appearance="outline" class="field-desktop">
       <input disabled matInput placeholder="Email">
@@ -66,13 +66,13 @@
         </div>
       </div>
     </div>
-    <button mat-flat-button color="primary" type="submit" [disabled]="massRegisterForm.invalid">Add users</button>
+    <button mat-flat-button color="primary" type="submit" (click)="onSubmit()" [disabled]="massRegisterForm.invalid">Add users</button>
     <div class="error-div warn-background" *ngIf="error">{{error}}</div>
     <div class="success-div" *ngIf="success">{{success}}</div>
   </form>
 
   <!-- mobile -->
-  <form [formGroup]="massRegisterForm" class="mobile-form" (ngSubmit)="onSubmit()" fxHide.gt-md="true">    
+  <form [formGroup]="massRegisterForm" class="mobile-form" *ngIf="massRegisterForm" fxHide.gt-md="true">    
       <button mat-flat-button class="button-mobile" color="accent" (click)="addUserForm()">Add user</button>
       <div formArrayName="massRegister">  
         <div *ngFor="let userForm of massRegister.controls; let i = index">
@@ -124,7 +124,7 @@
           </div>
         </div>
       </div>
-      <button mat-flat-button color="primary" class="button-mobile" type="submit" [disabled]="massRegisterForm.invalid">Add users</button>
+      <button mat-flat-button color="primary" class="button-mobile" type="submit" (click)="onSubmit()" [disabled]="massRegisterForm.invalid">Add users</button>
       <div class="error-div-mobile warn-background" *ngIf="error">{{error}}</div>
       <div class="success-div-mobile" *ngIf="success">{{success}}</div>
     </form>

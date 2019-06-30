@@ -1,4 +1,4 @@
-<form [formGroup]="freeDayEditForm" *ngIf="freeDay">
+<form [formGroup]="freeDayEditForm" *ngIf="freeDay && freeDayEditForm">
   <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
     <mat-label>Type</mat-label>
     <mat-select formControlName="type" name="type">

@@ -1,4 +1,4 @@
-<form [formGroup]="registerCompanyForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="registerCompanyForm">
   <div formGroupName="company">
     <p>Company Data</p>
     <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
@@ -40,6 +40,6 @@
         [errorStateMatcher]="matcher">
     </mat-form-field>
   </div>
-  <button mat-flat-button color="primary" type="submit" [ngStyle.xs]="{'width.%': 100}">Register</button>
+  <button mat-flat-button color="primary" type="submit" [ngStyle.xs]="{'width.%': 100}" (click)="onSubmit()" [disabled]="registerCompanyForm.invalid">Register</button>
   <div class="error-div warn-background"*ngIf="error" [ngStyle.xs]="{'width.%': 100}">{{error}}</div>
 </form>

@@ -1,7 +1,7 @@
 <div class="my-container">
   <mat-card class="main-card">
     <h2>Set your account password to activate your account</h2>
-    <form [formGroup]="accountActivationForm" (ngSubmit)="onSubmit()">  
+    <form [formGroup]="accountActivationForm" *ngIf="accountActivationForm">  
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" type="password"
@@ -12,7 +12,7 @@
         <input matInput formControlName="passwordConfirm" type="password"
           [errorStateMatcher]="matcher">
       </mat-form-field>
-      <button mat-flat-button color="primary" type="submit" [disabled]="accountActivationForm.invalid">Submit</button>
+      <button mat-flat-button color="primary" type="submit" (click)="onSubmit()" [disabled]="accountActivationForm.invalid">Submit</button>
       <div class="error-div warn-background"*ngIf="error">{{error}}</div>
     </form>
   </mat-card>
