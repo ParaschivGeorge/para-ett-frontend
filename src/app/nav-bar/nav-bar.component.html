@@ -41,8 +41,8 @@
         <!-- <a mat-button routerLink="/activation">Activation</a> -->
         <a mat-button routerLink="/mass-register" *ngIf="user && user.type === 'OWNER'" routerLinkActive="active-link">Add users</a>
         <a mat-button *ngIf="user && user.type === 'OWNER'" [routerLink]="'/companies/' + user.companyId" routerLinkActive="active-link">Your company</a>
-        <a mat-button routerLink="/users" *ngIf="user" routerLinkActive="active-link">Users</a>
-        <a mat-button routerLink="/projects" *ngIf="user" routerLinkActive="active-link">Projects</a>
+        <a mat-button routerLink="/users" [routerLinkActiveOptions]="{exact: true}" *ngIf="user" routerLinkActive="active-link">Users</a>
+        <a mat-button routerLink="/projects" [routerLinkActiveOptions]="{exact: true}" *ngIf="user" routerLinkActive="active-link">Projects</a>
         <a mat-button routerLink="/free-days" *ngIf="user" routerLinkActive="active-link">Vacation days</a>
         <a mat-button routerLink="/leave-requests" *ngIf="user" routerLinkActive="active-link">Leave requests</a>
         <a mat-button [routerLink]="'/timesheet-records/' + user.id" *ngIf="user" routerLinkActive="active-link">Timesheet records</a>
