@@ -1,65 +1,65 @@
 <div class="my-container">
-  <h2>Add a new project</h2>
-  <form [formGroup]="projectCreateForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline">      
-      <mat-label>Project name</mat-label>
-      <input matInput formControlName="name"
-        [errorStateMatcher]="matcher">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Responsible Email</mat-label>
-      <mat-select formControlName="responsibleId" name="responsibleId">
-        <mat-option *ngFor="let user of users" [value]="user.id">
-          {{user.email}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div formArrayName="users">
-      <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">      
-        <mat-form-field appearance="outline">
-          <mat-label>User Email</mat-label>
-          <mat-select [formControlName]="i">
-            <mat-option *ngFor="let user of users" [value]="user.id">
-              {{user.email}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+  <mat-card class="add-project-card">
+    <h2>Add a new project</h2>
+    <form [formGroup]="projectCreateForm">
+      <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">      
+        <mat-label>Project name</mat-label>
+        <input matInput formControlName="name"
+          [errorStateMatcher]="matcher">
+      </mat-form-field>
+      <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+        <mat-label>Responsible email</mat-label>
+        <mat-select formControlName="responsibleId" name="responsibleId">
+          <mat-option *ngFor="let user of users" [value]="user.id">
+            {{user.email}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div formArrayName="users">
+        <div class="form-group" *ngFor="let userControl of usersFormArray.controls; let i = index">      
+          <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
+            <mat-label>User Email</mat-label>
+            <mat-select [formControlName]="i">
+              <mat-option *ngFor="let user of users" [value]="user.id">
+                {{user.email}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
-    <button mat-flat-button color="accent" (click)="addUser()">Add user</button>
-    <button mat-flat-button color="warn" (click)="removeUser()">Remove User</button>
-    <button mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
-  </form>
+      <button mat-flat-button color="accent" (click)="addUser()" [ngStyle.xs]="{'width.%': 100}">Add user</button>
+      <button mat-flat-button color="warn" (click)="removeUser()" [ngStyle.xs]="{'width.%': 100}">Remove user</button>
+      <button mat-flat-button color="primary" (click)="onSubmit()" [ngStyle.xs]="{'width.%': 100}">Submit</button>
+    </form>
+  </mat-card>
   
-  <h2>Your projects</h2>
-  <div *ngFor="let project of projects">
-    <mat-accordion>
-      <mat-expansion-panel class="panel">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{project.name}}
-          </mat-panel-title>
-          <mat-panel-description>
-            {{getUserData(project.responsibleId)}}            
-          </mat-panel-description>                   
-        </mat-expansion-panel-header>
-        
-        <table class="panel-content">
-          <tr  *ngFor="let user of project.users">
-            <td>{{user.firstName}}</td>
-            <td>{{user.lastName}}</td>
-            <td>{{user.email}}</td>
-          </tr>
-        </table>
+  <h2 class="projects-title">Your projects</h2>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let project of projects" class="panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{project.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{getUserData(project.responsibleId)}}            
+        </mat-panel-description>                   
+      </mat-expansion-panel-header>
+      
+      <table class="panel-content">
+        <tr  *ngFor="let user of project.users">
+          <td>{{user.firstName}}</td>
+          <td>{{user.lastName}}</td>
+          <td>{{user.email}}</td>
+        </tr>
+      </table>
 
-        <mat-action-row>
-          <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-flat-button color="warn" (click)="deleteProject(project.id)">Delete</button>
-          <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-flat-button color="accent" [routerLink]="['./' + project.id]">Edit</button> 
-        </mat-action-row>
-        
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
+      <mat-action-row>
+        <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-flat-button color="warn" (click)="deleteProject(project.id)">Delete</button>
+        <button class="panel-button" *ngIf="canEditOrDelete(project.responsibleId)" mat-flat-button color="accent" [routerLink]="['./' + project.id]">Edit</button> 
+      </mat-action-row>
+      
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
 
 
