@@ -1,9 +1,29 @@
 .month-select {
     margin-top: 30px;
     text-align: center;
+    width: 180px;
+    max-width: 50%;
 }
 
 .arrow-button {
     height: 55px;
     font-size: 20px;
+}
+
+.filter {
+    display: block;
+    max-width: 150px;
+}
+
+.users-table {    
+    margin: 0 auto;
+}
+
+.filters {
+    max-width: 308px;
+    margin: 0 auto 20px;
+}
+
+.info-p {
+    padding-top: 50px;
 }

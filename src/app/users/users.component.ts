@@ -21,7 +21,6 @@ export class UsersComponent implements OnInit {
 
   users: User[] = [];
   displayedColumnsDesktop: string[] = ['email', 'firstName', 'lastName', 'type', 'freeDaysLeft', 'norm', 'manager', 'clocking'];
-  displayedColumnsMobile: string[] = ['email', 'firstName', 'lastName'];
   dataSource = null;
 
   timesheetRecords: TimesheetRecord[] = [];
@@ -37,7 +36,7 @@ export class UsersComponent implements OnInit {
   calendar = [];
   workingDays = 0;
 
-  _filter = '';
+  private _filter = '';
 
   get filter(): string {
     return this._filter;
@@ -48,7 +47,7 @@ export class UsersComponent implements OnInit {
     this.applyFilter();
   }
 
-  _clockedAllFilter = false;
+  private _clockedAllFilter = false;
 
   get clockedAllFilter(): boolean {
     return this._clockedAllFilter;
@@ -62,7 +61,7 @@ export class UsersComponent implements OnInit {
     this.applyFilter();
   }
 
-  _clockedPartiallyFilter = false;
+  private _clockedPartiallyFilter = false;
 
   get clockedPartiallyFilter(): boolean {
     return this._clockedPartiallyFilter;
@@ -76,7 +75,7 @@ export class UsersComponent implements OnInit {
     this.applyFilter();
   }
 
-  _myTeamFilter = false;
+  private _myTeamFilter = false;
 
   get myTeamFilter(): boolean {
     return this._myTeamFilter;
@@ -90,7 +89,7 @@ export class UsersComponent implements OnInit {
     this.applyFilter();
   }
 
-  _myManagerTeamFilter = false;
+  private _myManagerTeamFilter = false;
 
   get myManagerTeamFilter(): boolean {
     return this._myManagerTeamFilter;

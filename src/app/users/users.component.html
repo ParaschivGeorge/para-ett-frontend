@@ -1,7 +1,8 @@
-<div class="my-container" fxHide.lt-sm="true">
+<div class="my-container">
+
   <div class="calendar-selector" *ngIf="isOwnerOrHr()">
     <button class="arrow-button" mat-stroked-button mat-flat-button (click)="previous()">&#60;</button>
-    <mat-form-field appearance="outline" class="month-select">
+    <mat-form-field appearance="outline" class="month-select" >
       <mat-select placeholder="Month" [formControl]="monthFormControl" name="month">
         <mat-option *ngFor="let monthNb of monthsNumbers" [value]="monthNb">
           {{months[monthNb]}}
@@ -11,56 +12,80 @@
     <button class="arrow-button" mat-stroked-button mat-flat-button (click)="next()">&#62;</button>
   </div>
 
-  <div class="filters">
-    <mat-form-field>
-      <input matInput [(ngModel)]="filter" placeholder="Filter">
-    </mat-form-field>
-    <mat-checkbox [(ngModel)]="clockedAllFilter" *ngIf="isOwnerOrHr()">Clocking complete</mat-checkbox>
-    <mat-checkbox [(ngModel)]="clockedPartiallyFilter" *ngIf="isOwnerOrHr()">Clocking incomplete</mat-checkbox>
-    <mat-checkbox [(ngModel)]="myTeamFilter" *ngIf="isOwnerOrManager()">My team</mat-checkbox>
-    <mat-checkbox [(ngModel)]="myManagerTeamFilter" *ngIf="hasManager()">My manager's team</mat-checkbox>
-  </div>
+  <mat-accordion >
+    <mat-expansion-panel class="filters">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Filter users
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <mat-form-field class="filter">
+        <input matInput [(ngModel)]="filter" placeholder="Name or email">
+      </mat-form-field>
+  
+      <mat-checkbox class="filter" [(ngModel)]="clockedAllFilter" *ngIf="isOwnerOrHr()">Clocking complete</mat-checkbox>
+      <mat-checkbox class="filter" [(ngModel)]="clockedPartiallyFilter" *ngIf="isOwnerOrHr()">Clocking incomplete</mat-checkbox>
+      <mat-checkbox class="filter" [(ngModel)]="myTeamFilter" *ngIf="isOwnerOrManager()">My team</mat-checkbox>
+      <mat-checkbox class="filter" [(ngModel)]="myManagerTeamFilter" *ngIf="hasManager()">My manager's team</mat-checkbox>
+    </mat-expansion-panel>
+  </mat-accordion>
 
-  <table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table [dataSource]="dataSource" matSort class="users-table">
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <span fxHide.lt-sm="true">Email</span>
+        <span fxHide.gt-xs="true">Full name</span>
+      </th>
       <td mat-cell *matCellDef="let user">
-        <button mat-icon-button color="primary" [routerLink]="'/users/' + user.id">
+        <button
+          mat-icon-button
+          color="primary"
+          [routerLink]="'/users/' + user.id"
+          matTooltip="View profile"
+          matTooltipPosition="above">
           <mat-icon>person</mat-icon>
         </button>
-        {{user.email}}
+        <span fxHide.lt-sm="true">{{user.email}}</span>
+        <span fxHide.gt-xs="true">{{user.firstName}} {{user.lastName}}</span>        
       </td>
     </ng-container>
 
     <ng-container matColumnDef="firstName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let user">{{user.firstName}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-sm="true">Name</th>
+      <td mat-cell *matCellDef="let user" fxHide.lt-sm="true">{{user.firstName}}</td>
     </ng-container>
     
     <ng-container matColumnDef="lastName">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Surname</th>
-      <td mat-cell *matCellDef="let user">{{user.lastName}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-sm="true">Surname</th>
+      <td mat-cell *matCellDef="let user" fxHide.lt-sm="true">{{user.lastName}}</td>
     </ng-container>
 
     <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
-      <td mat-cell *matCellDef="let user">{{user.type}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md="true">Role</th>
+      <td mat-cell *matCellDef="let user" fxHide.lt-md="true">{{user.type}}</td>
     </ng-container>
 
     <ng-container matColumnDef="freeDaysLeft">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Vacations</th>
-      <td mat-cell *matCellDef="let user">{{user.freeDaysLeft}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md="true">Vacations</th>
+      <td mat-cell *matCellDef="let user" fxHide.lt-md="true">{{user.freeDaysLeft}}</td>
     </ng-container>
 
     <ng-container matColumnDef="norm">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Norm</th>
-      <td mat-cell *matCellDef="let user">{{user.norm}}</td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md="true">Norm</th>
+      <td mat-cell *matCellDef="let user" fxHide.lt-md="true">{{user.norm}}</td>
     </ng-container>
 
     <ng-container matColumnDef="manager">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Manager email</th>
-      <td mat-cell *matCellDef="let user">
-        <button mat-icon-button color="primary" [routerLink]="'/users/' + user.managerId" *ngIf="getManagerEmail(user) !== ''">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-lg="true">Manager email</th>
+      <td mat-cell *matCellDef="let user" fxHide.lt-lg="true">
+        <button
+          mat-icon-button
+          color="primary"
+          [routerLink]="'/users/' + user.managerId"
+          *ngIf="getManagerEmail(user) !== ''"        
+          matTooltip="View profile"
+          matTooltipPosition="above">
           <mat-icon>person</mat-icon>
         </button>
         {{getManagerEmail(user)}}
@@ -70,7 +95,12 @@
     <ng-container matColumnDef="clocking" *ngIf="isOwnerOrHr()">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Clocking</th>
       <td mat-cell *matCellDef="let user">
-        <button mat-icon-button color="accent" [routerLink]="'/timesheet-records/' + user.id">
+        <button
+          mat-icon-button
+          color="accent"
+          [routerLink]="'/timesheet-records/' + user.id"
+          matTooltip="View timesheets"
+          matTooltipPosition="above">
           <mat-icon>timer</mat-icon>
         </button>
         {{calculateWorkedHours(user) + calculateFreeDaysHours(user) + calculateLeaveRequestsHours(user)}}/{{calculateTotalHours(user)}}
@@ -80,4 +110,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumnsDesktop"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnsDesktop;"></tr>
   </table>
+
+  <p class="info-p" fxHide.gt-md="true">To display all the information, please use the desktop version.</p>
 </div>

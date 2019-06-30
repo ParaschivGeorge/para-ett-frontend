@@ -2,7 +2,7 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" *ngIf="loginForm">
     <mat-form-field appearance="outline">
     <mat-label>Email</mat-label>
-      <input matInput placeholder="Email" formControlName="email"
+      <input matInput formControlName="email"
         [errorStateMatcher]="matcher">
     </mat-form-field>
     <mat-form-field appearance="outline">
