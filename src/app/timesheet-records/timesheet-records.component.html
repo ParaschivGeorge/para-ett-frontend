@@ -55,7 +55,7 @@
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="space-between none" *ngIf="dhUser?.id === user?.id">
-        <button mat-flat-button color="primary" class="desktop-button" (click)="submit()">Submit</button>
+        <button mat-flat-button color="primary" class="desktop-button" (click)="submit()" [disabled]="calendarForm?.invalid">Submit</button>
         <button mat-flat-button color="accent" class="desktop-button" (click)="toggleWeekends()">Toggle weekends</button>
       </div>
     </div>
@@ -116,7 +116,7 @@
   </div> 
   <div class="tsrecords">    
     <div fxLayout="row" fxLayoutAlign="space-between none" *ngIf="dhUser?.id === user?.id">
-      <button mat-flat-button color="primary" class="mobile-button" (click)="submit()">Submit</button>
+      <button mat-flat-button color="primary" class="mobile-button" (click)="submit()" [disabled]="calendarForm?.invalid">Submit</button>
       <button mat-flat-button color="accent" class="mobile-button" (click)="toggleWeekends()">Toggle weekends</button>
     </div>    
     <div class="calendar-selector">

@@ -376,7 +376,7 @@ export class TimesheetRecordsComponent implements OnInit {
       null,
       this.user.id,
       new Date(this.year, this.month, 0),
-      new Date(this.year, this.month + 1, 1)).subscribe(
+      new Date(this.year, this.month + 1, 0)).subscribe(
       timesheetRecords => {
         this.timesheetRecords = timesheetRecords;
         console.log(timesheetRecords);
