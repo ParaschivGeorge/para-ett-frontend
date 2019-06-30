@@ -10,6 +10,6 @@
       <input matInput formControlName="password" type="password"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <button mat-flat-button color="primary" type="submit" [ngStyle.xs]="{'width.%': 100}" (click)="onSubmit()">Log In</button>
+    <button mat-flat-button color="primary" type="submit" [ngStyle.xs]="{'width.%': 100}" (click)="onSubmit()" [disabled]="loginForm.invalid">Log In</button>
     <div class="error-div warn-background"*ngIf="error" [ngStyle.xs]="{'width.%': 100}">{{error}}</div>
   </form>
