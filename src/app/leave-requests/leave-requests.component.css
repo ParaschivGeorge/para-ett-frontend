@@ -1,22 +1,30 @@
-form {
+h2 {
+    font-size: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    padding-bottom: 10px;
+}
+
+.main-card {
     max-width: 600px;
-    padding: 20px 50px;
-    overflow: hidden;
+    margin: 0 auto;
+}
+
+.leave-requests {
+    max-width: 630px;
     margin: 0 auto;
 }
 
 button {
-    height: 60px;
-    font-size: 15px;
-    margin: 5px 0;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 10px;
 }
 
-.bottom-button {
-    margin: 5px 5px;
-    max-width: 40%;
+.delete-button {    
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-h2 {
-    font-size: 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+.form-field {
+    width: 200px;
 }

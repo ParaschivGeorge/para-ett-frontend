@@ -69,6 +69,16 @@
     color: black !important;
 }
 
+.mat-select-disabled .mat-select-value {
+    color: black;
+}
+
+.mat-card {
+    box-shadow: none !important;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
 .mat-accordion>.mat-expansion-panel-spacing:last-child {
     margin-bottom: 15px !important;
 }

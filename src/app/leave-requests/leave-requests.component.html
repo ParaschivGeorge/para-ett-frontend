@@ -1,36 +1,62 @@
 <div class="my-container">
-  <h2>You have {{dhUser?.freeDaysLeft}} vacation days left</h2>
-  <form [formGroup]="leaveRequestCreateForm">
-    <h2>Add a new leave request</h2>
-    <mat-form-field appearance="outline">
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="type" name="type">
-        <mat-option *ngFor="let type of leaveRequestTypes" [value]="type">
-          {{type}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Choose a date</mat-label>
-      <input formControlName="date" matInput [matDatepicker]="picker">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <button mat-flat-button color="primary" (click)="onSubmit()">Submit</button>
-  </form>
-  <h2 *ngIf="futureLeaveRequests?.length">Your future leave requests</h2>
-  <div *ngFor="let leaveRequest of futureLeaveRequests">
-    <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
-    <button class="delete-button" mat-flat-button color="warn" (click)="deleteLeaveRequest(leaveRequest.id)">Delete</button>
-  </div>  
-  <div *ngIf="isManager() && teamLeaveRequests?.length">
-    <h2>Team leave requests</h2>
-    <div *ngFor="let leaveRequest of teamLeaveRequests">
-      <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
-    </div>
-  </div>
-  <h2 *ngIf="pastLeaveRequests?.length">Your past leave requests</h2>
-  <div *ngFor="let leaveRequest of pastLeaveRequests">
-    <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
-  </div>
+  <mat-card class="main-card">
+    <h2>You have {{dhUser?.freeDaysLeft}} vacation days left</h2>
+    <form [formGroup]="leaveRequestCreateForm">
+      <h2>Add a new leave request</h2>
+      <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type" name="type">
+          <mat-option *ngFor="let type of leaveRequestTypes" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field" [ngStyle.xs]="{'width.%': 100}">
+        <mat-label>Choose a date</mat-label>
+        <input formControlName="date" matInput [matDatepicker]="picker">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <button mat-flat-button color="primary" (click)="onSubmit()" [ngStyle.xs]="{'width.%': 100}">Submit</button>
+    </form>
+  </mat-card>
+
+  <mat-accordion class="main-accordion">
+    <mat-expansion-panel class="leave-requests" *ngIf="futureLeaveRequests?.length">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Your future leave requests
+        </mat-panel-title>
+      </mat-expansion-panel-header>    
+    
+      <div *ngFor="let leaveRequest of futureLeaveRequests">
+        <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
+        <button class="delete-button" mat-flat-button color="warn" (click)="deleteLeaveRequest(leaveRequest.id)" [ngStyle.xs]="{'width.%': 100}">Delete</button>
+      </div> 
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="leave-requests" *ngIf="isManager() && teamLeaveRequests?.length">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Team leave requests
+        </mat-panel-title>
+      </mat-expansion-panel-header>    
+      
+      <div *ngFor="let leaveRequest of teamLeaveRequests">
+        <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="leave-requests" *ngIf="pastLeaveRequests?.length">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Your past leave requests
+          </mat-panel-title>
+        </mat-expansion-panel-header>        
+        
+        <div *ngFor="let leaveRequest of pastLeaveRequests">
+          <app-leave-request [leaveRequest]="leaveRequest"></app-leave-request>
+        </div>
+      </mat-expansion-panel>
+  </mat-accordion>
 </div>

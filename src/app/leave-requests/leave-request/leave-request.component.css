@@ -1,15 +1,19 @@
 button {
-    height: 60px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.leave-request-form {
+    display: inline;
+}
+
+.form-field {
+    width: 130px;
+}
+
+.user {
+    margin: 5px;
     font-size: 15px;
-    margin: 5px 0;
-}
-
-.bottom-button {
-    margin: 5px 5px;
-    max-width: 40%;
-}
-
-h2 {
-    font-size: 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
 }

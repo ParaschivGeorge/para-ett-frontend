@@ -1,6 +1,6 @@
-<form [formGroup]="leaveRequestEditForm" *ngIf="leaveRequest">
-  <p *ngIf="user">{{user.firstName + ' ' + user.lastName}}</p>
-  <mat-form-field appearance="outline">
+<form [formGroup]="leaveRequestEditForm" *ngIf="leaveRequest" class="leave-request-form">
+  <p *ngIf="user" class="user">{{user.firstName + ' ' + user.lastName}}</p>
+  <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}" class="form-field">
     <mat-label>Type</mat-label>
     <mat-select placeholder="Type" formControlName="type" name="type">
       <mat-option *ngFor="let type of leaveRequestTypes" [value]="type">
@@ -8,13 +8,13 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}" class="form-field">
     <mat-label>Date</mat-label>
     <input formControlName="date" matInput [matDatepicker]="picker">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
-  <mat-form-field appearance="outline">
+  <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}" class="form-field">
     <mat-label>Status</mat-label>
     <mat-select formControlName="status" name="status">
       <mat-option *ngFor="let status of leaveRequestStatuses" [value]="status">
@@ -22,5 +22,5 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button *ngIf="leaveRequestEditForm.get('status').enabled" mat-flat-button color="accent" (click)="onSubmit()">Update</button>
+  <button *ngIf="leaveRequestEditForm.get('status').enabled" mat-flat-button color="accent" (click)="onSubmit()" [ngStyle.xs]="{'width.%': 100}">Update</button>
 </form>
