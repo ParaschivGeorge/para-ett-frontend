@@ -1,12 +1,12 @@
 <form [formGroup]="registerCompanyForm" (ngSubmit)="onSubmit()">
   <div formGroupName="company">
     <p>Company Data</p>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
       <mat-label>Company name</mat-label>
       <input matInput formControlName="name"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
       <mat-label>Company motto</mat-label>
       <input matInput formControlName="description"
         [errorStateMatcher]="matcher">
@@ -14,32 +14,32 @@
   </div>
   <div formGroupName="ownerRegisterUserDto">
     <p>Your Data</p>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
       <mat-label>First Name</mat-label>
       <input matInput formControlName="firstName"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
       <mat-label>Last Name</mat-label>
       <input matInput formControlName="lastName"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
       <mat-label>Free days per year</mat-label>
       <input matInput formControlName="freeDaysTotal"
         [errorStateMatcher]="matcher">
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [ngStyle.xs]="{'width.%': 100}">
       <mat-label>Working Norm</mat-label>
       <input matInput formControlName="norm"
         [errorStateMatcher]="matcher">
     </mat-form-field>
   </div>
-  <button mat-flat-button color="primary" type="submit">Register Company</button>
-  <div class="error-div warn-background"*ngIf="error">{{error}}</div>
+  <button mat-flat-button color="primary" type="submit" [ngStyle.xs]="{'width.%': 100}">Register</button>
+  <div class="error-div warn-background"*ngIf="error" [ngStyle.xs]="{'width.%': 100}">{{error}}</div>
 </form>

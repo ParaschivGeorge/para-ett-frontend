@@ -63,7 +63,8 @@ const routes: Routes = [
   { path: 'timesheet-records/:userId', component: TimesheetRecordsComponent, canActivate: [AuthGuard] },
   {
     path: 'refresh', component: HomeComponent
-  }
+  },
+  { path: '**', redirectTo: 'start' }
   // { path: '', redirectTo: 'login', pathMatch: 'full'},
   // { path: 'login', component: LoginComponent},
   // { path: 'admin-incidents', component: AdminIncidentsComponent, canActivate: [AuthGuard], data: {roles: ['admin']}},
