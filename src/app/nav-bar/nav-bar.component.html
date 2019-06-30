@@ -5,8 +5,17 @@
         <mat-icon>menu</mat-icon>
       </button>
     </div>
-    <img routerLink="/home" fxHide.lt-md="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  
-    <span class="welcome" *ngIf="user">Hello, {{user.firstName}}!</span>
+    <img fxHide.lt-md="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  
+    <span class="welcome" *ngIf="user" [routerLink]="'/users/' + user.id">
+      <button
+        mat-icon-button
+        matTooltip="View profile"
+        matTooltipPosition="below"
+        fxHide.lt-md="true">
+        <mat-icon>person</mat-icon>
+      </button>
+      Hello, {{user.firstName}}!
+    </span>
     <span class="fill-remaining-space"></span>    
     <mat-icon fxHide.gt-sm="true" class="logout-mobile" *ngIf="user" (click)="logout()">meeting_room</mat-icon>
     <img fxHide.gt-sm="true" class="logo" src="../../assets/logo.png" alt="PW-Cinema">  

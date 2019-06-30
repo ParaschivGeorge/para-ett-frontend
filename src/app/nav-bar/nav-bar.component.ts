@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataHolderService } from '../services/data-holder.service';
 import { User } from '../models/user';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { MatSidenav } from '@angular/material';
+import { Observable } from 'rxjs';
+import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { map, filter, withLatestFrom } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,10 +13,21 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent implements OnInit {
+  @ViewChild('sidenav') drawer: MatSidenav;
+
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches)
+    );
 
   activeRoute = '';
 
-  constructor(private dataHolderService: DataHolderService, private router: Router) { }
+  constructor(private breakpointObserver: BreakpointObserver, private dataHolderService: DataHolderService, private router: Router) {
+    router.events.pipe(
+      withLatestFrom(this.isHandset$),
+      filter(([a, b]) => b && a instanceof NavigationEnd)
+    ).subscribe(_ => this.drawer.close());
+   }
 
   ngOnInit() {
   }
