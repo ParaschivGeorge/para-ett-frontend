@@ -293,7 +293,8 @@ export class TimesheetRecordsComponent implements OnInit {
   }
 
   updateCalendar() {
-    const firstDay = (new Date(this.year, this.month)).getDay();
+    const firstDay = (new Date(this.year, this.month)).getDay() - 1;
+    console.log('',firstDay)
     let date = 1;
     const daysInMonth = this.daysInMonth(this.month, this.year);
     const month = [];
@@ -375,7 +376,7 @@ export class TimesheetRecordsComponent implements OnInit {
       this.user.companyId,
       null,
       this.user.id,
-      new Date(this.year, this.month, 0),
+      new Date(this.year, this.month, 1),
       new Date(this.year, this.month + 1, 0)).subscribe(
       timesheetRecords => {
         this.timesheetRecords = timesheetRecords;
