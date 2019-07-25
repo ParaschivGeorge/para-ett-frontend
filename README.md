@@ -1,5 +1,7 @@
 # ParaEttFrontend
 
+Front-end for the Para-ett project, an Employee Time Tracker with Leave requests integration.
+Project was deployed on [firebase](https://para-ett.firebaseapp.com/start)
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
 
 ## Development server
